@@ -14,7 +14,9 @@ public function up()
 {
     Schema::create('complaints', function (Blueprint $table) {
         $table->id('complaint_id');
-        $table->foreignId('student_id')->constrained('students');
+        $table->unsignedBigInteger('student_id');
+        $table->foreign('student_id')->references('student_id')->on('students')->onDelete('cascade');
+
         $table->enum('category', ['electrical', 'water', 'roommate', 'medical', 'harassment', 'safety', 'other']);
         $table->text('description');
         $table->boolean('emergency_flag');

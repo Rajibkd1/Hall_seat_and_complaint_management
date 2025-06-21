@@ -15,11 +15,10 @@ public function up()
     Schema::create('notifications', function (Blueprint $table) {
         $table->id('notification_id');
         $table->enum('user_type', ['student', 'admin']);
-        $table->integer('user_id'); // student_id or admin_id
+        $table->integer('user_id'); 
         $table->enum('type', ['application', 'seat_allotment', 'complaint', 'emergency', 'general']);
         $table->text('message');
         $table->enum('status', ['unread', 'read']);
-        $table->timestamp('created_at');
         $table->timestamps();
     });
 }

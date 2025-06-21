@@ -14,7 +14,11 @@ public function up()
 {
     Schema::create('seat_applications', function (Blueprint $table) {
         $table->id('application_id');
-        $table->foreignId('student_id')->constrained('students');
+        $table->unsignedBigInteger('student_id');
+        $table->foreign('student_id')
+              ->references('student_id')
+              ->on('students')
+              ->onDelete('cascade');
         $table->decimal('cgpa');
         $table->decimal('home_distance_km');
         $table->boolean('financial_need');

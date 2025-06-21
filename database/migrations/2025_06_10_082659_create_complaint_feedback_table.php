@@ -14,8 +14,12 @@ public function up()
 {
     Schema::create('complaint_feedback', function (Blueprint $table) {
         $table->id('feedback_id');
-        $table->foreignId('complaint_id')->constrained('complaints');
-        $table->foreignId('student_id')->constrained('students');
+        $table->unsignedBigInteger('complaint_id');
+        $table->foreign('complaint_id')->references('complaint_id')->on('complaints')->onDelete('cascade');
+
+         $table->unsignedBigInteger('student_id');
+        $table->foreign('student_id')->references('student_id')->on('students')->onDelete('cascade');
+
         $table->integer('rating');
         $table->text('comments');
         $table->timestamp('timestamp');

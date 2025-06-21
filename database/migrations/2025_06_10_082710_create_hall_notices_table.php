@@ -18,12 +18,12 @@ public function up()
         $table->enum('notice_type', ['announcement', 'event', 'deadline']);
         $table->text('description');
         $table->timestamp('date_posted');
-        $table->foreignId('admin_id')->constrained('admins');
+        $table->unsignedBigInteger('admin_id');
+        $table->foreign('admin_id')->references('admin_id')->on('admins')->onDelete('cascade');
         $table->timestamp('valid_from')->nullable();
         $table->timestamp('valid_until')->nullable();
         $table->enum('status', ['active', 'expired']);
         $table->string('attachment')->nullable();
-        $table->timestamp('updated_at');
         $table->timestamps();
     });
 }

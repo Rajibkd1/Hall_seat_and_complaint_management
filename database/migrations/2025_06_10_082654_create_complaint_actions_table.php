@@ -14,8 +14,12 @@ public function up()
 {
     Schema::create('complaint_actions', function (Blueprint $table) {
         $table->id('action_id');
-        $table->foreignId('complaint_id')->constrained('complaints');
-        $table->foreignId('admin_id')->constrained('admins');
+        $table->unsignedBigInteger('complaint_id');
+        $table->foreign('complaint_id')->references('complaint_id')->on('complaints')->onDelete('cascade');
+
+        $table->unsignedBigInteger('admin_id');
+        $table->foreign('admin_id')->references('admin_id')->on('admins')->onDelete('cascade');
+        
         $table->enum('action_type', ['response', 'closure', 'escalation']);
         $table->text('notes');
         $table->timestamp('timestamp');
