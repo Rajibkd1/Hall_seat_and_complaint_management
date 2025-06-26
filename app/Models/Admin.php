@@ -2,23 +2,33 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable; // Use this instead of Model
+use Illuminate\Notifications\Notifiable;
 
-class Admin extends Model
+class Admin extends Authenticatable
 {
-    use HasFactory;
+    use Notifiable;
 
-    protected $primaryKey = 'admin_id';  // Primary Key
+    protected $primaryKey = 'admin_id';
+
+    public $incrementing = true;
 
     protected $fillable = [
-        'name', 'email', 'phone', 'role', 'department', 'teacher_id', 'password_hash',
+        'name',
+        'email',
+        'phone',
+        'role',
+        'department',
+        'teacher_id',
+        'password_hash',
     ];
 
-    // Relationships
+    protected $hidden = [
+        'password_hash',
+    ];
+    //Relationships
     public function seatAllotments()
     {
         return $this->hasMany(SeatAllotment::class, 'admin_id');
     }
 }
-
