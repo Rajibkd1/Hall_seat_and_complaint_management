@@ -61,6 +61,9 @@ class StudentAuthController extends Controller
 
         Auth::guard('student')->login($student);
 
+        
+// return redirect()->route('student.dashboard');
+
         return response()->json(['message' => 'Student logged in successfully']);
     }
 
