@@ -46,8 +46,11 @@ Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.
 // Student Protected Routes
 Route::middleware('student-auth')->group(function () {
     Route::get('/student/dashboard', function () {
-        return response()->json(['message' => 'Welcome to Student Dashboard']);
-    });
+        return view('student.dashboard', ['student' => session('student')]);
+    })->name('student.dashboard');
+    Route::get('/student/profile', [\App\Http\Controllers\StudentController::class, 'profile'])->name('student.profile');
+    Route::post('/student/profile', [\App\Http\Controllers\StudentController::class, 'update'])->name('student.profile.update');
+    Route::post('/student/logout', [StudentAuthController::class, 'logout'])->name('student.logout');
 });
 
 // Admin Protected Routes

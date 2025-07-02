@@ -61,15 +61,12 @@ class StudentAuthController extends Controller
 
         Auth::guard('student')->login($student);
 
-        
-// return redirect()->route('student.dashboard');
-
-        return response()->json(['message' => 'Student logged in successfully']);
+        return redirect()->route('student.dashboard')->with('student', $student);
     }
 
     public function logout(Request $request)
     {
         Auth::guard('student')->logout();
-        return response()->json(['message' => 'Student logged out successfully']);
+        return redirect('/');
     }
 }
