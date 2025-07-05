@@ -18,12 +18,6 @@ class StudentAuthController extends Controller
             'phone' => 'required',
             'department' => 'required',
             'session_year' => 'required|integer',
-            'current_address' => 'required',
-            'permanent_address' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
-            'guardian_alive_status' => 'required|boolean',
-            'guardian_contact' => 'required',
             'password' => 'required|min:6',
         ]);
 
@@ -34,18 +28,13 @@ class StudentAuthController extends Controller
             'phone' => $request->phone,
             'department' => $request->department,
             'session_year' => $request->session_year,
-            'current_address' => $request->current_address,
-            'permanent_address' => $request->permanent_address,
-            'father_name' => $request->father_name,
-            'mother_name' => $request->mother_name,
-            'guardian_alive_status' => $request->guardian_alive_status,
-            'guardian_contact' => $request->guardian_contact,
             'password_hash' => Hash::make($request->password),
         ]);
 
         Auth::guard('student')->login($student);
         return redirect()->route('student.login.page')->with('success', 'Registration successful! Please log in.');
     }
+
     public function login(Request $request)
     {
         $request->validate([
