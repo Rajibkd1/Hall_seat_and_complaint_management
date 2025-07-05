@@ -11,7 +11,7 @@ use App\Http\Controllers\AdminAuthController;
 */
 
 // Student Pages
-Route::view('/student/login', 'student.login')->name('student.login.page');
+Route::view('/student/login', 'student.login')->name('student.login');
 Route::view('/student/register', 'student.register')->name('student.register.page');
 
 // Admin Pages
@@ -30,8 +30,8 @@ Route::get('/', function () {
 */
 
 // Student Auth (Form submission)
-Route::post('/student/send-code', [StudentAuthController::class, 'sendVerificationCode']);
-Route::post('/student/verify-code', [StudentAuthController::class, 'verifyCode']); // ✅ ADD THIS
+Route::post('/student/send-code', [StudentAuthController::class, 'sendVerificationCode'])->name('student.send-code');
+Route::post('/student/verify-code', [StudentAuthController::class, 'verifyCode'])->name('student.verify-code');
 Route::post('/student/register', [StudentAuthController::class, 'register'])->name('student.register.submit');
 Route::post('/student/login', [StudentAuthController::class, 'login'])->name('student.login.submit');
 

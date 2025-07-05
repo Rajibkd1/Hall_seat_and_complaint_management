@@ -30,7 +30,7 @@ class StudentAuthController extends Controller
         );
         Mail::to($request->email)->send(new StudentVerificationCode($code));
 
-        return response()->json(['message' => 'Verification code sent to email.']);
+        return response()->json(['status' => 'success', 'message' => 'Verification code sent to email.']);
     }
     public function verifyCode(Request $request)
     {
