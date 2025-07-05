@@ -58,7 +58,7 @@ class StudentAuthController extends Controller
             'code' => 'required',
             'phone' => 'required',
             'department' => 'required',
-            'session_year' => 'required|integer',
+            'session_year' => 'required',
             'password' => 'required|min:6',
         ]);
 

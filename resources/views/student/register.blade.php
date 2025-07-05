@@ -14,42 +14,42 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
         }
-        
+
         .glass-effect {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
-        
+
         .input-focus:focus {
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
             outline: none;
         }
-        
+
         .btn-gradient {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
-        
+
         .btn-gradient:hover {
             background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
-        
+
         .btn-secondary {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
-        
+
         .btn-secondary:hover {
             background: linear-gradient(135deg, #059669 0%, #047857 100%);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
         }
-        
+
         /* Password Strength Indicator */
         .strength-bar {
             height: 4px;
@@ -57,57 +57,63 @@
             transition: all 0.3s ease;
             background: #e5e7eb;
         }
-        
-        .strength-very-weak { 
+
+        .strength-very-weak {
             background: linear-gradient(90deg, #ef4444, #dc2626);
             box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
         }
-        
-        .strength-weak { 
+
+        .strength-weak {
             background: linear-gradient(90deg, #f97316, #ea580c);
             box-shadow: 0 0 8px rgba(249, 115, 22, 0.3);
         }
-        
-        .strength-medium { 
+
+        .strength-medium {
             background: linear-gradient(90deg, #f59e0b, #d97706);
             box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
         }
-        
-        .strength-strong { 
+
+        .strength-strong {
             background: linear-gradient(90deg, #10b981, #059669);
             box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
         }
-        
-        .strength-very-strong { 
+
+        .strength-very-strong {
             background: linear-gradient(90deg, #059669, #047857);
             box-shadow: 0 0 8px rgba(5, 150, 105, 0.3);
         }
-        
+
         /* Animations */
         .animate-slide-down {
             animation: slideDown 0.5s ease-out;
         }
-        
+
         .animate-fade-in {
             animation: fadeIn 0.3s ease-out;
         }
-        
+
         @keyframes slideDown {
             from {
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
-        
+
         /* Dropdown Styles */
         .dropdown-list {
             max-height: 200px;
@@ -118,59 +124,72 @@
             border-radius: 0 0 8px 8px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
-        
+
         .dropdown-item {
             padding: 12px 16px;
             cursor: pointer;
             border-bottom: 1px solid #f3f4f6;
             transition: all 0.2s ease;
         }
-        
+
         .dropdown-item:hover {
             background: #f8fafc;
             color: #667eea;
         }
-        
+
         .dropdown-item:last-child {
             border-bottom: none;
         }
-        
+
         /* Success checkmark animation */
         .success-checkmark {
             animation: checkmark 0.5s ease-in-out;
         }
-        
+
         @keyframes checkmark {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
-        
+
         /* Loading spinner */
         .spinner {
             animation: spin 1s linear infinite;
         }
-        
+
         @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
-        
+
         /* Custom scrollbar */
         .dropdown-list::-webkit-scrollbar {
             width: 6px;
         }
-        
+
         .dropdown-list::-webkit-scrollbar-track {
             background: #f1f1f1;
             border-radius: 3px;
         }
-        
+
         .dropdown-list::-webkit-scrollbar-thumb {
             background: #c1c1c1;
             border-radius: 3px;
         }
-        
+
         .dropdown-list::-webkit-scrollbar-thumb:hover {
             background: #a8a8a8;
         }
@@ -208,11 +227,11 @@
                         <i class="fas fa-envelope mr-2 text-blue-500"></i>Email Address
                     </label>
                     <div class="flex">
-                        <input type="email" id="email" name="email" 
-                               class="flex-1 p-4 border border-gray-300 rounded-l-xl input-focus transition-all duration-200 text-lg" 
-                               placeholder="Enter your email" required>
-                        <button type="button" onclick="sendCode()" 
-                                class="bg-blue-500 hover:bg-blue-600 text-white px-8 rounded-r-xl transition-all duration-200 font-semibold shadow-lg hover:shadow-xl">
+                        <input type="email" id="email" name="email"
+                            class="flex-1 p-4 border border-gray-300 rounded-l-xl input-focus transition-all duration-200 text-lg"
+                            placeholder="Enter your email" required>
+                        <button type="button" onclick="sendCode()"
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-8 rounded-r-xl transition-all duration-200 font-semibold shadow-lg hover:shadow-xl">
                             <i class="fas fa-paper-plane mr-2"></i>Send Code
                         </button>
                     </div>
@@ -224,11 +243,11 @@
                         <i class="fas fa-shield-alt mr-2 text-green-500"></i>Verification Code
                     </label>
                     <div class="flex">
-                        <input type="text" id="code" name="code" 
-                               class="flex-1 p-4 border border-gray-300 rounded-l-xl input-focus transition-all duration-200 text-lg text-center font-mono tracking-widest" 
-                               placeholder="Enter 6-digit code" maxlength="6">
-                        <button type="button" onclick="verifyCode()" 
-                                class="btn-secondary text-white px-8 rounded-r-xl transition-all duration-200 font-semibold">
+                        <input type="text" id="code" name="code"
+                            class="flex-1 p-4 border border-gray-300 rounded-l-xl input-focus transition-all duration-200 text-lg text-center font-mono tracking-widest"
+                            placeholder="Enter 6-digit code" maxlength="6">
+                        <button type="button" onclick="verifyCode()"
+                            class="btn-secondary text-white px-8 rounded-r-xl transition-all duration-200 font-semibold">
                             <i class="fas fa-check mr-2"></i>Verify
                         </button>
                     </div>
@@ -246,31 +265,31 @@
                         <label class="block text-sm font-semibold text-gray-700">
                             <i class="fas fa-user mr-2 text-purple-500"></i>Full Name
                         </label>
-                        <input type="text" name="name" 
-                               class="w-full p-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg" 
-                               placeholder="Enter your full name" required>
+                        <input type="text" name="name"
+                            class="w-full p-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg"
+                            placeholder="Enter your full name" required>
                     </div>
 
                     <div class="space-y-3">
                         <label class="block text-sm font-semibold text-gray-700">
                             <i class="fas fa-id-card mr-2 text-indigo-500"></i>University ID
                         </label>
-                        <input type="text" name="university_id" 
-                               class="w-full p-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg" 
-                               placeholder="e.g., 2021331001" required>
+                        <input type="text" name="university_id"
+                            class="w-full p-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg"
+                            placeholder="e.g., MUH2*****2M" required>
                     </div>
 
                     <div class="space-y-3 relative">
                         <label class="block text-sm font-semibold text-gray-700">
                             <i class="fas fa-building mr-2 text-orange-500"></i>Department
                         </label>
-                        <input type="text" id="department" name="department" 
-                               class="w-full p-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg" 
-                               placeholder="Start typing your department..." 
-                               autocomplete="off" required
-                               onkeyup="filterDepartments()"
-                               onfocus="showDepartments()"
-                               onblur="hideDepartments()">
+                        <input type="text" id="department" name="department"
+                            class="w-full p-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg"
+                            placeholder="Start typing your department..."
+                            autocomplete="off" required
+                            onkeyup="filterDepartments()"
+                            onfocus="showDepartments()"
+                            onblur="hideDepartments()">
                         <div id="department-dropdown" class="absolute z-10 w-full hidden dropdown-list"></div>
                     </div>
 
@@ -278,18 +297,18 @@
                         <label class="block text-sm font-semibold text-gray-700">
                             <i class="fas fa-calendar mr-2 text-teal-500"></i>Session Year
                         </label>
-                        <input type="number" name="session_year" min="2000" max="2030"
-                               class="w-full p-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg" 
-                               placeholder="e.g., 2021" required>
+                        <input type="text" name="session_year"
+                            class="w-full p-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg"
+                            placeholder="e.g., 2021-2022" required>
                     </div>
 
                     <div class="space-y-3 md:col-span-2">
                         <label class="block text-sm font-semibold text-gray-700">
                             <i class="fas fa-phone mr-2 text-pink-500"></i>Phone Number
                         </label>
-                        <input type="text" name="phone" 
-                               class="w-full p-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg" 
-                               placeholder="e.g., +8801XXXXXXXXX" required>
+                        <input type="text" name="phone"
+                            class="w-full p-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg"
+                            placeholder="e.g., +8801XXXXXXXXX" required>
                     </div>
                 </div>
 
@@ -300,16 +319,16 @@
                             <i class="fas fa-lock mr-2 text-red-500"></i>Password
                         </label>
                         <div class="relative">
-                            <input type="password" id="password" name="password" 
-                                   class="w-full p-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 pr-12 text-lg" 
-                                   placeholder="Create a strong password" required
-                                   onkeyup="checkPasswordStrength()">
-                            <button type="button" onclick="togglePassword('password')" 
-                                    class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors duration-200">
+                            <input type="password" id="password" name="password"
+                                class="w-full p-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 pr-12 text-lg"
+                                placeholder="Create a strong password" required
+                                onkeyup="checkPasswordStrength()">
+                            <button type="button" onclick="togglePassword('password')"
+                                class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors duration-200">
                                 <i id="password-toggle" class="fas fa-eye text-xl"></i>
                             </button>
                         </div>
-                        
+
                         <!-- Enhanced Password Strength Indicator -->
                         <div class="mt-4 space-y-2">
                             <div class="flex space-x-2">
@@ -348,12 +367,12 @@
                             <i class="fas fa-lock mr-2 text-red-500"></i>Confirm Password
                         </label>
                         <div class="relative">
-                            <input type="password" id="confirm_password" name="confirm_password" 
-                                   class="w-full p-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 pr-12 text-lg" 
-                                   placeholder="Confirm your password" required
-                                   onkeyup="checkPasswordMatch()">
-                            <button type="button" onclick="togglePassword('confirm_password')" 
-                                    class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors duration-200">
+                            <input type="password" id="confirm_password" name="confirm_password"
+                                class="w-full p-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 pr-12 text-lg"
+                                placeholder="Confirm your password" required
+                                onkeyup="checkPasswordMatch()">
+                            <button type="button" onclick="togglePassword('confirm_password')"
+                                class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors duration-200">
                                 <i id="confirm_password-toggle" class="fas fa-eye text-xl"></i>
                             </button>
                         </div>
@@ -362,7 +381,7 @@
                 </div>
 
                 <button type="submit" id="submit-btn" disabled
-                        class="w-full py-4 btn-gradient text-white font-bold text-lg rounded-xl transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none">
+                    class="w-full py-4 btn-gradient text-white font-bold text-lg rounded-xl transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none">
                     <i class="fas fa-user-plus mr-2"></i>Create Account
                 </button>
             </div>
@@ -370,7 +389,7 @@
 
         <div class="text-center mt-8 pt-6 border-t border-gray-200">
             <p class="text-gray-600 text-lg">
-                Already have an account? 
+                Already have an account?
                 <a href="{{ url('/student/login') }}" class="text-blue-600 hover:text-blue-800 font-semibold transition-colors duration-200 hover:underline">
                     Sign in here
                 </a>
@@ -381,7 +400,7 @@
     <script>
         let emailVerified = false;
         let codeSent = false;
-        
+
         const departments = [
             "Computer Science and Telecommunication Engineering (CSTE)",
             "Applied Chemistry and Chemical Engineering (ACCE)",
@@ -437,37 +456,39 @@
             button.disabled = true;
 
             fetch("{{ url('/student/send-code') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ email: email })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'exists') {
-                    if (confirm(data.message + "\nDo you want to go to login page?")) {
-                        window.location.href = "{{ url('/student/login') }}";
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        email: email
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'exists') {
+                        if (confirm(data.message + "\nDo you want to go to login page?")) {
+                            window.location.href = "{{ url('/student/login') }}";
+                        }
+                    } else if (data.status === 'success') {
+                        codeSent = true;
+                        showAlert(data.message, 'success');
+                        // Show verification code field with animation
+                        document.getElementById('verification-section').classList.remove('hidden');
+                        document.getElementById('code').focus();
+                    } else {
+                        showAlert(data.message, 'error');
                     }
-                } else if (data.status === 'success') {
-                    codeSent = true;
-                    showAlert(data.message, 'success');
-                    // Show verification code field with animation
-                    document.getElementById('verification-section').classList.remove('hidden');
-                    document.getElementById('code').focus();
-                } else {
-                    showAlert(data.message, 'error');
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                showAlert("Error sending verification code. Please try again.", "error");
-            })
-            .finally(() => {
-                button.innerHTML = originalText;
-                button.disabled = false;
-            });
+                })
+                .catch(err => {
+                    console.error(err);
+                    showAlert("Error sending verification code. Please try again.", "error");
+                })
+                .finally(() => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                });
         }
 
         function verifyCode() {
@@ -491,46 +512,49 @@
             button.disabled = true;
 
             fetch("{{ url('/student/verify-code') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ email: email, code: code })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    emailVerified = true;
-                    showAlert(data.message, 'success');
-                    
-                    // Add success checkmark animation
-                    button.innerHTML = '<i class="fas fa-check success-checkmark mr-2"></i>Verified!';
-                    button.classList.add('bg-green-500');
-                    
-                    setTimeout(() => {
-                        document.getElementById('rest-of-form').classList.remove('hidden');
-                        document.getElementById('email-section').classList.add('hidden');
-                        document.querySelector('input[name="name"]').focus();
-                    }, 1000);
-                } else {
-                    showAlert(data.message, 'error');
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        code: code
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        emailVerified = true;
+                        showAlert(data.message, 'success');
+
+                        // Add success checkmark animation
+                        button.innerHTML = '<i class="fas fa-check success-checkmark mr-2"></i>Verified!';
+                        button.classList.add('bg-green-500');
+
+                        setTimeout(() => {
+                            document.getElementById('rest-of-form').classList.remove('hidden');
+                            document.getElementById('email-section').classList.add('hidden');
+                            document.querySelector('input[name="name"]').focus();
+                        }, 1000);
+                    } else {
+                        showAlert(data.message, 'error');
+                        button.innerHTML = originalText;
+                        button.disabled = false;
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    showAlert("Verification failed. Please try again.", "error");
                     button.innerHTML = originalText;
                     button.disabled = false;
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                showAlert("Verification failed. Please try again.", "error");
-                button.innerHTML = originalText;
-                button.disabled = false;
-            });
+                });
         }
 
         function togglePassword(fieldId) {
             const field = document.getElementById(fieldId);
             const toggle = document.getElementById(fieldId + '-toggle');
-            
+
             if (field.type === 'password') {
                 field.type = 'text';
                 toggle.classList.remove('fa-eye');
@@ -637,7 +661,7 @@
         function updateRequirement(id, met) {
             const element = document.getElementById(id);
             const icon = element.querySelector('i');
-            
+
             if (met) {
                 element.classList.remove('text-gray-500');
                 element.classList.add('text-green-500');
@@ -691,16 +715,16 @@
             const input = document.getElementById('department');
             const dropdown = document.getElementById('department-dropdown');
             const filter = input.value.toLowerCase();
-            
+
             if (filter.length === 0) {
                 dropdown.classList.add('hidden');
                 return;
             }
-            
-            const filtered = departments.filter(dept => 
+
+            const filtered = departments.filter(dept =>
                 dept.toLowerCase().includes(filter)
             );
-            
+
             displayDepartments(filtered);
         }
 
@@ -719,16 +743,16 @@
 
         function displayDepartments(depts) {
             const dropdown = document.getElementById('department-dropdown');
-            
+
             if (depts.length === 0) {
                 dropdown.classList.add('hidden');
                 return;
             }
-            
-            dropdown.innerHTML = depts.map(dept => 
+
+            dropdown.innerHTML = depts.map(dept =>
                 `<div class="dropdown-item" onclick="selectDepartment('${dept}')">${dept}</div>`
             ).join('');
-            
+
             dropdown.classList.remove('hidden');
         }
 
@@ -750,7 +774,7 @@
                 type === 'warning' ? 'bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700' :
                 'bg-red-50 border-l-4 border-red-500 text-red-700'
             }`;
-            
+
             alertDiv.innerHTML = `
                 <div class="flex items-center">
                     <i class="fas ${
@@ -762,9 +786,9 @@
                     <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-xl hover:opacity-70 transition-opacity">&times;</button>
                 </div>
             `;
-            
+
             document.body.appendChild(alertDiv);
-            
+
             // Auto remove after 5 seconds
             setTimeout(() => {
                 if (alertDiv.parentElement) {
@@ -811,11 +835,6 @@
                 value = '+880' + value.substring(1);
             }
             e.target.value = value;
-        });
-
-        // Auto-format university ID
-        document.querySelector('input[name="university_id"]').addEventListener('input', function(e) {
-            e.target.value = e.target.value.replace(/\D/g, '');
         });
     </script>
 </body>
