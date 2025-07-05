@@ -14,8 +14,14 @@ class StudentAuthController extends Controller
 {
     public function sendVerificationCode(Request $request)
     {
-        $request->validate(['email' => 'required|email|unique:students,email']);
-
+        $request->validate(['email' => 'required|email']);
+        // Check if the email is already registered
+        if (Student::where('email', $request->email)->exists()) {
+            return response()->json([
+                'status' => 'exists',
+                'message' => 'This email is already registered. Please login instead.'
+            ], 200);
+        }
         $code = rand(100000, 999999);
 
         EmailVerification::updateOrCreate(
