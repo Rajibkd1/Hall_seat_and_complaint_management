@@ -210,7 +210,7 @@
                     <div class="flex">
                         <input type="email" id="email" name="email" 
                                class="flex-1 p-4 border border-gray-300 rounded-l-xl input-focus transition-all duration-200 text-lg" 
-                               placeholder="Enter your university email" required>
+                               placeholder="Enter your email" required>
                         <button type="button" onclick="sendCode()" 
                                 class="bg-blue-500 hover:bg-blue-600 text-white px-8 rounded-r-xl transition-all duration-200 font-semibold shadow-lg hover:shadow-xl">
                             <i class="fas fa-paper-plane mr-2"></i>Send Code
