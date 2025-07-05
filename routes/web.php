@@ -30,8 +30,11 @@ Route::get('/', function () {
 */
 
 // Student Auth (Form submission)
+Route::post('/student/send-code', [StudentAuthController::class, 'sendVerificationCode']);
+Route::post('/student/verify-code', [StudentAuthController::class, 'verifyCode']); // ✅ ADD THIS
 Route::post('/student/register', [StudentAuthController::class, 'register'])->name('student.register.submit');
 Route::post('/student/login', [StudentAuthController::class, 'login'])->name('student.login.submit');
+
 
 // Admin Auth (Form submission)
 Route::post('/admin/register', [AdminAuthController::class, 'register'])->name('admin.register.submit');
@@ -45,9 +48,7 @@ Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.
 
 // Student Protected Routes
 Route::middleware('student-auth')->group(function () {
-    Route::get('/student/dashboard', function () {
-        return view('student.dashboard', ['student' => session('student')]);
-    })->name('student.dashboard');
+    Route::get('/student/dashboard', [StudentAuthController::class, 'dashboard'])->name('student.dashboard');
     Route::get('/student/profile', [\App\Http\Controllers\StudentController::class, 'profile'])->name('student.profile');
     Route::post('/student/profile', [\App\Http\Controllers\StudentController::class, 'update'])->name('student.profile.update');
     Route::post('/student/logout', [StudentAuthController::class, 'logout'])->name('student.logout');
