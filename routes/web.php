@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentAuthController;
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\StudentComplaintController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +53,19 @@ Route::middleware('student-auth')->group(function () {
     Route::get('/student/profile', [\App\Http\Controllers\StudentController::class, 'profile'])->name('student.profile');
     Route::post('/student/profile', [\App\Http\Controllers\StudentController::class, 'update'])->name('student.profile.update');
     Route::post('/student/logout', [StudentAuthController::class, 'logout'])->name('student.logout');
+    // Complaint List
+    Route::get('/complaint_list', [StudentComplaintController::class, 'complaintList'])->name('student.complaint_list');
+    
+    // Create Complaint
+    Route::get('/create_complaint', [StudentComplaintController::class, 'createComplaint'])->name('student.create_complaint');
+    Route::post('/create_complaint', [StudentComplaintController::class, 'storeComplaint'])->name('student.store_complaint');
+    
+    // Track Complaint
+    Route::get('/track_complaint', [StudentComplaintController::class, 'trackComplaint'])->name('student.track_complaint');
+    Route::post('/search_complaint', [StudentComplaintController::class, 'searchComplaint'])->name('student.search_complaint');
+    
+    // Delete Complaint
+    Route::delete('/complaint/{complaint}', [StudentComplaintController::class, 'deleteComplaint'])->name('student.delete_complaint');
 });
 
 // Admin Protected Routes

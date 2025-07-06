@@ -15,6 +15,10 @@ class Complaint extends Model
         'student_id', 'category', 'description', 'emergency_flag', 'status', 'submission_date', 'image_url',
     ];
 
+    protected $casts = [
+        'submission_date' => 'datetime',
+    ];
+
     // Relationships
     public function student()
     {

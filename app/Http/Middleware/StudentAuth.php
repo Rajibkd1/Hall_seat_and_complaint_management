@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,11 +14,17 @@ class StudentAuth
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
+        // Check if the student is authenticated
         if (!Auth::guard('student')->check()) {
-            return response()->json(['message' => 'Unauthorized Student'], 401);
+            // If not authenticated, redirect to student login page
+            return redirect()->route('student.login');
         }
+
+        // Ensure the student guard is used for the request
+        Auth::shouldUse('student');
+
         return $next($request);
     }
 }

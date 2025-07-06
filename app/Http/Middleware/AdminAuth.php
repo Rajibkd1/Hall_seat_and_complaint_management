@@ -16,9 +16,12 @@ class AdminAuth
      */
     public function handle($request, Closure $next)
     {
-        if (!Auth::guard('admin')->check()) {
-            return response()->json(['message' => 'Unauthorized Admin'], 401);
+        '''        if (!Auth::guard('admin')->check()) {
+            return redirect()->route('admin.login');
         }
-        return $next($request);
+
+        Auth::shouldUse('admin');
+
+        return $next($request);''
     }
 }
