@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentAuthController;
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\HallNoticeController;
 use App\Http\Controllers\StudentComplaintController;
 
 /*
@@ -66,6 +67,13 @@ Route::middleware('student-auth')->group(function () {
     
     // Delete Complaint
     Route::delete('/complaint/{complaint}', [StudentComplaintController::class, 'deleteComplaint'])->name('student.delete_complaint');
+
+     Route::get('/hall-notice', [HallNoticeController::class, 'index'])->name('student.hall-notice');
+    Route::get('/hall-notice/{id}', [HallNoticeController::class, 'show'])->name('student.hall-notice.show');
+
+    // Placeholder routes for Seat Application and Contact Us
+    Route::get('/seat-application', function () { return view('student.seat_application'); })->name('student.seat_application');
+    Route::get('/contact-us', function () { return view('student.contact_us'); })->name('student.contact_us');
 });
 
 // Admin Protected Routes

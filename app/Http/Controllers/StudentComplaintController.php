@@ -20,9 +20,9 @@ class StudentComplaintController extends Controller
         }
 
         $complaints = Complaint::where('student_id', $student->student_id)
-                               ->orderBy('submission_date', 'desc')
-                               ->paginate(10);
-        
+            ->orderBy('submission_date', 'desc')
+            ->paginate(10);
+
         $stats = [
             'total' => Complaint::where('student_id', $student->student_id)->count(),
             'pending' => Complaint::where('student_id', $student->student_id)->where('status', 'pending')->count(),
@@ -91,8 +91,8 @@ class StudentComplaintController extends Controller
         }
 
         $complaints = Complaint::where('student_id', $student->student_id)
-                               ->orderBy('submission_date', 'desc')
-                               ->get();
+            ->orderBy('submission_date', 'desc')
+            ->get();
 
         return view('student.track_complaint', compact('complaints', 'student'));
     }
@@ -111,15 +111,15 @@ class StudentComplaintController extends Controller
         }
 
         $trackingId = $request->tracking_id;
-        
+
         // Extract complaint ID from tracking ID (format: CM-YYYY-XXX)
         if (preg_match('/CM-\d{4}-(\d{3})/', $trackingId, $matches)) {
             $complaintId = (int)$matches[1];
-            
+
             $complaint = Complaint::where('complaint_id', $complaintId)
-                                 ->where('student_id', $student->student_id)
-                                 ->first();
-            
+                ->where('student_id', $student->student_id)
+                ->first();
+
             if ($complaint) {
                 return response()->json([
                     'success' => true,
@@ -136,12 +136,18 @@ class StudentComplaintController extends Controller
     }
 
     // Delete complaint
+    // Delete complaint
     public function deleteComplaint(Complaint $complaint)
     {
-        $student = Auth::user();
+        $student = Auth::guard('student')->user(); // Use the correct guard
 
         if (!$student instanceof \App\Models\Student || $complaint->student_id !== $student->student_id) {
             abort(403, 'Unauthorized access to complaint.');
+        }
+
+        // Only allow deletion of pending complaints
+        if ($complaint->status !== 'pending') {
+            return back()->with('error', 'Only pending complaints can be deleted.');
         }
 
         if ($complaint->image_url) {
@@ -151,9 +157,6 @@ class StudentComplaintController extends Controller
 
         $complaint->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Complaint deleted successfully!'
-        ]);
+        return redirect()->route('student.complaint_list')->with('success', 'Complaint deleted successfully!');
     }
 }

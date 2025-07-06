@@ -109,9 +109,30 @@ class StudentAuthController extends Controller
         Auth::guard('student')->logout();
         return redirect('/');
     }
-    public function dashboard()
-    {
-        $student = Auth::guard('student')->user();
-        return view('student.dashboard', compact('student'));
+   // Add this method to your existing StudentAuthController
+public function dashboard()
+{
+    $student = Auth::guard('student')->user();
+    
+    if (!$student) {
+        return redirect()->route('student.login');
     }
+    
+    // Get statistics
+    $stats = [
+        'total_complaints' => \App\Models\Complaint::where('student_id', $student->student_id)->count(),
+        'pending_complaints' => \App\Models\Complaint::where('student_id', $student->student_id)->where('status', 'pending')->count(),
+        'resolved_complaints' => \App\Models\Complaint::where('student_id', $student->student_id)->where('status', 'resolved')->count(),
+        'recent_notices' => \App\Models\HallNotice::active()->orderBy('date_posted', 'desc')->limit(3)->get(),
+    ];
+    
+    // Get recent complaints
+    $recentComplaints = \App\Models\Complaint::where('student_id', $student->student_id)
+                                           ->orderBy('submission_date', 'desc')
+                                           ->limit(5)
+                                           ->get();
+    
+    return view('student.dashboard', compact('student', 'stats', 'recentComplaints'));
+}
+
 }

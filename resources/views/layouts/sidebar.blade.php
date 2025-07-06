@@ -27,13 +27,13 @@
                  <span class="font-medium">My Profile</span>
              </a></li>
              @endauth
-             <li><a href="#" class="nav-link group flex items-center py-4 px-6 text-slate-700 hover:bg-gradient-to-r hover:from-slate-50 hover:to-slate-100 transition-all duration-300 border-l-4 border-transparent hover:border-slate-400 rounded-r-xl mx-2">
+             <li><a href="{{ route('student.hall-notice') }}" class="nav-link group flex items-center py-4 px-6 text-slate-700 hover:bg-gradient-to-r hover:from-slate-50 hover:to-slate-100 transition-all duration-300 border-l-4 border-transparent hover:border-slate-400 rounded-r-xl mx-2">
                  <div class="bg-slate-100 p-2 rounded-lg mr-4 group-hover:bg-slate-200 transition-colors duration-300">
                      <i class="fas fa-bullhorn text-slate-600 group-hover:text-slate-700"></i>
                  </div>
                  <span class="font-medium">Notices</span>
              </a></li>
-             <li><a href="#" class="nav-link group flex items-center py-4 px-6 text-slate-700 hover:bg-gradient-to-r hover:from-slate-50 hover:to-slate-100 transition-all duration-300 border-l-4 border-transparent hover:border-slate-400 rounded-r-xl mx-2">
+             <li><a href="{{ route('student.seat_application') }}" class="nav-link group flex items-center py-4 px-6 text-slate-700 hover:bg-gradient-to-r hover:from-slate-50 hover:to-slate-100 transition-all duration-300 border-l-4 border-transparent hover:border-slate-400 rounded-r-xl mx-2">
                  <div class="bg-slate-100 p-2 rounded-lg mr-4 group-hover:bg-slate-200 transition-colors duration-300">
                      <i class="fas fa-chair text-slate-600 group-hover:text-slate-700"></i>
                  </div>
@@ -45,7 +45,7 @@
                  </div>
                  <span class="font-medium">Complaint Box</span>
              </a></li>
-             <li><a href="#" class="nav-link group flex items-center py-4 px-6 text-slate-700 hover:bg-gradient-to-r hover:from-slate-50 hover:to-slate-100 transition-all duration-300 border-l-4 border-transparent hover:border-slate-400 rounded-r-xl mx-2">
+             <li><a href="{{ route('student.contact_us') }}" class="nav-link group flex items-center py-4 px-6 text-slate-700 hover:bg-gradient-to-r hover:from-slate-50 hover:to-slate-100 transition-all duration-300 border-l-4 border-transparent hover:border-slate-400 rounded-r-xl mx-2">
                  <div class="bg-slate-100 p-2 rounded-lg mr-4 group-hover:bg-slate-200 transition-colors duration-300">
                      <i class="fas fa-phone text-slate-600 group-hover:text-slate-700"></i>
                  </div>

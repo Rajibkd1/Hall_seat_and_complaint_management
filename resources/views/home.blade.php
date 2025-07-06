@@ -1,4 +1,4 @@
-@extends('layouts.navigation')
+@extends('layouts.app')
 
 @section('content')
     <!-- Main Home Content -->
