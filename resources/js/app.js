@@ -1,23 +1,44 @@
-import './bootstrap';
-
 document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.getElementById('sidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
-    const menuToggle = document.getElementById('sidebarToggle'); // Corrected ID
+    const tabBar = document.getElementById('tabBar');
+    const menuToggle = document.getElementById('sidebarToggle');
 
+    // Function to initialize layout based on window size
+    function initializeLayout() {
+        if (window.innerWidth >= 1024) {
+            tabBar.classList.remove('hidden');
+            sidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        } else {
+            tabBar.classList.add('hidden');
+            sidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        }
+    }
+
+    // Toggle sidebar visibility on mobile
     if (menuToggle) {
         menuToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('-translate-x-full');
-            sidebarOverlay.classList.toggle('hidden');
+            if (window.innerWidth < 1024) {
+                sidebar.classList.toggle('-translate-x-full');
+                sidebarOverlay.classList.toggle('hidden');
+            }
         });
     }
 
+    // Close sidebar when clicking overlay
     if (sidebarOverlay) {
         sidebarOverlay.addEventListener('click', function() {
             sidebar.classList.add('-translate-x-full');
             sidebarOverlay.classList.add('hidden');
         });
     }
+
+    // Handle window resize
+    window.addEventListener('resize', function () {
+        initializeLayout();
+    });
 
     // Helper to normalize paths (remove trailing slash, handle root)
     function normalizePath(path) {
@@ -59,4 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
             link.classList.remove('border-transparent');
         }
     });
+
+    // Initialize layout on page load
+    initializeLayout();
 });
