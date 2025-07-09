@@ -13,8 +13,7 @@ use App\Http\Controllers\StudentComplaintController;
 */
 
 // Student Pages
-Route::view('/student/login', 'student.login')->name('student.login');
-Route::view('/student/register', 'student.register')->name('student.register.page');
+Route::get('/student/auth/{form_type?}', [StudentAuthController::class, 'showAuthForm'])->name('student.auth');
 
 // Admin Pages
 Route::view('/admin/login', 'admin.login')->name('admin.login.page');

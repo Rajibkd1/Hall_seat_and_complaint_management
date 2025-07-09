@@ -26,11 +26,11 @@
                 
                 <!-- Mobile-Optimized Auth Buttons -->
                 <div class="auth-buttons">
-                    <a href="{{ route('student.login') }}" class="header-btn header-login magnetic-effect">
+                    <a href="{{ route('student.auth', ['form_type' => 'login']) }}" class="header-btn header-login magnetic-effect">
                         <span>🔐</span>
                         <span>Login</span>
                     </a>
-                    <a href="{{ route('student.register.page') }}" class="header-btn header-signup glow-effect magnetic-effect">
+                    <a href="{{ route('student.auth', ['form_type' => 'register']) }}" class="header-btn header-signup glow-effect magnetic-effect">
                         <span>✨</span>
                         <span>Sign Up</span>
                     </a>

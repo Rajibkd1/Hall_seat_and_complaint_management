@@ -109,6 +109,12 @@ class StudentAuthController extends Controller
         Auth::guard('student')->logout();
         return redirect('/');
     }
+
+    public function showAuthForm($form_type = 'login')
+    {
+        return view('student.auth', ['form_type' => $form_type]);
+    }
+
    // Add this method to your existing StudentAuthController
 public function dashboard()
 {
