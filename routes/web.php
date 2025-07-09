@@ -22,7 +22,7 @@ Route::view('/admin/register', 'admin.register')->name('admin.register.page');
 
 // Home Page
 Route::get('/', function () {
-    return view('home');
+    return view('homepage');
 });
 
 /*
