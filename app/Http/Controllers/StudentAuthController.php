@@ -15,7 +15,6 @@ class StudentAuthController extends Controller
     public function sendVerificationCode(Request $request)
     {
         $request->validate(['email' => 'required|email']);
-        // Check if the email is already registered
         if (Student::where('email', $request->email)->exists()) {
             return response()->json([
                 'status' => 'exists',
@@ -114,31 +113,26 @@ class StudentAuthController extends Controller
     {
         return view('student.auth', ['form_type' => $form_type]);
     }
+    public function dashboard()
+    {
+        $student = Auth::guard('student')->user();
 
-   // Add this method to your existing StudentAuthController
-public function dashboard()
-{
-    $student = Auth::guard('student')->user();
-    
-    if (!$student) {
-        return redirect()->route('student.login');
+        if (!$student) {
+            return redirect()->route('student.login');
+        }
+
+        $stats = [
+            'total_complaints' => \App\Models\Complaint::where('student_id', $student->student_id)->count(),
+            'pending_complaints' => \App\Models\Complaint::where('student_id', $student->student_id)->where('status', 'pending')->count(),
+            'resolved_complaints' => \App\Models\Complaint::where('student_id', $student->student_id)->where('status', 'resolved')->count(),
+            'recent_notices' => \App\Models\HallNotice::active()->orderBy('date_posted', 'desc')->limit(3)->get(),
+        ];
+
+        $recentComplaints = \App\Models\Complaint::where('student_id', $student->student_id)
+            ->orderBy('submission_date', 'desc')
+            ->limit(5)
+            ->get();
+        session(['active_nav' => 'dashboard']);
+        return view('student.dashboard', compact('student', 'stats', 'recentComplaints'));
     }
-    
-    // Get statistics
-    $stats = [
-        'total_complaints' => \App\Models\Complaint::where('student_id', $student->student_id)->count(),
-        'pending_complaints' => \App\Models\Complaint::where('student_id', $student->student_id)->where('status', 'pending')->count(),
-        'resolved_complaints' => \App\Models\Complaint::where('student_id', $student->student_id)->where('status', 'resolved')->count(),
-        'recent_notices' => \App\Models\HallNotice::active()->orderBy('date_posted', 'desc')->limit(3)->get(),
-    ];
-    
-    // Get recent complaints
-    $recentComplaints = \App\Models\Complaint::where('student_id', $student->student_id)
-                                           ->orderBy('submission_date', 'desc')
-                                           ->limit(5)
-                                           ->get();
-    session(['active_nav' => 'dashboard']);
-    return view('student.dashboard', compact('student', 'stats', 'recentComplaints'));
-}
-
 }

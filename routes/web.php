@@ -5,6 +5,7 @@ use App\Http\Controllers\StudentAuthController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\HallNoticeController;
 use App\Http\Controllers\StudentComplaintController;
+use App\Http\Controllers\SeatApplicationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,8 +72,12 @@ Route::middleware('student-auth')->group(function () {
     Route::get('/hall-notice/{id}', [HallNoticeController::class, 'show'])->name('student.hall-notice.show');
 
     // Placeholder routes for Seat Application and Contact Us
-    Route::get('/seat-application', function () { session(['active_nav' => 'seat_application']); return view('student.seat_application'); })->name('student.seat_application');
     Route::get('/contact-us', function () { session(['active_nav' => 'contact_us']); return view('student.contact_us'); })->name('student.contact_us');
+
+    //Seat Application Routes
+    Route::get('/seat-application', [SeatApplicationController::class, 'showForm'])->name('student.seat_application');
+    Route::post('/seat-application/submit', [SeatApplicationController::class, 'store'])
+    ->name('seat-application.submit');
 });
 
 // Admin Protected Routes
