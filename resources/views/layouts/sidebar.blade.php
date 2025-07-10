@@ -13,39 +13,39 @@
     </div>
     <div class="overflow-y-auto h-full pb-20">
         <ul class="py-4 space-y-1">
-            <li><a href="{{ route('student.dashboard') }}" class="nav-link group flex items-center py-4 px-6 text-slate-700 hover:bg-gradient-to-r hover:from-slate-50 hover:to-slate-100 transition-all duration-300 border-l-4 border-transparent hover:border-slate-400 rounded-r-xl mx-2">
+            <li><a href="{{ route('student.dashboard') }}" class="nav-link group flex items-center py-4 px-6 text-slate-700 transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_nav') === 'dashboard' ? 'active bg-gradient-to-r from-slate-100 to-slate-200 border-slate-400' : 'hover:from-slate-50 hover:to-slate-100 border-transparent' }}">
                 <div class="bg-slate-100 p-2 rounded-lg mr-4 group-hover:bg-slate-200 transition-colors duration-300">
                     <i class="fas fa-home text-slate-600 group-hover:text-slate-700"></i>
                 </div>
                 <span class="font-medium">Dashboard</span>
             </a></li>
              @auth('student')
-             <li><a href="{{ route('student.profile') }}" class="nav-link group flex items-center py-4 px-6 text-slate-700 hover:bg-gradient-to-r hover:from-slate-50 hover:to-slate-100 transition-all duration-300 border-l-4 border-transparent hover:border-slate-400 rounded-r-xl mx-2">
+             <li><a href="{{ route('student.profile') }}" class="nav-link group flex items-center py-4 px-6 text-slate-700 transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_nav') === 'profile' ? 'active bg-gradient-to-r from-slate-100 to-slate-200 border-slate-400' : 'hover:from-slate-50 hover:to-slate-100 border-transparent' }}">
                  <div class="bg-slate-100 p-2 rounded-lg mr-4 group-hover:bg-slate-200 transition-colors duration-300">
                      <i class="fas fa-user text-slate-600 group-hover:text-slate-700"></i>
                  </div>
                  <span class="font-medium">My Profile</span>
              </a></li>
              @endauth
-             <li><a href="{{ route('student.hall-notice') }}" class="nav-link group flex items-center py-4 px-6 text-slate-700 hover:bg-gradient-to-r hover:from-slate-50 hover:to-slate-100 transition-all duration-300 border-l-4 border-transparent hover:border-slate-400 rounded-r-xl mx-2">
+             <li><a href="{{ route('student.hall-notice') }}" class="nav-link group flex items-center py-4 px-6 text-slate-700 transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_nav') === 'hall_notices' ? 'active bg-gradient-to-r from-slate-100 to-slate-200 border-slate-400' : 'hover:from-slate-50 hover:to-slate-100 border-transparent' }}">
                  <div class="bg-slate-100 p-2 rounded-lg mr-4 group-hover:bg-slate-200 transition-colors duration-300">
                      <i class="fas fa-bullhorn text-slate-600 group-hover:text-slate-700"></i>
                  </div>
                  <span class="font-medium">Notices</span>
              </a></li>
-             <li><a href="{{ route('student.seat_application') }}" class="nav-link group flex items-center py-4 px-6 text-slate-700 hover:bg-gradient-to-r hover:from-slate-50 hover:to-slate-100 transition-all duration-300 border-l-4 border-transparent hover:border-slate-400 rounded-r-xl mx-2">
+             <li><a href="{{ route('student.seat_application') }}" class="nav-link group flex items-center py-4 px-6 text-slate-700 transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_nav') === 'seat_application' ? 'active bg-gradient-to-r from-slate-100 to-slate-200 border-slate-400' : 'hover:from-slate-50 hover:to-slate-100 border-transparent' }}">
                  <div class="bg-slate-100 p-2 rounded-lg mr-4 group-hover:bg-slate-200 transition-colors duration-300">
                      <i class="fas fa-chair text-slate-600 group-hover:text-slate-700"></i>
                  </div>
                  <span class="font-medium">Seat Application</span>
              </a></li>
-             <li><a href="{{ route('student.complaint_list') }}" class="nav-link group flex items-center py-4 px-6 text-slate-700 hover:bg-gradient-to-r hover:from-slate-50 hover:to-slate-100 transition-all duration-300 border-l-4 border-transparent hover:border-slate-400 rounded-r-xl mx-2">
+             <li><a href="{{ route('student.complaint_list') }}" class="nav-link group flex items-center py-4 px-6 text-slate-700 transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_nav') === 'complaint_list' ? 'active bg-gradient-to-r from-slate-100 to-slate-200 border-slate-400' : 'hover:from-slate-50 hover:to-slate-100 border-transparent' }}">
                  <div class="bg-slate-100 p-2 rounded-lg mr-4 group-hover:bg-slate-200 transition-colors duration-300">
                      <i class="fas fa-comment-dots text-slate-600 group-hover:text-slate-700"></i>
                  </div>
                  <span class="font-medium">Complaint Box</span>
              </a></li>
-             <li><a href="{{ route('student.contact_us') }}" class="nav-link group flex items-center py-4 px-6 text-slate-700 hover:bg-gradient-to-r hover:from-slate-50 hover:to-slate-100 transition-all duration-300 border-l-4 border-transparent hover:border-slate-400 rounded-r-xl mx-2">
+             <li><a href="{{ route('student.contact_us') }}" class="nav-link group flex items-center py-4 px-6 text-slate-700 transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_nav') === 'contact_us' ? 'active bg-gradient-to-r from-slate-100 to-slate-200 border-slate-400' : 'hover:from-slate-50 hover:to-slate-100 border-transparent' }}">
                  <div class="bg-slate-100 p-2 rounded-lg mr-4 group-hover:bg-slate-200 transition-colors duration-300">
                      <i class="fas fa-phone text-slate-600 group-hover:text-slate-700"></i>
                  </div>

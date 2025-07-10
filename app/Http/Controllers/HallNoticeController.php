@@ -32,6 +32,7 @@ class HallNoticeController extends Controller
             ]);
         }
 
+        session(['active_nav' => 'hall_notices']);
         return view('student.hall_notices', compact('notices'));
     }
 

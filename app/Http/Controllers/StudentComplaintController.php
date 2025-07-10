@@ -29,7 +29,7 @@ class StudentComplaintController extends Controller
             'in_progress' => Complaint::where('student_id', $student->student_id)->where('status', 'in_progress')->count(),
             'resolved' => Complaint::where('student_id', $student->student_id)->where('status', 'resolved')->count(),
         ];
-
+        session(['active_nav' => 'complaint_list']);
         return view('student.complaint_list', compact('complaints', 'stats', 'student'));
     }
 

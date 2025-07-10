@@ -137,7 +137,7 @@ public function dashboard()
                                            ->orderBy('submission_date', 'desc')
                                            ->limit(5)
                                            ->get();
-    
+    session(['active_nav' => 'dashboard']);
     return view('student.dashboard', compact('student', 'stats', 'recentComplaints'));
 }
 

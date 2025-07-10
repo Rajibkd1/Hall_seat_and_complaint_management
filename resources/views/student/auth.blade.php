@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,32 +20,26 @@
         <div class="form-box login">
             <form action="{{ route('student.login.submit') }}" method="POST">
                 @csrf
-                <h1>Welcome Back</h1>
-                <p>Sign in to your account</p>
-                
+                <h1>Sign in to your account</h1>
                 <div class="input-box">
                     <input type="email" name="email" placeholder="Email Address" required>
                     <i class='bx bxs-envelope'></i>
                 </div>
-                
+
                 <div class="input-box">
                     <input type="password" id="login-password" name="password" placeholder="Password" required>
                     <i class='bx bxs-lock-alt password-toggle' onclick="togglePassword('login-password', this)"></i>
                 </div>
-                
+
                 <div class="forgot-link">
                     <a href="#">Forgot Password?</a>
                 </div>
-                
+
                 <button type="submit" class="btn">
                     <i class="fas fa-sign-in-alt"></i>
                     Sign In
                 </button>
             </form>
-
-            <div class="mobile-toggle">
-                <p>Don't have an account? <button type="button" onclick="switchToRegister()">Create Account</button></p>
-            </div>
         </div>
 
         <!-- Registration Form -->
@@ -53,14 +48,14 @@
                 @csrf
                 <h1>Create Account</h1>
                 <p>Join NSTU Hall Management</p>
-                
+
                 <!-- Step Indicator -->
                 <div class="step-indicator">
                     <div class="step active" id="step-1"></div>
                     <div class="step" id="step-2"></div>
                     <div class="step" id="step-3"></div>
                 </div>
-                
+
                 <!-- Email Verification Section -->
                 <div id="email-section">
                     <div class="input-box">
@@ -75,7 +70,8 @@
                     <!-- Verification Code Field -->
                     <div id="verification-section" class="verification-section">
                         <div class="input-box">
-                            <input type="text" id="code" name="code" placeholder="Enter 6-digit code" maxlength="6" class="code-input">
+                            <input type="text" id="code" name="code" placeholder="Enter 6-digit code"
+                                maxlength="6" class="code-input">
                             <i class='fas fa-shield-alt'></i>
                         </div>
                         <button type="button" onclick="verifyCode()" class="btn btn-secondary">
@@ -100,12 +96,15 @@
 
                     <div class="form-grid">
                         <div class="input-box" style="position: relative;">
-                            <input type="text" id="department" name="department" placeholder="Department" required autocomplete="off" onkeyup="filterDepartments()" onfocus="showDepartments()" onblur="hideDepartments()">
+                            <input type="text" id="department" name="department" placeholder="Department" required
+                                autocomplete="off" onkeyup="filterDepartments()" onfocus="showDepartments()"
+                                onblur="hideDepartments()">
                             <i class='fas fa-building'></i>
                             <div id="department-dropdown" class="department-dropdown"></div>
                         </div>
                         <div class="input-box">
-                            <input type="text" name="session_year" placeholder="Session Year (e.g., 2021-2022)" required>
+                            <input type="text" name="session_year" placeholder="Session Year (e.g., 2021-2022)"
+                                required>
                             <i class='fas fa-calendar'></i>
                         </div>
                     </div>
@@ -117,12 +116,15 @@
 
                     <div class="form-grid">
                         <div class="input-box">
-                            <input type="password" id="password" name="password" placeholder="Password" required onkeyup="checkPasswordStrength()">
+                            <input type="password" id="password" name="password" placeholder="Password" required
+                                onkeyup="checkPasswordStrength()">
                             <i class='bx bxs-lock-alt password-toggle' onclick="togglePassword('password', this)"></i>
                         </div>
                         <div class="input-box">
-                            <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required onkeyup="checkPasswordMatch()">
-                            <i class='bx bxs-lock-alt password-toggle' onclick="togglePassword('confirm_password', this)"></i>
+                            <input type="password" id="confirm_password" name="confirm_password"
+                                placeholder="Confirm Password" required onkeyup="checkPasswordMatch()">
+                            <i class='bx bxs-lock-alt password-toggle'
+                                onclick="togglePassword('confirm_password', this)"></i>
                         </div>
                     </div>
 
@@ -135,8 +137,9 @@
                             <div id="strength-4" class="strength-bar"></div>
                             <div id="strength-5" class="strength-bar"></div>
                         </div>
-                        <div id="strength-text" style="font-size: 12px; color: #64748b; font-weight: 500;">Password strength</div>
-                        
+                        <div id="strength-text" style="font-size: 12px; color: #64748b; font-weight: 500;">Password
+                            strength</div>
+
                         <div class="requirements">
                             <div id="req-length" class="req">
                                 <i class="fas fa-circle"></i>At least 8 characters
@@ -158,10 +161,6 @@
                     </button>
                 </div>
             </form>
-
-            <div class="mobile-toggle">
-                <p>Already have an account? <button type="button" onclick="switchToLogin()">Sign In</button></p>
-            </div>
         </div>
 
         <!-- Toggle Panels -->
@@ -280,10 +279,10 @@
         // Enhanced password toggle with smooth animation
         function togglePassword(fieldId, iconElement) {
             const field = document.getElementById(fieldId);
-            
+
             // Add smooth transition
             iconElement.style.transform = 'translateY(-50%) scale(0.8)';
-            
+
             setTimeout(() => {
                 if (field.type === 'password') {
                     field.type = 'text';
@@ -296,7 +295,7 @@
                     iconElement.classList.add('bxs-lock-alt');
                     iconElement.style.color = '#64748b';
                 }
-                
+
                 iconElement.style.transform = 'translateY(-50%) scale(1)';
             }, 100);
         }
@@ -320,34 +319,37 @@
             button.disabled = true;
 
             fetch('{{ route('student.send-code') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : ''
-                },
-                body: JSON.stringify({ email: email })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    codeSent = true;
-                    showAlert(data.message, 'success');
-                    document.getElementById('verification-section').classList.add('show');
-                    document.getElementById('code').focus();
-                } else if (data.status === 'exists') {
-                    showAlert(data.message, 'warning');
-                } else {
-                    showAlert(data.message || 'Failed to send verification code.', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showAlert('An error occurred while sending the code.', 'error');
-            })
-            .finally(() => {
-                button.innerHTML = originalText;
-                button.disabled = false;
-            });
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]') ? document.querySelector(
+                            'meta[name="csrf-token"]').getAttribute('content') : ''
+                    },
+                    body: JSON.stringify({
+                        email: email
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        codeSent = true;
+                        showAlert(data.message, 'success');
+                        document.getElementById('verification-section').classList.add('show');
+                        document.getElementById('code').focus();
+                    } else if (data.status === 'exists') {
+                        showAlert(data.message, 'warning');
+                    } else {
+                        showAlert(data.message || 'Failed to send verification code.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('An error occurred while sending the code.', 'error');
+                })
+                .finally(() => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                });
         }
 
         function verifyCode() {
@@ -370,50 +372,54 @@
             button.disabled = true;
 
             fetch('{{ route('student.verify-code') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : ''
-                },
-                body: JSON.stringify({ email: email, code: code })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    emailVerified = true;
-                    showAlert(data.message, 'success');
-                    button.innerHTML = '<i class="fas fa-check"></i> Verified!';
-                    button.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-                    
-                    updateStepIndicator(2);
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]') ? document.querySelector(
+                            'meta[name="csrf-token"]').getAttribute('content') : ''
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        code: code
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        emailVerified = true;
+                        showAlert(data.message, 'success');
+                        button.innerHTML = '<i class="fas fa-check"></i> Verified!';
+                        button.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
 
-                    setTimeout(() => {
-                        document.getElementById('rest-of-form').style.display = 'block';
-                        document.getElementById('email-section').style.display = 'none';
-                        
-                        // Add mobile compact class for better mobile experience
-                        if (window.innerWidth <= 650) {
-                            document.querySelector('.form-box.register').classList.add('mobile-compact');
-                        }
-                        
-                        updateStepIndicator(3);
-                        document.querySelector('input[name="name"]').focus();
-                        resetFormAnimations();
-                    }, 1000);
-                } else {
-                    showAlert(data.message || 'Failed to verify code.', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showAlert('An error occurred during verification.', 'error');
-            })
-            .finally(() => {
-                if (!emailVerified) {
-                    button.innerHTML = originalText;
-                    button.disabled = false;
-                }
-            });
+                        updateStepIndicator(2);
+
+                        setTimeout(() => {
+                            document.getElementById('rest-of-form').style.display = 'block';
+                            document.getElementById('email-section').style.display = 'none';
+
+                            // Add mobile compact class for better mobile experience
+                            if (window.innerWidth <= 650) {
+                                document.querySelector('.form-box.register').classList.add('mobile-compact');
+                            }
+
+                            updateStepIndicator(3);
+                            document.querySelector('input[name="name"]').focus();
+                            resetFormAnimations();
+                        }, 1000);
+                    } else {
+                        showAlert(data.message || 'Failed to verify code.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('An error occurred during verification.', 'error');
+                })
+                .finally(() => {
+                    if (!emailVerified) {
+                        button.innerHTML = originalText;
+                        button.disabled = false;
+                    }
+                });
         }
 
         function checkPasswordStrength() {
@@ -549,10 +555,10 @@
         function showDepartments() {
             const input = document.getElementById('department');
             const dropdown = document.getElementById('department-dropdown');
-            
+
             // Ensure proper z-index when showing dropdown
             input.parentElement.style.zIndex = '10000';
-            
+
             if (input.value.length === 0) {
                 displayDepartments(departments);
             }
@@ -586,7 +592,7 @@
         function selectDepartment(dept) {
             const input = document.getElementById('department');
             const dropdown = document.getElementById('department-dropdown');
-            
+
             input.value = dept;
             dropdown.classList.remove('show');
             // Reset z-index after selection
@@ -684,5 +690,5 @@
         });
     </script>
 </body>
-</html>
 
+</html>

@@ -17,6 +17,7 @@ class StudentController extends Controller
     public function profile()
     {
         $student = Auth::guard('student')->user();
+        session(['active_nav' => 'profile']);
         return view('student.profile', compact('student'));
     }
 

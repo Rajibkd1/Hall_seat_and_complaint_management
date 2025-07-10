@@ -71,8 +71,8 @@ Route::middleware('student-auth')->group(function () {
     Route::get('/hall-notice/{id}', [HallNoticeController::class, 'show'])->name('student.hall-notice.show');
 
     // Placeholder routes for Seat Application and Contact Us
-    Route::get('/seat-application', function () { return view('student.seat_application'); })->name('student.seat_application');
-    Route::get('/contact-us', function () { return view('student.contact_us'); })->name('student.contact_us');
+    Route::get('/seat-application', function () { session(['active_nav' => 'seat_application']); return view('student.seat_application'); })->name('student.seat_application');
+    Route::get('/contact-us', function () { session(['active_nav' => 'contact_us']); return view('student.contact_us'); })->name('student.contact_us');
 });
 
 // Admin Protected Routes
