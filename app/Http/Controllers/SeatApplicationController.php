@@ -86,7 +86,7 @@ class SeatApplicationController extends Controller
         foreach ($uploadFields as $input => $column) {
             if ($request->hasFile($input)) {
                 $file = $request->file($input);
-                $filename = $universityId . '_' . $input . '_' . time() . '.' . $file->getClientOriginalExtension();
+                $filename = $universityId . '_' . $input . '.' . $file->getClientOriginalExtension();
                 $path = $file->storeAs("applications/{$universityId}", $filename, 'public');
                 $filePaths[$column] = $path;
             }
