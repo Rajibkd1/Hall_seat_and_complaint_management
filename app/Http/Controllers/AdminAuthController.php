@@ -44,12 +44,12 @@ class AdminAuthController extends Controller
         $admin = Admin::where('email', $request->email)->first();
 
         if (!$admin || !Hash::check($request->password, $admin->password_hash)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return redirect()->route('admin.login.page')->with('error', 'Invalid credentials');
         }
 
         Auth::guard('admin')->login($admin);
 
-        return response()->json(['message' => 'Admin logged in successfully']);
+        return redirect()->route('admin.dashboard');
     }
     public function logout(Request $request)
     {

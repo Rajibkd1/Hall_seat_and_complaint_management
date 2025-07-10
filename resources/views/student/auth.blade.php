@@ -21,6 +21,11 @@
             <form action="{{ route('student.login.submit') }}" method="POST">
                 @csrf
                 <h1>Sign in to your account</h1>
+                @if(session('error'))
+                    <div class="alert alert-danger" style="color: red; margin-bottom: 15px;">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <div class="input-box">
                     <input type="email" name="email" placeholder="Email Address" required>
                     <i class='bx bxs-envelope'></i>

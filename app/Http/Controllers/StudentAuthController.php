@@ -96,7 +96,7 @@ class StudentAuthController extends Controller
         $student = Student::where('email', $request->email)->first();
 
         if (!$student || !Hash::check($request->password, $student->password_hash)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return redirect()->back()->with('error', 'Invalid credentials. Please try again.');
         }
 
         Auth::guard('student')->login($student);

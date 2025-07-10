@@ -19,7 +19,7 @@ class StudentAuth
         // Check if the student is authenticated
         if (!Auth::guard('student')->check()) {
             // If not authenticated, redirect to student login page
-            return redirect()->route('student.login');
+            return redirect()->route('student.auth');
         }
 
         // Ensure the student guard is used for the request

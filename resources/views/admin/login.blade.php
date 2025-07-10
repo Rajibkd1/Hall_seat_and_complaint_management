@@ -16,6 +16,11 @@
     <div class="flex justify-center items-center min-h-screen">
         <div class="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
             <h2 class="text-2xl font-bold mb-6 text-center">Admin Login</h2>
+            @if(session('error'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
+            @endif
             <form method="POST" action="{{ url('/admin/login') }}">
                 @csrf
 

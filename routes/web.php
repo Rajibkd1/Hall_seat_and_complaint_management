@@ -78,6 +78,6 @@ Route::middleware('student-auth')->group(function () {
 // Admin Protected Routes
 Route::middleware('admin-auth')->group(function () {
     Route::get('/admin/dashboard', function () {
-        return response()->json(['message' => 'Welcome to Admin Dashboard']);
-    });
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
 });
