@@ -23,6 +23,7 @@ class StudentController extends Controller
 
     public function update(Request $request)
     {
+        /** @var \App\Models\Student $student */
         $student = Auth::guard('student')->user();
 
         $validator = Validator::make($request->all(), [
@@ -30,7 +31,7 @@ class StudentController extends Controller
             'university_id' => 'required|string|max:255|unique:students,university_id,' . $student->student_id . ',student_id',
             'phone' => 'required|string|max:20',
             'department' => 'required|string|max:255',
-            'session_year' => 'required|integer|min:2000|max:' . (date('Y') + 5),
+            'session_year' => 'required',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
