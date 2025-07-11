@@ -11,7 +11,7 @@
                 <div class="absolute inset-0 bg-black/20"></div>
                 <div class="absolute -bottom-16 left-8 z-10">
                     <div id="profileImgContainer" class="relative group">
-                        <img id="profileImg" src="{{ $student->profile_image_url }}" 
+                        <img src="{{ asset('storage/' . $student->profile_image) }}" 
                              alt="Profile" class="w-32 h-32 rounded-full border-4 border-white shadow-xl object-cover transition-transform duration-300 group-hover:scale-105">
                         <div class="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center cursor-pointer">
                             <span class="text-white text-sm font-medium">Change Photo</span>
