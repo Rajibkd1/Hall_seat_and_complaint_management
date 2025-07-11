@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
-    
+
 
     public function profile()
     {
@@ -46,21 +46,29 @@ class StudentController extends Controller
         $dataToUpdate = $request->except('profile_image', 'email');
 
         if ($request->hasFile('profile_image')) {
-            // Delete old image if it exists
-            if ($student->profile_image) {
-                Storage::disk('public')->delete($student->profile_image);
+            // Delete old image if it exists (regardless of extension)
+            $existingFiles = Storage::disk('public')->files('profile_images');
+            foreach ($existingFiles as $file) {
+                if (pathinfo($file, PATHINFO_FILENAME) === $student->university_id) {
+                    Storage::disk('public')->delete($file);
+                }
             }
-            // Store the new image
-            $path = $request->file('profile_image')->store('profile_images', 'public');
+
+            $file = $request->file('profile_image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = $student->university_id . '.' . $extension;
+            $path = $file->storeAs('profile_images', $filename, 'public');
+
             $dataToUpdate['profile_image'] = $path;
         }
+
 
         $student->update($dataToUpdate);
 
         return response()->json([
             'success' => true,
             'message' => 'Profile updated successfully!',
-            'student' => $student->fresh()
+            'student' => $student->fresh()->append('profile_image_url')
         ]);
     }
 }

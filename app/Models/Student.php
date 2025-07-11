@@ -40,4 +40,11 @@ class Student extends Authenticatable
     {
         return $this->hasMany(SeatApplication::class, 'student_id');
     }
+    protected $appends = ['profile_image_url'];
+    public function getProfileImageUrlAttribute()
+    {
+        return $this->profile_image
+            ? asset('storage/' . $this->profile_image)
+            : asset('images/default.png');
+    }
 }

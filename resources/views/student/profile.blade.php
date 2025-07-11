@@ -5,15 +5,12 @@
 
 @section('content')
 <body class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-    <!-- Main Content -->
     <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Profile Card -->
         <div class="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden animate-fade-in">
-            <!-- Profile Header -->
             <div class="relative h-48 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600">
                 <div class="absolute inset-0 bg-black/20"></div>
                 <div class="absolute -bottom-16 left-8 z-10">
-                    <div class="relative group">
+                    <div id="profileImgContainer" class="relative group">
                         <img id="profileImg" src="{{ $student->profile_image_url }}" 
                              alt="Profile" class="w-32 h-32 rounded-full border-4 border-white shadow-xl object-cover transition-transform duration-300 group-hover:scale-105">
                         <div class="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center cursor-pointer">
@@ -28,16 +25,12 @@
                 </div>
             </div>
 
-            <!-- Profile Content -->
             <div class="pt-20 pb-8 px-8">
-                <form id="profileForm">
+                <form id="profileForm" enctype="multipart/form-data">
                     @csrf
-                    
-                    <!-- Student Info Grid -->
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 animate-slide-up">
-                        <!-- Left Column -->
                         <div class="space-y-6">
-                            <!-- Student Name -->
                             <div class="group">
                                 <label class="block text-sm font-semibold text-gray-600 mb-2">Student Name</label>
                                 <div class="relative">
@@ -50,8 +43,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- University ID -->
                             <div class="group">
                                 <label class="block text-sm font-semibold text-gray-600 mb-2">University ID</label>
                                 <div class="relative">
@@ -65,7 +56,6 @@
                                 </div>
                             </div>
 
-                            <!-- Department -->
                             <div class="group">
                                 <label class="block text-sm font-semibold text-gray-600 mb-2">Department</label>
                                 <div class="relative">
@@ -85,9 +75,7 @@
                             </div>
                         </div>
 
-                        <!-- Right Column -->
                         <div class="space-y-6">
-                            <!-- Session Year -->
                             <div class="group">
                                 <label class="block text-sm font-semibold text-gray-600 mb-2">Session Year</label>
                                 <div class="relative">
@@ -101,7 +89,6 @@
                                 </div>
                             </div>
 
-                            <!-- Contact Number -->
                             <div class="group">
                                 <label class="block text-sm font-semibold text-gray-600 mb-2">Contact Number</label>
                                 <div class="relative">
@@ -118,7 +105,6 @@
                     </div>
                 </form>
 
-                <!-- Edit Profile Button -->
                 <div class="flex justify-center mt-8">
                     <button id="editBtn" class="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold">
                         <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,7 +114,6 @@
                     </button>
                 </div>
 
-                <!-- Action Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4 mt-6 justify-center">
                     <button id="saveBtn" style="display: none;" 
                             class="px-8 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-full hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold">
