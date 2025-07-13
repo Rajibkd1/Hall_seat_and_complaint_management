@@ -2,8 +2,45 @@ class ProfileManager {
     constructor() {
         this.isEditing = false;
         this.originalValues = {};
+        this.departments = [
+            "Computer Science and Telecommunication Engineering (CSTE)",
+            "Applied Chemistry and Chemical Engineering (ACCE)",
+            "Information and Communication Engineering (ICE)",
+            "Electrical and Electronics Engineering (EEE)",
+            "Software Engineering (Institute of Information Technology)",
+            "Applied Mathematics",
+            "Statistics",
+            "Oceanography",
+            "Chemistry",
+            "Physics",
+            "Environmental Science and Disaster Management (ESDM)",
+            "Fisheries and Marine Science (FIMS)",
+            "Pharmacy",
+            "Microbiology",
+            "Biochemistry and Molecular Biology (BMB)",
+            "Food Technology and Nutrition Science (FTNS)",
+            "Biotechnology and Genetic Engineering (BGE)",
+            "Agriculture",
+            "Soil, Water & Environmental Sciences (SWES)",
+            "Zoology",
+            "English",
+            "Economics",
+            "Political Science",
+            "Bangla",
+            "Sociology",
+            "Social Work",
+            "Business Administration (DBA)",
+            "Tourism and Hospitality Management (THM)",
+            "Management Information Systems (MIS)",
+            "Education",
+            "Educational Administration",
+            "Law",
+            "Information Sciences and Library Management (ISLM)"
+        ];
         this.initializeElements();
         this.bindEvents();
+        // Bind the instance to the window so we can access it from onclick attributes
+        window.profileManager = this;
     }
 
     initializeElements() {
@@ -39,6 +76,10 @@ class ProfileManager {
                 e.target.parentElement.classList.remove('transform', 'scale-105');
             });
         });
+
+        this.fields.department.addEventListener('keyup', () => this.filterDepartments());
+        this.fields.department.addEventListener('focus', () => this.showDepartments());
+        this.fields.department.addEventListener('blur', () => this.hideDepartments());
     }
 
     toggleEditMode() {
@@ -55,6 +96,7 @@ class ProfileManager {
         Object.keys(this.fields).forEach(key => {
             this.originalValues[key] = this.fields[key].value;
         });
+
         Object.values(this.fields).forEach(field => {
             field.removeAttribute('readonly');
             field.removeAttribute('disabled');
@@ -188,6 +230,59 @@ class ProfileManager {
         this.isEditing = false;
         this.exitEditMode();
         this.showNotification('Changes cancelled - Original data restored', 'warning');
+    }
+
+    filterDepartments() {
+        if (!this.isEditing) return;
+        const input = this.fields.department;
+        const dropdown = document.getElementById('department-dropdown');
+        const filter = input.value.toLowerCase();
+
+        if (filter.length === 0) {
+            dropdown.classList.remove('show');
+            return;
+        }
+
+        const filtered = this.departments.filter(dept =>
+            dept.toLowerCase().includes(filter)
+        );
+
+        this.displayDepartments(filtered);
+    }
+
+    showDepartments() {
+        if (!this.isEditing) return;
+        const input = this.fields.department;
+        if (input.value.length === 0) {
+            this.displayDepartments(this.departments);
+        }
+    }
+
+    hideDepartments() {
+        setTimeout(() => {
+            const dropdown = document.getElementById('department-dropdown');
+            dropdown.classList.remove('show');
+        }, 200);
+    }
+
+    displayDepartments(depts) {
+        const dropdown = document.getElementById('department-dropdown');
+
+        if (depts.length === 0) {
+            dropdown.classList.remove('show');
+            return;
+        }
+
+        dropdown.innerHTML = depts.map(dept =>
+            `<div class="department-item" onclick="window.profileManager.selectDepartment('${dept}')">${dept}</div>`
+        ).join('');
+
+        dropdown.classList.add('show');
+    }
+
+    selectDepartment(dept) {
+        this.fields.department.value = dept;
+        document.getElementById('department-dropdown').classList.remove('show');
     }
 
     handleImageUpload(event) {

@@ -1,5 +1,37 @@
 @extends('layouts.app')
 
+@push('styles')
+<style>
+    #department-dropdown {
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background-color: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        max-height: 12rem; /* Approximately 4 items */
+        overflow-y: auto;
+        display: none; /* Initially hidden */
+    }
+
+    #department-dropdown.show {
+        display: block;
+    }
+
+    .department-item {
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+    }
+
+    .department-item:hover {
+        background-color: #f7fafc;
+    }
+</style>
+@endpush
+
 @section('content')
 
 
@@ -58,19 +90,16 @@
 
                             <div class="group">
                                 <label class="block text-sm font-semibold text-gray-600 mb-2">Department</label>
-                                <div class="relative">
-                                    <select id="department" name="department"
-                                            class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:bg-white transition-all duration-300 text-lg font-medium text-gray-800 appearance-none">
-                                        <option value="Computer Science & Engineering" {{ $student->department == 'Computer Science & Engineering' ? 'selected' : '' }}>Computer Science & Engineering</option>
-                                        <option value="Electrical & Electronic Engineering" {{ $student->department == 'Electrical & Electronic Engineering' ? 'selected' : '' }}>Electrical & Electronic Engineering</option>
-                                        <option value="Mechanical Engineering" {{ $student->department == 'Mechanical Engineering' ? 'selected' : '' }}>Mechanical Engineering</option>
-                                        <option value="Civil Engineering" {{ $student->department == 'Civil Engineering' ? 'selected' : '' }}>Civil Engineering</option>
-                                    </select>
+                                <div class="relative" id="department-container">
+                                    <input type="text" id="department" name="department" value="{{ $student->department }}" readonly
+                                           class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:bg-white transition-all duration-300 text-lg font-medium text-gray-800"
+                                           autocomplete="off">
                                     <div class="absolute inset-y-0 right-0 flex items-center pr-3">
                                         <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                         </svg>
                                     </div>
+                                    <div id="department-dropdown" class="department-dropdown"></div>
                                 </div>
                             </div>
                         </div>
