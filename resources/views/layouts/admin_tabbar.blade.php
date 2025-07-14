@@ -7,7 +7,7 @@
         <ul class="flex justify-evenly overflow-x-auto">
             <!-- Dashboard Tab -->
             <li class="relative">
-                <a href="{{ route('admin.dashboard') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_nav') === 'dashboard' ? 'active-tab-indicator' : 'border-transparent' }}">
+                <a href="{{ route('admin.dashboard') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ (session('active_admin_menu') ?? 'dashboard') === 'dashboard' ? 'active-tab-indicator' : 'border-transparent' }}">
                     <!-- Shimmer effect -->
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                     <div class="bg-gradient-to-br from-slate-100 to-slate-50 px-4 py-2 rounded-md mb-2 group-hover:bg-gradient-to-br group-hover:from-slate-200 group-hover:to-slate-100 transition-all duration-500 shadow-md group-hover:shadow-xl relative z-10">
@@ -19,7 +19,7 @@
 
             <!-- View Students Tab -->
             <li class="relative">
-                <a href="{{ route('admin.students') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_nav') === 'view_students' ? 'active-tab-indicator' : 'border-transparent' }}">
+                <a href="{{ route('admin.students') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_admin_menu') === 'students' ? 'active-tab-indicator' : 'border-transparent' }}">
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-blue-200/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                     <div class="bg-gradient-to-br from-blue-100 to-blue-50 px-4 py-2 rounded-md mb-2 group-hover:bg-gradient-to-br group-hover:from-blue-200 group-hover:to-blue-100 transition-all duration-500 shadow-md group-hover:shadow-xl relative z-10">
                         <i class="fas fa-users text-lg text-blue-600 group-hover:text-blue-800 transition-colors duration-300 drop-shadow-sm"></i>
@@ -30,7 +30,7 @@
 
             <!-- Complaints Tab -->
             <li class="relative">
-                <a href="{{ route('admin.complaints') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_nav') === 'complaints' ? 'active-tab-indicator' : 'border-transparent' }}">
+                <a href="{{ route('admin.complaints') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_admin_menu') === 'complaints' ? 'active-tab-indicator' : 'border-transparent' }}">
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-orange-200/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                     <div class="bg-gradient-to-br from-orange-100 to-orange-50 px-4 py-2 rounded-md mb-2 group-hover:bg-gradient-to-br group-hover:from-orange-200 group-hover:to-orange-100 transition-all duration-500 shadow-md group-hover:shadow-xl relative z-10">
                         <i class="fas fa-comment-dots text-lg text-orange-600 group-hover:text-orange-800 transition-colors duration-300 drop-shadow-sm"></i>
@@ -41,7 +41,7 @@
 
             <!-- Notices Tab -->
             <li class="relative">
-                <a href="{{ route('admin.notices') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_nav') === 'notices' ? 'active-tab-indicator' : 'border-transparent' }}">
+                <a href="{{ route('admin.notices') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_admin_menu') === 'notices' ? 'active-tab-indicator' : 'border-transparent' }}">
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-green-200/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                     <div class="bg-gradient-to-br from-green-100 to-green-50 px-4 py-2 rounded-md mb-2 group-hover:bg-gradient-to-br group-hover:from-green-200 group-hover:to-green-100 transition-all duration-500 shadow-md group-hover:shadow-xl relative z-10">
                         <i class="fas fa-bullhorn text-lg text-green-600 group-hover:text-green-800 transition-colors duration-300 drop-shadow-sm"></i>
@@ -52,7 +52,7 @@
 
             <!-- Applications Tab -->
             <li class="relative">
-                <a href="{{ route('admin.applications') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_nav') === 'applications' ? 'active-tab-indicator' : 'border-transparent' }}">
+                <a href="{{ route('admin.applications') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_admin_menu') === 'applications' ? 'active-tab-indicator' : 'border-transparent' }}">
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-purple-200/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                     <div class="bg-gradient-to-br from-purple-100 to-purple-50 px-4 py-2 rounded-md mb-2 group-hover:bg-gradient-to-br group-hover:from-purple-200 group-hover:to-purple-100 transition-all duration-500 shadow-md group-hover:shadow-xl relative z-10">
                         <i class="fas fa-file-alt text-lg text-purple-600 group-hover:text-purple-800 transition-colors duration-300 drop-shadow-sm"></i>

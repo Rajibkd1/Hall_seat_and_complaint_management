@@ -83,7 +83,7 @@ Route::middleware('student-auth')->group(function () {
 // Admin Protected Routes
 use App\Http\Controllers\AdminController;
 
-Route::middleware('admin-auth')->group(function () {
+Route::middleware(['admin-auth', 'set-active-menu'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
     Route::get('/admin/students', [AdminController::class, 'students'])->name('admin.students');

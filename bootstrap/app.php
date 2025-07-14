@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'student-auth' => \App\Http\Middleware\StudentAuth::class,
             'admin-auth' => \App\Http\Middleware\AdminAuth::class,
+            'set-active-menu' => \App\Http\Middleware\SetActiveMenu::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
