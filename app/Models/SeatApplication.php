@@ -57,6 +57,8 @@ class SeatApplication extends Model
         'admin_override',
         'notes',
     ];
+
+    protected $dates = ['application_date'];
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id');

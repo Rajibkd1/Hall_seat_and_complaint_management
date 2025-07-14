@@ -1,0 +1,62 @@
+.student-row:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    .fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .search-highlight {
+        background-color: #fef3c7;
+        padding: 2px 4px;
+        border-radius: 3px;
+    }
+
+    @media screen and (max-width: 768px) {
+        /* Hide table headers (but not display: none;, for accessibility) */
+        table thead {
+            border: none;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
+
+        table tr {
+            border-bottom: 3px solid #ddd;
+            display: block;
+            margin-bottom: .625em;
+        }
+
+        table td {
+            border-bottom: 1px solid #ddd;
+            display: block;
+            font-size: .8em;
+        }
+
+        table td::before {
+            content: attr(data-label);
+            float: left;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        table td:last-child {
+            border-bottom: 0;
+        }
+
+        /* Adjust padding for actions column */
+        table td.px-6.py-4.whitespace-nowrap.text-right.text-sm.font-medium {
+            padding-right: 1.5rem; /* Adjust as needed */
+            padding-left: 1.5rem; /* Adjust as needed */
+        }
+    }

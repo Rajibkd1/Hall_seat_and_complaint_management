@@ -81,8 +81,23 @@ Route::middleware('student-auth')->group(function () {
 });
 
 // Admin Protected Routes
+use App\Http\Controllers\AdminController;
+
 Route::middleware('admin-auth')->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+    Route::get('/admin/students', [AdminController::class, 'students'])->name('admin.students');
+    Route::get('/admin/students/{student_id}', [AdminController::class, 'viewStudentProfile'])->name('admin.student.profile');
+    Route::get('/admin/complaints', [AdminController::class, 'complaints'])->name('admin.complaints');
+    Route::get('/admin/complaints/{id}', [AdminController::class, 'viewComplaint'])->name('admin.complaint.view');
+    Route::post('/admin/complaints/{id}/update-status', [AdminController::class, 'updateComplaintStatus'])->name('admin.complaint.update_status');
+    Route::get('/admin/notices', [AdminController::class, 'notices'])->name('admin.notices');
+    Route::get('/admin/notices/create', [AdminController::class, 'createNotice'])->name('admin.notices.create');
+    Route::post('/admin/notices', [AdminController::class, 'storeNotice'])->name('admin.notices.store');
+    Route::get('/admin/notices/{id}/edit', [AdminController::class, 'editNotice'])->name('admin.notices.edit');
+    Route::put('/admin/notices/{id}', [AdminController::class, 'updateNotice'])->name('admin.notices.update');
+    Route::delete('/admin/notices/{id}', [AdminController::class, 'destroyNotice'])->name('admin.notices.destroy');
+    Route::get('/admin/applications', [AdminController::class, 'applications'])->name('admin.applications');
+    Route::get('/admin/applications/{id}', [AdminController::class, 'viewApplication'])->name('admin.applications.view');
+    Route::post('/admin/applications/{id}/update-status', [AdminController::class, 'updateApplicationStatus'])->name('admin.applications.update_status');
 });

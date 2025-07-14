@@ -1,10 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.admin_app')
 
 @section('content')
-<div class="flex justify-center items-center min-h-screen bg-gray-50">
-    <div class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full text-center">
-        <h1 class="text-3xl font-bold mb-4">Welcome, {{ $admin->name }}!</h1>
-        <p class="text-gray-700">You have successfully logged in to your admin dashboard.</p>
-    </div>
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome to Admin Dashboard</h1>
+    <!-- Your dashboard content goes here -->
 </div>
 @endsection

@@ -87,7 +87,7 @@
                         <div class="mt-4">
                             <div class="flex justify-between text-xs text-gray-500 mb-2">
                                 <span>Submitted</span>
-                                <span>In Progress</span>
+                                <span>In_Progress</span>
                                 <span>Resolved</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
@@ -190,11 +190,20 @@
                                 <p class="text-gray-800 leading-relaxed">${complaint.description}</p>
                             </div>
                             
+                            ${complaint.admin_comment ? `
+                            <div class="mt-6">
+                                <p class="text-sm text-gray-600 mb-2">Admin Response</p>
+                                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-md">
+                                    <p class="text-gray-800 leading-relaxed">${complaint.admin_comment}</p>
+                                </div>
+                            </div>
+                            ` : ''}
+
                             <div class="mt-6">
                                 <p class="text-sm text-gray-600 mb-2">Progress</p>
                                 <div class="flex justify-between text-xs text-gray-500 mb-2">
                                     <span>Submitted</span>
-                                    <span>In Progress</span>
+                                    <span>In_Progress</span>
                                     <span>Resolved</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-3">

@@ -184,13 +184,25 @@
                                         </p>
                                         <div class="flex items-center space-x-2">
                                             @if ($complaint->status === 'pending')
-                                                <button onclick="deleteComplaint({{ $complaint->complaint_id }})"
-                                                    class="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors duration-200 text-sm font-medium">
-                                                    Delete
-                                                </button>
+                                                <form action="{{ route('student.delete_complaint', $complaint->complaint_id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this complaint?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors duration-200 text-sm font-medium">
+                                                        Delete
+                                                    </button>
+                                                </form>
                                             @endif
                                         </div>
                                     </div>
+                                    @if ($complaint->admin_comment)
+                                    <div class="mt-4 pt-4 border-t border-gray-200">
+                                        <h4 class="text-md font-semibold text-gray-800">Admin Response</h4>
+                                        <p class="text-gray-700 leading-relaxed mt-2">
+                                            {{ $complaint->admin_comment }}
+                                        </p>
+                                    </div>
+                                @endif
                                 </div>
                             </div>
                         </div>
@@ -275,34 +287,6 @@
                 document.getElementById('imageModal').classList.add('hidden');
                 document.body.style.overflow = 'auto';
             }
-
-            // Delete complaint
-            function deleteComplaint(complaintId) {
-                if (confirm('Are you sure you want to delete this complaint? This action cannot be undone.')) {
-                    // Create a form and submit it (better approach for DELETE requests)
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = `/complaint/${complaintId}`;
-
-                    // Add CSRF token
-                    const csrfToken = document.createElement('input');
-                    csrfToken.type = 'hidden';
-                    csrfToken.name = '_token';
-                    csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                    form.appendChild(csrfToken);
-
-                    // Add method spoofing for DELETE
-                    const methodField = document.createElement('input');
-                    methodField.type = 'hidden';
-                    methodField.name = '_method';
-                    methodField.value = 'DELETE';
-                    form.appendChild(methodField);
-
-                    document.body.appendChild(form);
-                    form.submit();
-                }
-            }
-
 
             // Close modal when clicking outside
             document.getElementById('imageModal').addEventListener('click', function(e) {

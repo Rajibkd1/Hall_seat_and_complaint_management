@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use App\Models\Admin;
 use App\Models\EmailVerification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -92,15 +93,21 @@ class StudentAuthController extends Controller
             'password' => 'required',
         ]);
 
+        // Attempt to log in as a student
         $student = Student::where('email', $request->email)->first();
-
-        if (!$student || !Hash::check($request->password, $student->password_hash)) {
-            return redirect()->back()->with('error', 'Invalid credentials. Please try again.');
+        if ($student && Hash::check($request->password, $student->password_hash)) {
+            Auth::guard('student')->login($student);
+            return redirect()->route('student.dashboard');
         }
 
-        Auth::guard('student')->login($student);
+        // Attempt to log in as an admin
+        $admin = Admin::where('email', $request->email)->first();
+        if ($admin && Hash::check($request->password, $admin->password_hash)) {
+            Auth::guard('admin')->login($admin);
+            return redirect()->route('admin.dashboard');
+        }
 
-        return redirect()->route('student.dashboard');
+        return redirect()->back()->with('error', 'Invalid credentials. Please try again.');
     }
 
     public function logout(Request $request)
