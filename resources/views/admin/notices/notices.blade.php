@@ -236,40 +236,36 @@
     </div>
 </div>
 
-<style>
-    .notice-row:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    }
-    
-    .fade-in {
-        animation: fadeIn 0.3s ease-in-out;
-    }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .search-highlight {
-        background-color: #fef3c7;
-        padding: 2px 4px;
-        border-radius: 3px;
-    }
-    
-    .modal-enter {
-        opacity: 1;
-        transform: scale(1);
-    }
-    
-    .modal-exit {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/admin_notices_list.css') }}">
 
 <script>
+// Toast notification function
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    const bgColor = type === 'error' ? 'bg-red-500' : type === 'warning' ? 'bg-yellow-500' : type === 'info' ? 'bg-blue-500' : 'bg-green-500';
+    
+    toast.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300`;
+    toast.textContent = message;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.remove('translate-x-full');
+    }, 100);
+    
+    setTimeout(() => {
+        toast.classList.add('translate-x-full');
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 300);
+    }, 3000);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Check for success message and display toast
+    @if(session('success'))
+        showToast('{{ session('success') }}', 'success');
+    @endif
     const searchInput = document.getElementById('searchInput');
     const statusFilter = document.getElementById('statusFilter');
     const sortBy = document.getElementById('sortBy');

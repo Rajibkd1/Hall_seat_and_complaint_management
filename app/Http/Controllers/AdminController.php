@@ -68,7 +68,8 @@ class AdminController extends Controller
     public function storeNotice(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255|unique:hall_notices',
+            'notice_type' => 'required|in:announcement,event,deadline',
             'description' => 'required|string',
             'date_posted' => 'required|date',
             'status' => 'required|in:active,inactive',
@@ -76,9 +77,11 @@ class AdminController extends Controller
 
         HallNotice::create([
             'title' => $request->title,
+            'notice_type' => $request->notice_type,
             'description' => $request->description,
             'date_posted' => $request->date_posted,
             'status' => $request->status,
+            'admin_id' => auth()->guard('admin')->id(),
         ]);
 
         return redirect()->route('admin.notices')->with('success', 'Notice created successfully.');
@@ -86,20 +89,20 @@ class AdminController extends Controller
 
     public function editNotice($id)
     {
-        $notice = HallNotice::where('notice_id', $id)->first();
+        $notice = HallNotice::findOrFail($id);
         return view('admin.notices.edit_notice', compact('notice'));
     }
 
     public function updateNotice(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255|unique:hall_notices,title,'.$id.',notice_id',
             'description' => 'required|string',
             'date_posted' => 'required|date',
             'status' => 'required|in:active,inactive',
         ]);
 
-        $notice = HallNotice::where('notice_id', $id)->firstOrFail();
+        $notice = HallNotice::findOrFail($id);
         $notice->title = $request->title;
         $notice->description = $request->description;
         $notice->date_posted = $request->date_posted;
@@ -111,7 +114,7 @@ class AdminController extends Controller
 
     public function destroyNotice($id)
     {
-        $notice = HallNotice::where('notice_id', $id)->firstOrFail();
+        $notice = HallNotice::findOrFail($id);
         $notice->delete();
 
         return redirect()->route('admin.notices')->with('success', 'Notice deleted successfully.');
