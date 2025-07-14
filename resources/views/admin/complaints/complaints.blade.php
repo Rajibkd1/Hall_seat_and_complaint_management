@@ -154,8 +154,8 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                                        <span class="text-white font-medium text-sm">{{ $complaint->student ? substr($complaint->student->name, 0, 1) : 'N' }}</span>
+                                    <div class="flex-shrink-0 h-10 w-10">
+                                        <img class="h-10 w-10 rounded-full object-cover" src="{{ $complaint->student->profile_image_url }}" alt="{{ $complaint->student->name }}'s profile image">
                                     </div>
                                     <div class="ml-4">
                                         <div class="text-sm font-medium text-gray-900">{{ $complaint->student->name ?? 'N/A' }}</div>

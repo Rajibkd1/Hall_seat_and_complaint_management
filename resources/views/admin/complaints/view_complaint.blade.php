@@ -58,8 +58,12 @@
                                 Student Information
                             </h3>
                             <div class="flex items-center p-4 bg-gray-50 rounded-lg">
-                                <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                                    <span class="text-white font-medium text-lg">{{ $complaint->student ? substr($complaint->student->name, 0, 1) : 'N' }}</span>
+                                <div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center bg-gray-200">
+                                    @if($complaint->student && $complaint->student->profile_image)
+                                        <img src="{{ asset('storage/' . $complaint->student->profile_image) }}" alt="{{ $complaint->student->name }}'s profile image" class="w-full h-full object-cover">
+                                    @else
+                                        <span class="text-gray-600 font-medium text-lg">{{ $complaint->student ? substr($complaint->student->name, 0, 1) : 'N' }}</span>
+                                    @endif
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-lg font-medium text-gray-900">{{ $complaint->student->name ?? 'N/A' }}</p>
