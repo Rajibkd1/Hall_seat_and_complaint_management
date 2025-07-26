@@ -52,7 +52,7 @@
 
             <!-- Applications Tab -->
             <li class="relative">
-                <a href="{{ route('admin.applications') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_admin_menu') === 'applications' ? 'active-tab-indicator' : 'border-transparent' }}">
+                <a href="{{ route('admin.applications.index') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_admin_menu') === 'applications' ? 'active-tab-indicator' : 'border-transparent' }}">
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-purple-200/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                     <div class="bg-gradient-to-br from-purple-100 to-purple-50 px-4 py-2 rounded-md mb-2 group-hover:bg-gradient-to-br group-hover:from-purple-200 group-hover:to-purple-100 transition-all duration-500 shadow-md group-hover:shadow-xl relative z-10">
                         <i class="fas fa-file-alt text-lg text-purple-600 group-hover:text-purple-800 transition-colors duration-300 drop-shadow-sm"></i>

@@ -9,7 +9,7 @@ class SeatApplication extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'application_id';  
+    protected $primaryKey = 'application_id';
 
     protected $fillable = [
         'student_id',
@@ -28,8 +28,8 @@ class SeatApplication extends Model
         'family_status',
         'permanent_address',
         'current_address',
-        'activities',        
-        'other_info',        
+        'activities',
+        'other_info',
         'university_id_doc',
         'marksheet_doc',
         'birth_certificate_doc',
@@ -59,6 +59,9 @@ class SeatApplication extends Model
     ];
 
     protected $dates = ['application_date'];
+    protected $casts = [
+        'application_date' => 'datetime',
+    ];
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id');

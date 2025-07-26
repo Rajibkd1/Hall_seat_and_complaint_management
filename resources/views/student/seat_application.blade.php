@@ -50,26 +50,26 @@
             <h3 class="font-semibold mb-2">Uploaded Documents:</h3>
             <ul class="list-disc list-inside text-blue-600">
                 @php
-                    $documents = [
-                        'University ID' => $existingApplication->university_id_doc,
-                        'Marksheet' => $existingApplication->marksheet_doc,
-                        'Birth Certificate' => $existingApplication->birth_certificate_doc,
-                        'Financial Certificate' => $existingApplication->financial_certificate_doc,
-                        'Death Certificate' => $existingApplication->death_certificate_doc,
-                        'Medical Certificate' => $existingApplication->medical_certificate_doc,
-                        'Activity Certificate' => $existingApplication->activity_certificate_doc,
-                        'Signature' => $existingApplication->signature_doc,
-                    ];
+                $documents = [
+                'University ID' => $existingApplication->university_id_doc,
+                'Marksheet' => $existingApplication->marksheet_doc,
+                'Birth Certificate' => $existingApplication->birth_certificate_doc,
+                'Financial Certificate' => $existingApplication->financial_certificate_doc,
+                'Death Certificate' => $existingApplication->death_certificate_doc,
+                'Medical Certificate' => $existingApplication->medical_certificate_doc,
+                'Activity Certificate' => $existingApplication->activity_certificate_doc,
+                'Signature' => $existingApplication->signature_doc,
+                ];
                 @endphp
 
                 @foreach ($documents as $label => $file)
-                    @if ($file)
-                        <li>
-                            <a href="{{ asset('storage/' . $file) }}" target="_blank" class="underline hover:text-blue-800">
-                                {{ $label }}
-                            </a>
-                        </li>
-                    @endif
+                @if ($file)
+                <li>
+                    <a href="{{ asset('storage/' . $file) }}" target="_blank" class="underline hover:text-blue-800">
+                        {{ $label }}
+                    </a>
+                </li>
+                @endif
                 @endforeach
             </ul>
         </div>
@@ -101,9 +101,9 @@
 
 
                 <div>
-                    <label for="academic_year" class="block text-sm font-medium text-gray-700 mb-1">Academic Year</label>
-                    <input type="text" name="academic_year" id="academic_year" value="{{ old('academic_year') }}" required
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label for="academic_year" class="block text-sm font-medium text-gray-700 mb-1">Session</label>
+                    <input type="text" name="academic_year" id="academic_year" value="{{ $student->session_year }}" readonly
+                        class="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 cursor-not-allowed focus:outline-none">
                 </div>
                 <div>
                     <label for="guardian_name" class="block text-sm font-medium text-gray-700 mb-1">Guardian's Name</label>
@@ -145,22 +145,42 @@
             </div>
 
             <!-- Current Semester and GPA -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                 <div>
-                    <label for="semester_year" class="block text-sm font-medium text-gray-700 mb-1">Current Semester Y:</label>
-                    <input type="number" name="semester_year" id="semester_year" value="{{ old('semester_year') }}"
+                    <label for="semester_year" class="block text-sm font-medium text-gray-700 mb-1">Current Year</label>
+                    <select
+                        name="semester_year"
+                        id="semester_year"
+                        required
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="" disabled {{ old('semester_year') ? '' : 'selected' }}>Select year</option>
+                        <option value="1" {{ old('semester_year') == 1 ? 'selected' : '' }}>1st Year</option>
+                        <option value="2" {{ old('semester_year') == 2 ? 'selected' : '' }}>2nd Year</option>
+                        <option value="3" {{ old('semester_year') == 3 ? 'selected' : '' }}>3rd Year</option>
+                        <option value="4" {{ old('semester_year') == 4 ? 'selected' : '' }}>4th Year</option>
+                        <option value="5" {{ old('semester_year') == 5 ? 'selected' : '' }}>5th Year</option>
+                    </select>
+                </div>
+
+
+                <div>
+                    <label for="semester_term" class="block text-sm font-medium text-gray-700 mb-1">
+                        Term <span class="text-red-500">*</span>
+                    </label>
+                    <select name="semester_term" id="semester_term" required
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="" disabled {{ old('semester_term') ? '' : 'selected' }}>Select term</option>
+                        <option value="1" {{ old('semester_term') == 1 ? 'selected' : '' }}>1</option>
+                        <option value="2" {{ old('semester_term') == 2 ? 'selected' : '' }}>2</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="cgpa" class="block text-sm font-medium text-gray-700 mb-1">cGPA <span class="text-red-500">*</span></label>
+                    <input type="number" step="0.01" min="0" max="4" name="cgpa" id="cgpa" value="{{ old('cgpa') }}" required placeholder="e.g., 3.75"
                         class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div>
-                    <label for="semester_term" class="block text-sm font-medium text-gray-700 mb-1">T:</label>
-                    <input type="number" name="semester_term" id="semester_term" value="{{ old('semester_term') }}"
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label for="cgpa" class="block text-sm font-medium text-gray-700 mb-1">cGPA</label>
-                    <input type="number" step="0.01" name="cgpa" id="cgpa" value="{{ old('cgpa') }}" required
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
+
                 <div class="flex items-end">
                     <span class="text-sm text-gray-600 pb-2">out of 4.00</span>
                 </div>
@@ -320,12 +340,14 @@
             </div>
         </div>
 
-        <!-- Application Date -->
         <div class="border border-gray-300 rounded-lg p-6 mt-6">
-            <label for="application_date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
-            <input type="date" name="application_date" id="application_date" value="{{ old('application_date') }}" required
-                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+            <p class="py-2 px-3 border border-gray-300 rounded-md bg-gray-100 text-gray-700 select-none">
+                {{ old('application_date', date('Y-m-d')) }}
+            </p>
+            <input type="hidden" name="application_date" value="{{ old('application_date', date('Y-m-d')) }}">
         </div>
+
 
         <!-- Submit Button -->
         <div class="text-center pt-6">

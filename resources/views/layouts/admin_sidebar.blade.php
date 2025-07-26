@@ -37,7 +37,7 @@
                 </div>
                 <span class="font-medium">Notices</span>
             </a></li>
-            <li><a href="{{ route('admin.applications') }}" class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'applications' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
+            <li><a href="{{ route('admin.applications.index') }}" class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'applications' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
                 <div class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
                     <i class="fas fa-file-alt text-gray-300 group-hover:text-white"></i>
                 </div>

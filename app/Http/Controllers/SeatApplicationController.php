@@ -148,4 +148,29 @@ class SeatApplicationController extends Controller
 
         return redirect()->back()->with('success', 'Seat application submitted successfully.');
     }
+    // List all applications for admin
+    public function adminIndex()
+    {
+        $applications = SeatApplication::with('student')->orderBy('application_date', 'desc')->get();
+        return view('admin.applications.index', compact('applications'));
+    }
+
+    // Show details of a specific application for admin
+    public function adminShow($id)
+    {
+        $application = SeatApplication::with('student')->findOrFail($id);
+        return view('admin.applications.show', compact('application'));
+    }
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,approved,rejected,waitlisted',
+        ]);
+
+        $application = SeatApplication::findOrFail($id);
+        $application->status = $request->input('status');
+        $application->save();
+
+        return redirect()->route('admin.applications.view', $id)->with('success', 'Status updated successfully.');
+    }
 }
