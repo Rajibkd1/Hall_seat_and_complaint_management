@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\HallNoticeController;
 use App\Http\Controllers\StudentComplaintController;
 use App\Http\Controllers\SeatApplicationController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +23,8 @@ Route::view('/admin/login', 'admin.login')->name('admin.login.page');
 Route::view('/admin/register', 'admin.register')->name('admin.register.page');
 
 // Home Page
-Route::get('/', function () {
-    return view('homepage');
-});
+Route::get('/', [HomeController::class, 'index'])->name('homepage');
+Route::get('/public-notice/{id}', [HomeController::class, 'showPublicNotice']);
 
 /*
 |--------------------------------------------------------------------------
