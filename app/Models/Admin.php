@@ -26,6 +26,14 @@ class Admin extends Authenticatable
     protected $hidden = [
         'password_hash',
     ];
+
+    /**
+     * Get the password for the user.
+     */
+    public function getAuthPassword()
+    {
+        return $this->password_hash;
+    }
     //Relationships
     public function seatAllotments()
     {

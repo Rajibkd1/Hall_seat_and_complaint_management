@@ -12,7 +12,53 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        return view('admin.dashboard');
+        // Get current admin information
+        $admin = auth()->guard('admin')->user();
+
+        // Get statistics
+        $totalStudents = Student::count();
+        $totalApplications = SeatApplication::count();
+        $totalComplaints = Complaint::count();
+        $totalNotices = HallNotice::count();
+
+        // Get recent statistics
+        $pendingApplications = SeatApplication::where('status', 'pending')->count();
+        $pendingComplaints = Complaint::where('status', 'pending')->count();
+        $activeNotices = HallNotice::where('status', 'active')->count();
+        $recentStudents = Student::where('created_at', '>=', now()->subDays(7))->count();
+
+        // Get recent notices (last 4)
+        $recentNotices = HallNotice::with('admin')
+            ->orderBy('date_posted', 'desc')
+            ->limit(4)
+            ->get();
+
+        // Get recent complaints (last 4)
+        $recentComplaints = Complaint::with('student')
+            ->orderBy('created_at', 'desc')
+            ->limit(4)
+            ->get();
+
+        // Get recent applications (last 4)
+        $recentApplications = SeatApplication::with('student')
+            ->orderBy('created_at', 'desc')
+            ->limit(4)
+            ->get();
+
+        return view('admin.dashboard', compact(
+            'admin',
+            'totalStudents',
+            'totalApplications',
+            'totalComplaints',
+            'totalNotices',
+            'pendingApplications',
+            'pendingComplaints',
+            'activeNotices',
+            'recentStudents',
+            'recentNotices',
+            'recentComplaints',
+            'recentApplications'
+        ));
     }
 
     public function students()
@@ -96,7 +142,7 @@ class AdminController extends Controller
     public function updateNotice(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required|string|max:255|unique:hall_notices,title,'.$id.',notice_id',
+            'title' => 'required|string|max:255|unique:hall_notices,title,' . $id . ',notice_id',
             'description' => 'required|string',
             'date_posted' => 'required|date',
             'status' => 'required|in:active,inactive',
