@@ -8,7 +8,9 @@ use App\Models\Student;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use App\Mail\ApplicationStatusUpdated;
+use App\Mail\AdminMessageEmail;
 
 class SeatApplicationController extends Controller
 {
@@ -158,55 +160,89 @@ class SeatApplicationController extends Controller
     }
 
     // Show details of a specific application for admin
-    public function adminShow($id)
+    public function adminShow(SeatApplication $application)
     {
-        $application = SeatApplication::with('student')->findOrFail($id);
+        $application->load('student');
         return view('admin.applications.show', compact('application'));
     }
-    public function updateStatus(Request $request, $id)
+    public function updateStatus(Request $request, SeatApplication $application)
     {
-        $request->validate([
+        $validated = $request->validate([
             'status' => 'required|in:pending,approved,rejected,waitlisted',
             'email_message' => 'nullable|string|max:2000',
+            'send_email' => 'nullable|boolean',
         ]);
 
-        $application = SeatApplication::findOrFail($id);
         $oldStatus = $application->status;
-        $newStatus = $request->input('status');
+        $newStatus = $validated['status'];
 
         // Update status
-        $application->status = $newStatus;
-        $application->save();
+        if ($oldStatus !== $newStatus) {
+            $application->status = $newStatus;
+            $application->save();
+        }
 
-        // Send email notification if enabled and status changed
-        if ($request->has('send_email') && $request->send_email == 1 && $oldStatus !== $newStatus) {
-            $emailMessage = $request->input('email_message', '');
-
-            // Get student email
+        // Send email notification if requested and status has changed
+        if ($request->boolean('send_email') && $oldStatus !== $newStatus) {
+            $emailMessage = $validated['email_message'] ?? '';
             $student = $application->student;
-            if ($student && $student->email) {
-                try {
-                    Mail::to($student->email)->send(
-                        new ApplicationStatusUpdated($application, $emailMessage, $newStatus)
-                    );
 
-                    return redirect()
-                        ->route('admin.applications.view', $id)
-                        ->with('success', 'Status updated successfully and email notification sent to student.');
-                } catch (\Exception $e) {
-                    return redirect()
-                        ->route('admin.applications.view', $id)
-                        ->with('warning', 'Status updated successfully but email could not be sent: ' . $e->getMessage());
-                }
-            } else {
+            if (!$student || !$student->email) {
                 return redirect()
-                    ->route('admin.applications.view', $id)
-                    ->with('warning', 'Status updated successfully but no email address found for this student.');
+                    ->route('admin.applications.view', $application->application_id)
+                    ->with('warning', 'Status updated, but no email address found for this student.');
+            }
+
+            try {
+                Mail::to($student->email)->send(
+                    new ApplicationStatusUpdated($application, $emailMessage, $newStatus)
+                );
+
+                return redirect()
+                    ->route('admin.applications.view', $application->application_id)
+                    ->with('success', 'Status updated and email notification sent.');
+            } catch (\Exception $e) {
+                Log::error('Failed to send application status email: ' . $e->getMessage());
+                return redirect()
+                    ->route('admin.applications.view', $application->application_id)
+                    ->with('warning', 'Status updated, but the email notification could not be sent.');
             }
         }
 
         return redirect()
-            ->route('admin.applications.view', $id)
+            ->route('admin.applications.view', $application->application_id)
             ->with('success', 'Status updated successfully.');
+    }
+
+    public function sendEmail(Request $request, SeatApplication $application)
+    {
+        $validated = $request->validate([
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string|max:5000',
+        ]);
+
+        $student = $application->student;
+
+        if (!$student || !$student->email) {
+            return redirect()
+                ->route('admin.applications.view', $application->application_id)
+                ->with('error', 'Could not find student email address.');
+        }
+
+        try {
+            Mail::to($student->email)->send(
+                new AdminMessageEmail($validated['subject'], $validated['message'])
+            );
+
+            return redirect()
+                ->route('admin.applications.view', $application->application_id)
+                ->with('success', 'Email sent successfully.');
+        } catch (\Exception $e) {
+            Log::error('Failed to send custom admin email: ' . $e->getMessage());
+
+            return redirect()
+                ->route('admin.applications.view', $application->application_id)
+                ->with('error', 'Failed to send email. Please try again later.');
+        }
     }
 }

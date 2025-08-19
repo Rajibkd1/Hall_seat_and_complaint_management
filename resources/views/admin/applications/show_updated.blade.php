@@ -175,26 +175,6 @@
             </form>
         </div>
 
-        <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200 mt-8">
-            <h3 class="text-2xl font-bold text-gray-800 mb-5 border-b pb-3 border-gray-200">Send a Custom Email</h3>
-            <form action="{{ route('admin.applications.send_email', $application->application_id) }}" method="POST" class="max-w-2xl">
-                @csrf
-                <div class="mb-4">
-                    <label for="subject" class="block text-md font-medium text-gray-700 mb-2">Subject</label>
-                    <input type="text" name="subject" id="subject" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required maxlength="255">
-                </div>
-                <div class="mb-4">
-                    <label for="message" class="block text-md font-medium text-gray-700 mb-2">Message</label>
-                    <textarea name="message" id="message" rows="5" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required maxlength="5000"></textarea>
-                </div>
-                <div class="flex items-center">
-                    <button type="submit" class="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition ease-in-out duration-150">
-                        Send Email
-                    </button>
-                </div>
-            </form>
-        </div>
-
         <script>
             document.getElementById('email_message').addEventListener('input', function() {
                 const charCount = this.value.length;

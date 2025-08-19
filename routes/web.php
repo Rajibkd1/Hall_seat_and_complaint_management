@@ -95,7 +95,7 @@ Route::middleware(['admin-auth', 'set-active-menu'])->prefix('admin')->group(fun
     Route::get('/notices', [AdminController::class, 'notices'])->name('admin.notices');
     Route::get('/notices/create', [AdminController::class, 'createNotice'])->name('admin.notices.create');
     Route::post('/notices', [AdminController::class, 'storeNotice'])->name('admin.notices.store');
-    Route::get('/notices/{id}/edit', [AdminController::class, 'editNotice'])->name('admin.notices.edit');
+    Route.get('/notices/{id}/edit', [AdminController::class, 'editNotice'])->name('admin.notices.edit');
     Route::put('/notices/{id}', [AdminController::class, 'updateNotice'])->name('admin.notices.update');
     Route::delete('/notices/{id}', [AdminController::class, 'destroyNotice'])->name('admin.notices.destroy');
 
@@ -103,5 +103,6 @@ Route::middleware(['admin-auth', 'set-active-menu'])->prefix('admin')->group(fun
     Route::get('/applications', [SeatApplicationController::class, 'adminIndex'])->name('admin.applications.index');
     Route::get('/applications/{application}', [SeatApplicationController::class, 'adminShow'])->name('admin.applications.view');
     Route::patch('/applications/{application}/update-status', [SeatApplicationController::class, 'updateStatus'])->name('admin.applications.update_status');
+    Route::post('/applications/{application}/send-email', [SeatApplicationController::class, 'sendEmail'])->name('admin.applications.send_email');
 
 });
