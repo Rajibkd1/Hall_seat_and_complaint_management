@@ -16,6 +16,9 @@ public function up()
         $table->id('seat_id');
         $table->string('room_number');
         $table->string('bed_number');
+        $table->integer('floor');
+        $table->string('block');
+        $table->string('seat_number')->nullable();
         $table->enum('status', ['vacant', 'occupied', 'maintenance']);
         $table->timestamp('last_updated');
         $table->timestamps();

@@ -66,4 +66,9 @@ class SeatApplication extends Model
     {
         return $this->belongsTo(Student::class, 'student_id');
     }
+
+    public function seatAllotments()
+    {
+        return $this->hasMany(SeatAllotment::class, 'application_id');
+    }
 }

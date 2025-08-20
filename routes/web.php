@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\HallNoticeController;
 use App\Http\Controllers\StudentComplaintController;
 use App\Http\Controllers\SeatApplicationController;
+use App\Http\Controllers\SeatController;
 use App\Http\Controllers\HomeController;
 
 /*
@@ -57,28 +58,31 @@ Route::middleware('student-auth')->group(function () {
     Route::post('/student/logout', [StudentAuthController::class, 'logout'])->name('student.logout');
     // Complaint List
     Route::get('/complaint_list', [StudentComplaintController::class, 'complaintList'])->name('student.complaint_list');
-    
+
     // Create Complaint
     Route::get('/create_complaint', [StudentComplaintController::class, 'createComplaint'])->name('student.create_complaint');
     Route::post('/create_complaint', [StudentComplaintController::class, 'storeComplaint'])->name('student.store_complaint');
-    
+
     // Track Complaint
     Route::get('/track_complaint', [StudentComplaintController::class, 'trackComplaint'])->name('student.track_complaint');
     Route::post('/search_complaint', [StudentComplaintController::class, 'searchComplaint'])->name('student.search_complaint');
-    
+
     // Delete Complaint
     Route::delete('/complaint/{complaint}', [StudentComplaintController::class, 'deleteComplaint'])->name('student.delete_complaint');
 
-     Route::get('/hall-notice', [HallNoticeController::class, 'index'])->name('student.hall-notice');
+    Route::get('/hall-notice', [HallNoticeController::class, 'index'])->name('student.hall-notice');
     Route::get('/hall-notice/{id}', [HallNoticeController::class, 'show'])->name('student.hall-notice.show');
 
     // Placeholder routes for Seat Application and Contact Us
-    Route::get('/contact-us', function () { session(['active_nav' => 'contact_us']); return view('student.contact_us'); })->name('student.contact_us');
+    Route::get('/contact-us', function () {
+        session(['active_nav' => 'contact_us']);
+        return view('student.contact_us');
+    })->name('student.contact_us');
 
     //Seat Application Routes
     Route::get('/seat-application', [SeatApplicationController::class, 'showForm'])->name('student.seat_application');
     Route::post('/seat-application/submit', [SeatApplicationController::class, 'store'])
-    ->name('seat-application.submit');
+        ->name('seat-application.submit');
 });
 
 // Admin Protected Routes
@@ -95,7 +99,7 @@ Route::middleware(['admin-auth', 'set-active-menu'])->prefix('admin')->group(fun
     Route::get('/notices', [AdminController::class, 'notices'])->name('admin.notices');
     Route::get('/notices/create', [AdminController::class, 'createNotice'])->name('admin.notices.create');
     Route::post('/notices', [AdminController::class, 'storeNotice'])->name('admin.notices.store');
-    Route.get('/notices/{id}/edit', [AdminController::class, 'editNotice'])->name('admin.notices.edit');
+    Route::get('/notices/{id}/edit', [AdminController::class, 'editNotice'])->name('admin.notices.edit');
     Route::put('/notices/{id}', [AdminController::class, 'updateNotice'])->name('admin.notices.update');
     Route::delete('/notices/{id}', [AdminController::class, 'destroyNotice'])->name('admin.notices.destroy');
 
@@ -105,4 +109,11 @@ Route::middleware(['admin-auth', 'set-active-menu'])->prefix('admin')->group(fun
     Route::patch('/applications/{application}/update-status', [SeatApplicationController::class, 'updateStatus'])->name('admin.applications.update_status');
     Route::post('/applications/{application}/send-email', [SeatApplicationController::class, 'sendEmail'])->name('admin.applications.send_email');
 
+    // Seat Management Routes
+    Route::get('/seats', [SeatController::class, 'index'])->name('admin.seats.index');
+    Route::get('/seats/rooms', [SeatController::class, 'getRooms'])->name('admin.seats.rooms');
+    Route::get('/seats/room-seats', [SeatController::class, 'getRoomSeats'])->name('admin.seats.room_seats');
+    Route::get('/seats/{seat}/details', [SeatController::class, 'getSeatDetails'])->name('admin.seats.details');
+    Route::post('/seats/assign', [SeatController::class, 'assignSeat'])->name('admin.seats.assign');
+    Route::delete('/seats/{seat}/release', [SeatController::class, 'releaseSeat'])->name('admin.seats.release');
 });

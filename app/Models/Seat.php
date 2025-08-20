@@ -12,7 +12,7 @@ class Seat extends Model
     protected $primaryKey = 'seat_id';  // Primary Key
 
     protected $fillable = [
-        'room_number', 'bed_number', 'status', 'last_updated',
+        'floor', 'block', 'seat_number', 'room_number', 'bed_number', 'status', 'last_updated',
     ];
 
     // Relationships
