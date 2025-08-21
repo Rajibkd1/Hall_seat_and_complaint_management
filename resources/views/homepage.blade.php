@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hall Seat and Complaint Management System - Professional Student Housing Solutions</title>
+    <title>Institutional Hall Management System - Professional Student Housing Administration</title>
     <meta name="description"
-        content="Streamline your hall accommodation experience with our comprehensive seat allocation and complaint management system. Apply for seats, track applications, and resolve issues efficiently.">
+        content="Official institutional platform for hall seat allocation and complaint management. Secure, reliable, and compliant student housing administration system.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
@@ -27,16 +27,16 @@
                         <i class="fas fa-university text-2xl text-blue-600"></i>
                     </div>
                     <div class="logo-content">
-                        <span class="logo-text">Hall Management</span>
-                        <span class="logo-subtitle">Seat and Complaint Solutions</span>
+                        <span class="logo-text">Institutional Housing</span>
+                        <span class="logo-subtitle">Management System</span>
                     </div>
                 </div>
 
                 <!-- Navigation Menu -->
                 <div class="nav-menu hidden lg:flex">
-                    <a href="#features" class="nav-link">Features</a>
-                    <a href="#how-it-works" class="nav-link">How It Works</a>
-                    <a href="#faq" class="nav-link">FAQ</a>
+                    <a href="#services" class="nav-link">Services</a>
+                    <a href="#process" class="nav-link">Process</a>
+                    <a href="#support" class="nav-link">Support</a>
                     <a href="#contact" class="nav-link">Contact</a>
                 </div>
 
@@ -74,17 +74,19 @@
                     </button>
                 </div>
                 <nav class="mobile-nav">
-                    <a href="#features" class="mobile-nav-link">Features</a>
-                    <a href="#how-it-works" class="mobile-nav-link">How It Works</a>
-                    <a href="#faq" class="mobile-nav-link">FAQ</a>
+                    <a href="#services" class="mobile-nav-link">Services</a>
+                    <a href="#process" class="mobile-nav-link">Process</a>
+                    <a href="#support" class="mobile-nav-link">Support</a>
                     <a href="#contact" class="mobile-nav-link">Contact</a>
                 </nav>
                 <div class="mobile-auth-buttons">
-                    <a href="{{ route('student.auth', ['form_type' => 'login']) }}" class="mobile-auth-btn mobile-login">
+                    <a href="{{ route('student.auth', ['form_type' => 'login']) }}"
+                        class="mobile-auth-btn mobile-login">
                         <i class="fas fa-sign-in-alt"></i>
                         <span>Login</span>
                     </a>
-                    <a href="{{ route('student.auth', ['form_type' => 'register']) }}" class="mobile-auth-btn mobile-signup">
+                    <a href="{{ route('student.auth', ['form_type' => 'register']) }}"
+                        class="mobile-auth-btn mobile-signup">
                         <i class="fas fa-user-plus"></i>
                         <span>Signup</span>
                     </a>
@@ -97,11 +99,12 @@
     <section class="notices-section scroll-fade bg-gradient-to-br from-blue-50 via-white to-purple-50">
         <div class="max-w-7xl mx-auto px-4 py-16 sm:px-6">
             <div class="text-center mb-12">
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-                    📢 <span class="text-gradient">Latest Hall Notices</span>
+                <h2 class="section-title">
+                    <span class="text-gradient">Official Announcements</span>
                 </h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Stay updated with important announcements, events, and deadlines from hall administration
+                <p class="section-subtitle">
+                    Stay informed with official notices, policy updates, and important communications from the
+                    institutional housing administration
                 </p>
             </div>
 
@@ -168,7 +171,8 @@
                     <div id="noticesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($notices as $index => $notice)
                             <div class="notice-card bg-white/90 backdrop-blur-lg rounded-2xl p-6 border border-gray-200/50 cursor-pointer transition-all duration-300 hover:shadow-2xl shadow-lg animate-notice-appear relative group"
-                                style="animation-delay: {{ $index * 0.1 }}s" data-notice-id="{{ $notice->notice_id }}"
+                                style="animation-delay: {{ $index * 0.1 }}s"
+                                data-notice-id="{{ $notice->notice_id }}"
                                 data-notice-type="{{ $notice->notice_type }}"
                                 data-notice-title="{{ strtolower($notice->title) }}"
                                 data-notice-description="{{ strtolower($notice->description) }}">
@@ -308,120 +312,142 @@
         <div class="max-w-7xl mx-auto px-4 py-20 sm:px-6 lg:py-32">
             <div class="text-center">
                 <h1 class="hero-title">
-                    Streamline Your <span class="text-gradient">Hall Experience</span>
+                    Official <span class="text-gradient">Institutional Housing</span> Platform
                 </h1>
                 <p class="hero-subtitle">
-                    Professional seat allocation and complaint management system designed for modern student housing.
-                    Apply for accommodations, track your applications, and resolve issues with ease.
+                    Secure, compliant, and efficient student housing administration system.
+                    Manage accommodations, track applications, and resolve concerns through our official institutional
+                    platform.
                 </p>
                 <div class="hero-buttons">
                     <a href="{{ route('student.auth', ['form_type' => 'register']) }}" class="btn-primary">
-                        <i class="fas fa-rocket mr-2"></i>
-                        Start Your Application
+                        <i class="fas fa-user-graduate mr-2"></i>
+                        Student Portal Access
                     </a>
-                    <a href="#how-it-works" class="btn-secondary">
-                        <i class="fas fa-play-circle mr-2"></i>
-                        See How It Works
+                    <a href="#process" class="btn-secondary">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Learn More
                     </a>
+                </div>
+
+                <!-- Add institutional statistics -->
+                <div class="hero-stats mt-12">
+                    <div class="stat-item">
+                        <div class="stat-number">{{ $statistics['total_students'] ?? 0 }}</div>
+                        <div class="stat-label">Registered Students</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ $statistics['satisfaction_rate'] ?? 0 }}%</div>
+                        <div class="stat-label">Satisfaction Rate</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ $statistics['occupancy_rate'] ?? 0 }}%</div>
+                        <div class="stat-label">Occupancy Rate</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ $statistics['resolved_complaints'] ?? 0 }}</div>
+                        <div class="stat-label">Issues Resolved</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="features-section scroll-fade">
+    <!-- Services Section -->
+    <section id="services" class="features-section scroll-fade">
         <div class="max-w-7xl mx-auto px-4 py-20 sm:px-6">
             <div class="text-center mb-16">
-                <h2 class="section-title">Seat and Complaint Solutions</h2>
-                <p class="section-subtitle">Complete management system for hall seat allocation and complaint resolution</p>
+                <h2 class="section-title">Institutional Housing Services</h2>
+                <p class="section-subtitle">Comprehensive student accommodation management with institutional standards
+                    and compliance</p>
             </div>
 
             <div class="features-grid">
                 <div class="feature-card scroll-scale" style="--delay: 0.1s">
                     <div class="feature-icon">
-                        <i class="fas fa-bed"></i>
+                        <i class="fas fa-building"></i>
                     </div>
-                    <h3 class="feature-title">Smart Seat Allocation</h3>
+                    <h3 class="feature-title">Accommodation Management</h3>
                     <p class="feature-description">
-                        Intelligent room assignment system that considers your preferences, academic requirements, and
-                        compatibility factors for optimal accommodation.
+                        Official institutional housing allocation system with standardized procedures, fair distribution
+                        policies, and compliance with institutional regulations.
                     </p>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check"></i> Preference-based matching</li>
-                        <li><i class="fas fa-check"></i> Real-time availability</li>
-                        <li><i class="fas fa-check"></i> Automated processing</li>
+                        <li><i class="fas fa-check"></i> Policy-compliant allocation</li>
+                        <li><i class="fas fa-check"></i> Fair distribution system</li>
+                        <li><i class="fas fa-check"></i> Institutional standards</li>
                     </ul>
                 </div>
 
                 <div class="feature-card scroll-scale" style="--delay: 0.2s">
                     <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
+                        <i class="fas fa-clipboard-list"></i>
                     </div>
-                    <h3 class="feature-title">Application Tracking</h3>
+                    <h3 class="feature-title">Application Processing</h3>
                     <p class="feature-description">
-                        Monitor your seat application status in real-time with detailed progress updates and transparent
-                        communication throughout the process.
+                        Transparent application review process with institutional oversight, documented procedures, and
+                        regular status updates for all applicants.
                     </p>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check"></i> Real-time updates</li>
-                        <li><i class="fas fa-check"></i> Email notifications</li>
-                        <li><i class="fas fa-check"></i> Status dashboard</li>
+                        <li><i class="fas fa-check"></i> Transparent process</li>
+                        <li><i class="fas fa-check"></i> Institutional oversight</li>
+                        <li><i class="fas fa-check"></i> Regular updates</li>
                     </ul>
                 </div>
 
                 <div class="feature-card scroll-scale" style="--delay: 0.3s">
                     <div class="feature-icon">
-                        <i class="fas fa-headset"></i>
+                        <i class="fas fa-balance-scale"></i>
                     </div>
-                    <h3 class="feature-title">Complaint Management</h3>
+                    <h3 class="feature-title">Grievance Resolution</h3>
                     <p class="feature-description">
-                        Comprehensive complaint resolution system with priority handling, escalation procedures, and
-                        satisfaction tracking for quick issue resolution.
+                        Formal complaint handling system with institutional protocols, escalation procedures, and
+                        documented resolution processes for student concerns.
                     </p>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check"></i> Priority support</li>
-                        <li><i class="fas fa-check"></i> Issue escalation</li>
-                        <li><i class="fas fa-check"></i> Resolution tracking</li>
+                        <li><i class="fas fa-check"></i> Formal procedures</li>
+                        <li><i class="fas fa-check"></i> Escalation protocols</li>
+                        <li><i class="fas fa-check"></i> Documented outcomes</li>
                     </ul>
                 </div>
 
                 <div class="feature-card scroll-scale" style="--delay: 0.4s">
                     <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
+                        <i class="fas fa-certificate"></i>
                     </div>
-                    <h3 class="feature-title">Secure & Reliable</h3>
+                    <h3 class="feature-title">Compliance & Security</h3>
                     <p class="feature-description">
-                        Enterprise-grade security with encrypted data storage, secure authentication, and reliable
-                        system performance for peace of mind.
+                        Institutional-grade security protocols, data protection compliance, and adherence to educational
+                        institution standards and regulations.
                     </p>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check"></i> Data encryption</li>
-                        <li><i class="fas fa-check"></i> Secure access</li>
-                        <li><i class="fas fa-check"></i> 24/7 availability</li>
+                        <li><i class="fas fa-check"></i> Regulatory compliance</li>
+                        <li><i class="fas fa-check"></i> Data protection</li>
+                        <li><i class="fas fa-check"></i> Institutional standards</li>
                     </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="how-it-works-section scroll-fade">
+    <!-- Process Section -->
+    <section id="process" class="how-it-works-section scroll-fade">
         <div class="max-w-7xl mx-auto px-4 py-20 sm:px-6">
             <div class="text-center mb-16">
-                <h2 class="section-title">How It Works</h2>
-                <p class="section-subtitle">Simple steps to secure your ideal accommodation</p>
+                <h2 class="section-title">Institutional Process</h2>
+                <p class="section-subtitle">Official procedures for student housing application and management</p>
             </div>
 
             <div class="process-timeline">
                 <div class="process-step scroll-slide-left" style="--delay: 0.1s">
                     <div class="step-number">1</div>
                     <div class="step-content">
-                        <h3 class="step-title">Create Account</h3>
-                        <p class="step-description">Register with your student credentials and complete your profile
-                            with academic and personal information.</p>
+                        <h3 class="step-title">Student Registration</h3>
+                        <p class="step-description">Complete official registration using institutional credentials and
+                            provide required academic documentation for verification.</p>
                         <div class="step-features">
-                            <span class="step-tag">Quick Setup</span>
-                            <span class="step-tag">Secure Verification</span>
+                            <span class="step-tag">Official Registration</span>
+                            <span class="step-tag">Document Verification</span>
                         </div>
                     </div>
                 </div>
@@ -429,12 +455,12 @@
                 <div class="process-step scroll-slide-right" style="--delay: 0.2s">
                     <div class="step-number">2</div>
                     <div class="step-content">
-                        <h3 class="step-title">Submit Application</h3>
-                        <p class="step-description">Fill out your accommodation preferences, upload required documents,
-                            and submit your application.</p>
+                        <h3 class="step-title">Formal Application</h3>
+                        <p class="step-description">Submit official housing application with required documentation,
+                            following institutional guidelines and procedures.</p>
                         <div class="step-features">
-                            <span class="step-tag">Smart Matching</span>
-                            <span class="step-tag">Document Upload</span>
+                            <span class="step-tag">Official Documentation</span>
+                            <span class="step-tag">Institutional Guidelines</span>
                         </div>
                     </div>
                 </div>
@@ -442,12 +468,12 @@
                 <div class="process-step scroll-slide-left" style="--delay: 0.3s">
                     <div class="step-number">3</div>
                     <div class="step-content">
-                        <h3 class="step-title">Track Progress</h3>
-                        <p class="step-description">Monitor your application status in real-time and receive updates
-                            via email and dashboard notifications.</p>
+                        <h3 class="step-title">Review Process</h3>
+                        <p class="step-description">Application undergoes institutional review with transparent
+                            evaluation criteria and regular status communications.</p>
                         <div class="step-features">
-                            <span class="step-tag">Real-time Updates</span>
-                            <span class="step-tag">Email Alerts</span>
+                            <span class="step-tag">Institutional Review</span>
+                            <span class="step-tag">Status Updates</span>
                         </div>
                     </div>
                 </div>
@@ -455,12 +481,12 @@
                 <div class="process-step scroll-slide-right" style="--delay: 0.4s">
                     <div class="step-number">4</div>
                     <div class="step-content">
-                        <h3 class="step-title">Get Approved</h3>
-                        <p class="step-description">Receive your seat allocation confirmation and access your
-                            accommodation details and move-in information.</p>
+                        <h3 class="step-title">Official Allocation</h3>
+                        <p class="step-description">Receive official housing allocation notification with detailed
+                            accommodation information and institutional procedures.</p>
                         <div class="step-features">
-                            <span class="step-tag">Instant Confirmation</span>
-                            <span class="step-tag">Move-in Guide</span>
+                            <span class="step-tag">Official Notification</span>
+                            <span class="step-tag">Detailed Information</span>
                         </div>
                     </div>
                 </div>
@@ -470,79 +496,85 @@
 
 
 
-    <!-- FAQ Section -->
-    <section id="faq" class="faq-section scroll-fade">
+    <!-- Support Section -->
+    <section id="support" class="faq-section scroll-fade">
         <div class="max-w-7xl mx-auto px-4 py-20 sm:px-6">
             <div class="text-center mb-16">
-                <h2 class="section-title">Frequently Asked Questions</h2>
-                <p class="section-subtitle">Find answers to common questions about our platform</p>
+                <h2 class="section-title">Student Support & Information</h2>
+                <p class="section-subtitle">Essential information and answers to common inquiries about institutional
+                    housing services</p>
             </div>
 
             <div class="faq-container">
                 <div class="faq-item scroll-scale" style="--delay: 0.1s">
                     <button class="faq-question">
-                        <span>How do I apply for a hall seat?</span>
+                        <span>What are the eligibility requirements for institutional housing?</span>
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>Simply create an account with your student credentials, complete your profile, and submit
-                            your accommodation preferences. Our system will guide you through each step with clear
-                            instructions.</p>
+                        <p>Students must be officially enrolled at the institution with valid student credentials.
+                            Complete your official registration, provide required academic documentation, and follow
+                            institutional housing application procedures.</p>
                     </div>
                 </div>
 
                 <div class="faq-item scroll-scale" style="--delay: 0.2s">
                     <button class="faq-question">
-                        <span>What documents do I need to upload?</span>
+                        <span>What official documentation is required for housing applications?</span>
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>You'll need your student ID, academic transcripts, and any relevant medical or special
-                            accommodation requirements. All documents are securely stored and encrypted.</p>
+                        <p>Required documents include official student ID, academic transcripts, medical certificates
+                            (if applicable), and any special accommodation documentation. All documents must be
+                            officially verified and comply with institutional standards.</p>
                     </div>
                 </div>
 
                 <div class="faq-item scroll-scale" style="--delay: 0.3s">
                     <button class="faq-question">
-                        <span>How long does the application process take?</span>
+                        <span>What is the official processing timeline for housing applications?</span>
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>Most applications are processed within 3-5 business days. You'll receive real-time updates
-                            via email and your dashboard as your application progresses through each stage.</p>
+                        <p>Applications undergo institutional review within 5-7 business days following official
+                            submission. Status updates are provided through official channels including email
+                            notifications and the student portal dashboard.</p>
                     </div>
                 </div>
 
                 <div class="faq-item scroll-scale" style="--delay: 0.4s">
                     <button class="faq-question">
-                        <span>Can I track my complaint status?</span>
+                        <span>How does the institutional grievance process work?</span>
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>Yes! Our complaint tracking system provides real-time updates on your issue status, assigned
-                            staff, estimated resolution time, and detailed progress notes.</p>
+                        <p>Our formal grievance system follows institutional protocols with documented procedures,
+                            assigned case officers, and transparent resolution timelines. All complaints are handled
+                            according to institutional standards and policies.</p>
                     </div>
                 </div>
 
                 <div class="faq-item scroll-scale" style="--delay: 0.5s">
                     <button class="faq-question">
-                        <span>Is my personal information secure?</span>
+                        <span>How is student data protected and secured?</span>
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>Absolutely. We use enterprise-grade encryption, secure authentication, and comply with all
-                            privacy regulations. Your data is never shared with third parties.</p>
+                        <p>We maintain institutional-grade security protocols with encrypted data storage, secure
+                            authentication systems, and full compliance with educational privacy regulations. Student
+                            information is protected according to institutional data governance policies.</p>
                     </div>
                 </div>
 
                 <div class="faq-item scroll-scale" style="--delay: 0.6s">
                     <button class="faq-question">
-                        <span>What if I have special accommodation needs?</span>
+                        <span>What support is available for students with special accommodation needs?</span>
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>Our system accommodates special requirements including medical needs, accessibility features,
-                            and dietary restrictions. Simply indicate your needs during the application process.</p>
+                        <p>The institution provides comprehensive support for students with medical, accessibility, or
+                            dietary requirements. Special accommodation requests are processed through official channels
+                            with appropriate documentation and institutional approval procedures.</p>
                     </div>
                 </div>
             </div>
@@ -553,83 +585,87 @@
     <section id="contact" class="contact-section scroll-fade">
         <div class="max-w-7xl mx-auto px-4 py-20 sm:px-6">
             <div class="text-center mb-16">
-                <h2 class="section-title">Get In Touch</h2>
-                <p class="section-subtitle">We're here to help with any questions or concerns</p>
+                <h2 class="section-title">Official Contact Information</h2>
+                <p class="section-subtitle">Connect with institutional housing administration for official inquiries
+                    and support</p>
             </div>
 
             <div class="contact-grid">
                 <div class="contact-info scroll-slide-left" style="--delay: 0.1s">
-                    <h3 class="contact-title">Contact Information</h3>
-                    <p class="contact-description">Reach out to us through any of these channels for prompt assistance.
+                    <h3 class="contact-title">Institutional Housing Office</h3>
+                    <p class="contact-description">Official contact channels for institutional housing services,
+                        applications, and student support inquiries.
                     </p>
 
                     <div class="contact-methods">
                         <div class="contact-method">
                             <i class="fas fa-envelope text-blue-600"></i>
                             <div>
-                                <div class="method-label">Email Support</div>
-                                <div class="method-value">support@hallmanagement.edu</div>
+                                <div class="method-label">Official Email</div>
+                                <div class="method-value">housing@institution.edu</div>
                             </div>
                         </div>
 
                         <div class="contact-method">
                             <i class="fas fa-phone text-green-600"></i>
                             <div>
-                                <div class="method-label">Phone Support</div>
-                                <div class="method-value">+880 1234-567890</div>
+                                <div class="method-label">Administrative Office</div>
+                                <div class="method-value">+1 (555) 123-4567</div>
                             </div>
                         </div>
 
                         <div class="contact-method">
                             <i class="fas fa-clock text-purple-600"></i>
                             <div>
-                                <div class="method-label">Support Hours</div>
-                                <div class="method-value">24/7 Emergency Support</div>
+                                <div class="method-label">Office Hours</div>
+                                <div class="method-value">Mon-Fri: 8:00 AM - 5:00 PM</div>
                             </div>
                         </div>
 
                         <div class="contact-method">
                             <i class="fas fa-map-marker-alt text-orange-600"></i>
                             <div>
-                                <div class="method-label">Office Location</div>
-                                <div class="method-value">Student Services Building, Room 101</div>
+                                <div class="method-label">Physical Address</div>
+                                <div class="method-value">Student Housing Administration, Building A, Room 205</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="contact-form scroll-slide-right" style="--delay: 0.2s">
-                    <h3 class="contact-title">Send Us a Message</h3>
+                    <h3 class="contact-title">Official Inquiry Form</h3>
                     <form class="contact-form-container">
                         <div class="form-group">
-                            <label for="name">Full Name</label>
+                            <label for="name">Full Name (as per institutional records)</label>
                             <input type="text" id="name" name="name" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Email Address</label>
+                            <label for="email">Institutional Email Address</label>
                             <input type="email" id="email" name="email" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="subject">Subject</label>
+                            <label for="subject">Inquiry Category</label>
                             <select id="subject" name="subject" required>
-                                <option value="">Select a topic</option>
-                                <option value="application">Application Support</option>
-                                <option value="complaint">Complaint Issue</option>
-                                <option value="technical">Technical Support</option>
-                                <option value="general">General Inquiry</option>
+                                <option value="">Select inquiry type</option>
+                                <option value="housing-application">Housing Application</option>
+                                <option value="grievance">Formal Grievance</option>
+                                <option value="accommodation">Special Accommodation</option>
+                                <option value="administrative">Administrative Inquiry</option>
+                                <option value="policy">Policy Information</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" rows="4" required></textarea>
+                            <label for="message">Detailed Inquiry</label>
+                            <textarea id="message" name="message" rows="4" required
+                                placeholder="Please provide detailed information about your inquiry..."></textarea>
                         </div>
 
                         <button type="submit" class="btn-primary w-full">
                             <i class="fas fa-paper-plane mr-2"></i>
-                            Send Message
+                            Submit Official Inquiry
                         </button>
                     </form>
                 </div>
@@ -641,43 +677,44 @@
     <section class="quick-access-section scroll-fade">
         <div class="max-w-7xl mx-auto px-4 py-20 sm:px-6">
             <div class="text-center mb-16">
-                <h2 class="section-title">Ready to Get Started?</h2>
-                <p class="section-subtitle">Join thousands of students who trust our platform</p>
+                <h2 class="section-title">Access Institutional Services</h2>
+                <p class="section-subtitle">Official student housing services and administrative support</p>
             </div>
 
             <div class="quick-access-container">
                 <div class="quick-access-card scroll-scale" style="--delay: 0.1s">
                     <div class="quick-access-icon">
-                        <i class="fas fa-bed text-blue-600"></i>
+                        <i class="fas fa-university text-blue-600"></i>
                     </div>
-                    <h4 class="quick-access-title">Apply for Seat</h4>
-                    <p class="quick-access-description">Submit your application with required documents and track
-                        progress in real-time.</p>
+                    <h4 class="quick-access-title">Housing Application</h4>
+                    <p class="quick-access-description">Submit official housing application with required institutional
+                        documentation and track review progress.</p>
                     <a href="{{ route('student.auth', ['form_type' => 'register']) }}" class="btn-primary">
-                        Start Application
+                        Begin Application
                     </a>
                 </div>
 
                 <div class="quick-access-card scroll-scale" style="--delay: 0.2s">
                     <div class="quick-access-icon">
-                        <i class="fas fa-chart-line text-green-600"></i>
+                        <i class="fas fa-clipboard-check text-green-600"></i>
                     </div>
-                    <h4 class="quick-access-title">Track Status</h4>
-                    <p class="quick-access-description">Monitor your applications and complaints with detailed progress
-                        updates.</p>
+                    <h4 class="quick-access-title">Application Status</h4>
+                    <p class="quick-access-description">Monitor official application status and receive institutional
+                        updates through the student portal.</p>
                     <a href="{{ route('student.auth', ['form_type' => 'login']) }}" class="btn-primary">
-                        Track Now
+                        Check Status
                     </a>
                 </div>
 
                 <div class="quick-access-card scroll-scale" style="--delay: 0.3s">
                     <div class="quick-access-icon">
-                        <i class="fas fa-headset text-purple-600"></i>
+                        <i class="fas fa-info-circle text-purple-600"></i>
                     </div>
-                    <h4 class="quick-access-title">Get Support</h4>
-                    <p class="quick-access-description">24/7 assistance for urgent issues and general inquiries.</p>
+                    <h4 class="quick-access-title">Administrative Support</h4>
+                    <p class="quick-access-description">Access institutional housing administration for official
+                        inquiries and support services.</p>
                     <a href="#contact" class="btn-primary">
-                        Contact Support
+                        Contact Administration
                     </a>
                 </div>
             </div>
@@ -692,46 +729,46 @@
                     <div class="footer-logo">
                         <i class="fas fa-university text-2xl text-blue-600"></i>
                         <div>
-                            <div class="footer-logo-text">Hall Management</div>
-                            <div class="footer-logo-subtitle">Professional Housing Solutions</div>
+                            <div class="footer-logo-text">Institutional Housing</div>
+                            <div class="footer-logo-subtitle">Official Student Administration</div>
                         </div>
                     </div>
                     <p class="footer-description">
-                        Streamlining student accommodation with intelligent seat allocation and comprehensive complaint
-                        management.
+                        Official institutional platform for student housing administration, providing secure, compliant,
+                        and transparent accommodation management services.
                     </p>
                 </div>
 
                 <div class="footer-links">
                     <div class="footer-column">
-                        <h4 class="footer-heading">Quick Links</h4>
-                        <a href="#features" class="footer-link">Features</a>
-                        <a href="#how-it-works" class="footer-link">How It Works</a>
-                        <a href="#faq" class="footer-link">FAQ</a>
+                        <h4 class="footer-heading">Services</h4>
+                        <a href="#services" class="footer-link">Housing Services</a>
+                        <a href="#process" class="footer-link">Application Process</a>
+                        <a href="#support" class="footer-link">Student Support</a>
                     </div>
 
                     <div class="footer-column">
-                        <h4 class="footer-heading">Support</h4>
-                        <a href="#contact" class="footer-link">Contact Us</a>
-                        <a href="#" class="footer-link">Help Center</a>
+                        <h4 class="footer-heading">Administration</h4>
+                        <a href="#contact" class="footer-link">Contact Administration</a>
+                        <a href="#" class="footer-link">Policies & Procedures</a>
                         <a href="#" class="footer-link">Privacy Policy</a>
                         <a href="#" class="footer-link">Terms of Service</a>
                     </div>
 
                     <div class="footer-column">
-                        <h4 class="footer-heading">Connect</h4>
-                        <a href="#" class="footer-link">Facebook</a>
-                        <a href="#" class="footer-link">Twitter</a>
-                        <a href="#" class="footer-link">LinkedIn</a>
-                        <a href="#" class="footer-link">Instagram</a>
+                        <h4 class="footer-heading">Institution</h4>
+                        <a href="#" class="footer-link">About Institution</a>
+                        <a href="#" class="footer-link">Academic Calendar</a>
+                        <a href="#" class="footer-link">Student Resources</a>
+                        <a href="#" class="footer-link">Campus Directory</a>
                     </div>
                 </div>
             </div>
 
             <div class="footer-bottom">
                 <div class="footer-bottom-content">
-                    <p>&copy; 2025 Hall Seat and Complaint Management System. All rights reserved.</p>
-                    <p>Designed for students, by students. Built with ❤️ for better accommodation experiences.</p>
+                    <p>&copy; 2025 Institutional Housing Administration. All rights reserved.</p>
+                    <p>Official platform for secure, compliant, and transparent student housing management.</p>
                 </div>
             </div>
         </div>
