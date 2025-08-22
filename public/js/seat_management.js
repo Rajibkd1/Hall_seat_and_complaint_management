@@ -667,37 +667,66 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
 
         if (allotment && allotment.student) {
-            content += `
-                <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200">
-                    <h4 class="font-semibold text-green-900 mb-3 flex items-center gap-2">
-                        <div class="w-6 h-6 bg-green-500 rounded-lg flex items-center justify-center text-white text-xs">👤</div>
-                        Student Information
-                    </h4>
-                    <div class="space-y-2 text-sm">
-                        <div><span class="font-medium text-green-800">Name:</span> <span class="text-green-600">${
-                            allotment.student.name || "N/A"
-                        }</span></div>
-                        <div><span class="font-medium text-green-800">Email:</span> <span class="text-green-600">${
-                            allotment.student.email || "N/A"
-                        }</span></div>
-                        <div><span class="font-medium text-green-800">Phone:</span> <span class="text-green-600">${
-                            allotment.student.phone || "N/A"
-                        }</span></div>
-                        <div><span class="font-medium text-green-800">Start Date:</span> <span class="text-green-600">${new Date(
-                            allotment.start_date
-                        ).toLocaleDateString()}</span></div>
+            // Generate profile image HTML - larger rectangular format on the right
+            let profileImageHtml = '';
+            if (allotment.student.profile_image) {
+                profileImageHtml = `
+                    <img src="/storage/${allotment.student.profile_image}" 
+                         alt="Profile Image" 
+                         class="w-32 h-40 rounded-lg object-cover border-2 border-green-300 shadow-lg">
+                `;
+            } else {
+                const initials = (allotment.student.name || 'N').charAt(0).toUpperCase();
+                profileImageHtml = `
+                    <div class="w-32 h-40 bg-gradient-to-br from-green-400 to-emerald-600 rounded-lg flex items-center justify-center text-white text-4xl font-bold border-2 border-green-300 shadow-lg">
+                        ${initials}
                     </div>
-                </div>
+                `;
+            }
+
+            // Check if current user is provost or admin to show release button
+            const userRole = window.seatManagementConfig?.userRole;
+            const canReleaseSeat = userRole === 'provost' || userRole === 'admin';
+            const releaseButtonHtml = canReleaseSeat ? `
                 <div class="pt-2">
-                    <button onclick="releaseSeat(${
-                        seat.seat_id
-                    })" class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-3 px-4 rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2">
+                    <button onclick="showReleaseModal(${seat.seat_id}, '${allotment.student.name}', '${allotment.student.email}')" class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-3 px-4 rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                         </svg>
                         Release Seat
                     </button>
                 </div>
+            ` : '';
+
+            content += `
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200">
+                    <h4 class="font-semibold text-green-900 mb-3 flex items-center gap-2">
+                        <div class="w-6 h-6 bg-green-500 rounded-lg flex items-center justify-center text-white text-xs">👤</div>
+                        Student Information
+                    </h4>
+                    <div class="flex items-start gap-4">
+                        <!-- Student Details -->
+                        <div class="flex-1 space-y-2 text-sm">
+                            <div><span class="font-medium text-green-800">Name:</span> <span class="text-green-600">${
+                                allotment.student.name || "N/A"
+                            }</span></div>
+                            <div><span class="font-medium text-green-800">Email:</span> <span class="text-green-600">${
+                                allotment.student.email || "N/A"
+                            }</span></div>
+                            <div><span class="font-medium text-green-800">Phone:</span> <span class="text-green-600">${
+                                allotment.student.phone || "N/A"
+                            }</span></div>
+                            <div><span class="font-medium text-green-800">Start Date:</span> <span class="text-green-600">${new Date(
+                                allotment.start_date
+                            ).toLocaleDateString()}</span></div>
+                        </div>
+                        <!-- Profile Image - Right side, larger rectangular -->
+                        <div class="flex-shrink-0">
+                            ${profileImageHtml}
+                        </div>
+                    </div>
+                </div>
+                ${releaseButtonHtml}
             `;
         }
 
@@ -1130,21 +1159,91 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Global functions for inline event handlers
-    window.releaseSeat = function (seatId) {
-        if (
-            confirm(
-                "Are you sure you want to release this seat? This action cannot be undone."
-            )
-        ) {
-            fetch(`${baseUrl}/seats/${seatId}/release`, {
-                method: "DELETE",
-                headers: {
-                    "X-CSRF-TOKEN":
-                        document
-                            .querySelector('meta[name="csrf-token"]')
-                            ?.getAttribute("content") || "",
-                },
-            })
+    window.showReleaseModal = function (seatId, studentName, studentEmail) {
+        const modalContent = document.getElementById("modalContent");
+        if (!modalContent) return;
+
+        modalContent.innerHTML = `
+            <div class="space-y-6">
+                <div class="bg-gradient-to-r from-red-50 to-red-100 p-4 rounded-xl border border-red-200">
+                    <h4 class="font-semibold text-red-900 mb-3 flex items-center gap-2">
+                        <div class="w-6 h-6 bg-red-500 rounded-lg flex items-center justify-center text-white text-xs">⚠️</div>
+                        Release Seat Confirmation
+                    </h4>
+                    <p class="text-red-800 text-sm mb-4">
+                        You are about to release the seat for <strong>${studentName}</strong>. 
+                        Please provide a reason that will be sent to the student via email.
+                    </p>
+                </div>
+                
+                <form id="releaseSeatForm" class="space-y-4">
+                    <input type="hidden" name="seat_id" value="${seatId}">
+                    <input type="hidden" name="student_email" value="${studentEmail}">
+                    <input type="hidden" name="student_name" value="${studentName}">
+                    
+                    <div>
+                        <label for="release_reason" class="block text-sm font-bold text-gray-700 mb-2">
+                            Reason for Release <span class="text-red-500">*</span>
+                        </label>
+                        <textarea 
+                            name="release_reason" 
+                            id="release_reason" 
+                            rows="4" 
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 resize-none" 
+                            placeholder="Please explain why this seat is being released. This message will be sent to the student."
+                            required
+                        ></textarea>
+                        <p class="mt-2 text-xs text-gray-500">This message will be included in the email notification to ${studentName}</p>
+                    </div>
+                    
+                    <div class="flex gap-3 pt-4">
+                        <button 
+                            type="button" 
+                            onclick="closeSeatModal()" 
+                            class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 px-4 rounded-xl transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            Cancel
+                        </button>
+                        <button 
+                            type="submit" 
+                            class="flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white py-3 px-4 rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                            Release Seat & Send Email
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `;
+
+        // Handle form submission
+        const form = document.getElementById("releaseSeatForm");
+        if (form) {
+            form.addEventListener("submit", function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData);
+                
+                // Show loading state
+                const submitBtn = e.target.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<div class="loading-spinner"></div> Releasing...';
+                submitBtn.disabled = true;
+                
+                fetch(`${baseUrl}/seats/${seatId}/release`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')?.getAttribute("content") || "",
+                    },
+                    body: JSON.stringify(data),
+                })
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.success) {
@@ -1158,7 +1257,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 .catch((error) => {
                     console.error("Error releasing seat:", error);
                     showNotification("Error releasing seat", "error");
+                })
+                .finally(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
                 });
+            });
         }
     };
 

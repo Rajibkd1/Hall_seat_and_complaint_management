@@ -186,9 +186,9 @@ class ProvostController extends Controller
         return app(\App\Http\Controllers\SeatController::class)->assignSeat($request);
     }
 
-    public function releaseSeat($seat)
+    public function releaseSeat($seat, Request $request)
     {
-        return app(\App\Http\Controllers\SeatController::class)->releaseSeat($seat);
+        return app(\App\Http\Controllers\SeatController::class)->releaseSeat($seat, $request);
     }
 
     public function getAvailableStudents()

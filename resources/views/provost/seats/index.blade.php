@@ -385,7 +385,8 @@
     <script>
         // Set the base URL for API calls based on current route
         window.seatManagementConfig = {
-            baseUrl: '/provost'
+            baseUrl: '/provost',
+            userRole: 'provost'
         };
     </script>
     <script src="{{ asset('js/seat_management.js') }}"></script>

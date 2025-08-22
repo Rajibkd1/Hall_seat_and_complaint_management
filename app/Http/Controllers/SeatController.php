@@ -6,9 +6,12 @@ use App\Models\Seat;
 use App\Models\SeatApplication;
 use App\Models\SeatAllotment;
 use App\Models\Student;
+use App\Mail\SeatAssignmentNotification;
+use App\Mail\SeatReleaseNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class SeatController extends Controller
 {
@@ -16,30 +19,30 @@ class SeatController extends Controller
     {
         $floor = $request->get('floor', 1);
         $block = $request->get('block', 'Front');
-        
+
         // Get available applications for seat assignment
         $availableApplications = SeatApplication::where('status', 'approved')
-                                              ->whereDoesntHave('seatAllotments')
-                                              ->with('student')
-                                              ->get();
-        
+            ->whereDoesntHave('seatAllotments')
+            ->with('student')
+            ->get();
+
         // Get overall seat statistics
         $seatStats = Seat::select('status', DB::raw('count(*) as count'))
-                        ->groupBy('status')
-                        ->pluck('count', 'status')
-                        ->toArray();
-        
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->toArray();
+
         $totalSeats = Seat::count();
         $occupiedSeats = $seatStats['occupied'] ?? 0;
         $availableSeats = $seatStats['vacant'] ?? 0;
         $maintenanceSeats = $seatStats['maintenance'] ?? 0;
-        
+
         // Get total number of rooms
         $totalRooms = Seat::distinct('room_number')->count('room_number');
-        
+
         return view('admin.seats.index', compact(
-            'floor', 
-            'block', 
+            'floor',
+            'block',
             'availableApplications',
             'totalSeats',
             'occupiedSeats',
@@ -48,27 +51,27 @@ class SeatController extends Controller
             'totalRooms'
         ));
     }
-    
+
     public function getRooms(Request $request)
     {
         $floor = $request->get('floor', 1);
         $block = $request->get('block', 'Front');
-        
+
         // Get room numbers with their status counts
         $roomsData = Seat::where('floor', $floor)
-                        ->where('block', $block)
-                        ->select('room_number', 'status', DB::raw('count(*) as count'))
-                        ->groupBy('room_number', 'status')
-                        ->orderBy('room_number')
-                        ->get();
-        
+            ->where('block', $block)
+            ->select('room_number', 'status', DB::raw('count(*) as count'))
+            ->groupBy('room_number', 'status')
+            ->orderBy('room_number')
+            ->get();
+
         // Process room data to get status for each room
         $rooms = [];
         $totalCounts = ['occupied' => 0, 'vacant' => 0, 'maintenance' => 0];
-        
+
         foreach ($roomsData as $data) {
             $roomNumber = $data->room_number;
-            
+
             if (!isset($rooms[$roomNumber])) {
                 $rooms[$roomNumber] = [
                     'room_number' => $roomNumber,
@@ -78,12 +81,12 @@ class SeatController extends Controller
                     'total' => 0
                 ];
             }
-            
+
             $rooms[$roomNumber][$data->status] = $data->count;
             $rooms[$roomNumber]['total'] += $data->count;
             $totalCounts[$data->status] += $data->count;
         }
-        
+
         // Determine room status based on seat occupancy
         foreach ($rooms as &$room) {
             if ($room['occupied'] == $room['total']) {
@@ -96,7 +99,7 @@ class SeatController extends Controller
                 $room['status'] = 'Partially Occupied';
             }
         }
-        
+
         return response()->json([
             'success' => true,
             'rooms' => array_values($rooms),
@@ -105,22 +108,22 @@ class SeatController extends Controller
             'block' => $block
         ]);
     }
-    
+
     public function getRoomSeats(Request $request)
     {
         $floor = $request->get('floor');
         $block = $request->get('block');
         $roomNumber = $request->get('room_number');
-        
+
         // Get seats for the specific room
         $seats = Seat::where('floor', $floor)
-                    ->where('block', $block)
-                    ->where('room_number', $roomNumber)
-                    ->orderBy('bed_number')
-                    ->get();
-        
+            ->where('block', $block)
+            ->where('room_number', $roomNumber)
+            ->orderBy('bed_number')
+            ->get();
+
         // Transform seats to show as A, B, C, D, Fifth
-        $transformedSeats = $seats->map(function($seat) {
+        $transformedSeats = $seats->map(function ($seat) {
             return [
                 'seat_id' => $seat->seat_id,
                 'status' => $seat->status,
@@ -128,7 +131,7 @@ class SeatController extends Controller
                 'bed_number' => $seat->bed_number
             ];
         });
-        
+
         return response()->json([
             'success' => true,
             'seats' => $transformedSeats,
@@ -137,21 +140,21 @@ class SeatController extends Controller
             'block' => $block
         ]);
     }
-    
+
     public function getSeatDetails($seatId)
     {
         try {
             // Load seat with all necessary relationships using the new helper methods
             $seat = Seat::with([
                 'currentAllotment', // This will load student, admin, and application through the relationship
-                'seatAllotments.student', 
+                'seatAllotments.student',
                 'seatAllotments.admin',
                 'seatAllotments.application'
             ])->findOrFail($seatId);
-            
+
             // Get the current active allotment using the helper method
             $currentAllotment = $seat->currentAllotment;
-            
+
             // If no active allotment but seat is occupied, try to find the most recent allotment
             if (!$currentAllotment && $seat->status === 'occupied') {
                 $currentAllotment = $seat->seatAllotments()
@@ -159,44 +162,42 @@ class SeatController extends Controller
                     ->latest('start_date')
                     ->first();
             }
-            
+
             // Prepare the response data
             $responseData = [
                 'success' => true,
                 'seat' => $seat->makeHidden(['seatAllotments']), // Hide the full allotments list to reduce payload
                 'allotment' => $currentAllotment
             ];
-            
+
             // Add student information if available
             if ($currentAllotment && $currentAllotment->student) {
                 $responseData['student'] = $currentAllotment->student;
             }
-            
+
             // Add admin information if available
             if ($currentAllotment && $currentAllotment->admin) {
                 $responseData['admin'] = $currentAllotment->admin;
             }
-            
+
             // Add application information if available
             if ($currentAllotment && $currentAllotment->application) {
                 $responseData['application'] = $currentAllotment->application;
             }
-            
+
             return response()->json($responseData);
-            
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Seat not found',
                 'error' => 'The requested seat does not exist.'
             ], 404);
-            
         } catch (\Exception $e) {
             Log::error('Error loading seat details: ' . $e->getMessage(), [
                 'seat_id' => $seatId,
                 'exception' => $e
             ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error loading seat details',
@@ -204,7 +205,7 @@ class SeatController extends Controller
             ], 500);
         }
     }
-    
+
     public function assignSeat(Request $request)
     {
         $request->validate([
@@ -216,7 +217,7 @@ class SeatController extends Controller
             DB::beginTransaction();
             
             $seat = Seat::findOrFail($request->seat_id);
-            $application = SeatApplication::findOrFail($request->application_id);
+            $application = SeatApplication::with('student')->findOrFail($request->application_id);
             
             // Check if seat is available
             if ($seat->status !== 'vacant') {
@@ -239,7 +240,7 @@ class SeatController extends Controller
             }
             
             // Create seat allotment
-            SeatAllotment::create([
+            $allotment = SeatAllotment::create([
                 'seat_id' => $seat->seat_id,
                 'student_id' => $application->student_id,
                 'application_id' => $application->application_id,
@@ -253,6 +254,28 @@ class SeatController extends Controller
             
             // Update application status
             $application->update(['status' => 'allocated']);
+            
+            // Send email notification to student
+            try {
+                if ($application->student && $application->student->email) {
+                    Mail::to($application->student->email)->send(
+                        new SeatAssignmentNotification($application->student, $seat, $allotment)
+                    );
+                    Log::info('Seat assignment email sent successfully', [
+                        'student_id' => $application->student_id,
+                        'seat_id' => $seat->seat_id,
+                        'allotment_id' => $allotment->allotment_id
+                    ]);
+                }
+            } catch (\Exception $emailException) {
+                // Log email error but don't fail the assignment
+                Log::error('Failed to send seat assignment email: ' . $emailException->getMessage(), [
+                    'student_id' => $application->student_id,
+                    'seat_id' => $seat->seat_id,
+                    'allotment_id' => $allotment->allotment_id,
+                    'exception' => $emailException
+                ]);
+            }
             
             DB::commit();
             
@@ -270,51 +293,94 @@ class SeatController extends Controller
             ], 500);
         }
     }
-    
-    public function releaseSeat($seatId)
+
+    public function releaseSeat($seatId, Request $request)
     {
         try {
             DB::beginTransaction();
-            
+
             $seat = Seat::findOrFail($seatId);
-            
-            // Find active allotment
+
+            // Find active allotment with student and application relationships
             $allotment = SeatAllotment::where('seat_id', $seatId)
-                                    ->where('status', 'active')
-                                    ->first();
-            
+                ->where('status', 'active')
+                ->with(['student', 'application'])
+                ->first();
+
             if (!$allotment) {
                 return response()->json([
                     'success' => false,
                     'message' => 'No active allotment found for this seat'
                 ], 400);
             }
-            
+
+            // Validate request data for release with message
+            $request->validate([
+                'release_reason' => 'required|string|min:10|max:1000',
+                'student_email' => 'required|email',
+                'student_name' => 'required|string'
+            ]);
+
+            $releaseReason = $request->release_reason;
+            $studentEmail = $request->student_email;
+            $studentName = $request->student_name;
+
             // Update allotment status
             $allotment->update([
-                'status' => 'completed',
+                'status' => 'ended',
                 'end_date' => now()
             ]);
-            
+
             // Update seat status
             $seat->update(['status' => 'vacant']);
-            
+
             // Update application status back to approved
             $application = SeatApplication::find($allotment->application_id);
             if ($application) {
                 $application->update(['status' => 'approved']);
             }
-            
+
+            // Send email notification to student
+            try {
+                if ($studentEmail) {
+                    $seatDetails = [
+                        'room_number' => $seat->room_number,
+                        'bed_number' => $seat->bed_number,
+                        'floor' => $seat->floor,
+                        'block' => $seat->block
+                    ];
+
+                    $releasedBy = auth('admin')->user()->name ?? 'Hall Administration';
+
+                    Mail::to($studentEmail)->send(
+                        new SeatReleaseNotification($studentName, $seatDetails, $releaseReason, $releasedBy)
+                    );
+
+                    Log::info('Seat release email sent successfully', [
+                        'student_email' => $studentEmail,
+                        'seat_id' => $seatId,
+                        'release_reason' => $releaseReason
+                    ]);
+                }
+            } catch (\Exception $emailException) {
+                // Log email error but don't fail the release process
+                Log::error('Failed to send seat release email: ' . $emailException->getMessage(), [
+                    'student_email' => $studentEmail,
+                    'seat_id' => $seatId,
+                    'release_reason' => $releaseReason,
+                    'exception' => $emailException
+                ]);
+            }
+
             DB::commit();
-            
+
             return response()->json([
                 'success' => true,
-                'message' => 'Seat released successfully'
+                'message' => 'Seat released successfully and notification sent to student'
             ]);
-            
         } catch (\Exception $e) {
             DB::rollback();
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to release seat: ' . $e->getMessage()
@@ -325,18 +391,18 @@ class SeatController extends Controller
     public function getAvailableStudents()
     {
         $students = SeatApplication::where('status', 'approved')
-                                  ->whereDoesntHave('seatAllotments', function($query) {
-                                      $query->where('status', 'active');
-                                  })
-                                  ->with('student')
-                                  ->get()
-                                  ->map(function($application) {
-                                      return [
-                                          'application_id' => $application->application_id,
-                                          'name' => $application->student->name ?? $application->student_name,
-                                          'email' => $application->student->email ?? 'N/A'
-                                      ];
-                                  });
+            ->whereDoesntHave('seatAllotments', function ($query) {
+                $query->where('status', 'active');
+            })
+            ->with('student')
+            ->get()
+            ->map(function ($application) {
+                return [
+                    'application_id' => $application->application_id,
+                    'name' => $application->student->name ?? $application->student_name,
+                    'email' => $application->student->email ?? 'N/A'
+                ];
+            });
 
         return response()->json([
             'success' => true,
@@ -347,20 +413,20 @@ class SeatController extends Controller
     public function showAssignmentPage($seatId)
     {
         $seat = Seat::findOrFail($seatId);
-        
+
         // Check if seat is available for assignment
         if ($seat->status !== 'vacant') {
             return redirect()->back()->with('error', 'This seat is not available for assignment.');
         }
-        
+
         // Get available students for assignment
         $availableStudents = SeatApplication::where('status', 'approved')
-                                          ->whereDoesntHave('seatAllotments', function($query) {
-                                              $query->where('status', 'active');
-                                          })
-                                          ->with('student')
-                                          ->get();
-        
+            ->whereDoesntHave('seatAllotments', function ($query) {
+                $query->where('status', 'active');
+            })
+            ->with('student')
+            ->get();
+
         return view('admin.seats.assign', compact('seat', 'availableStudents'));
     }
 }
