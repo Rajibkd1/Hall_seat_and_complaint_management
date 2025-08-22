@@ -104,7 +104,18 @@ class StudentAuthController extends Controller
         $admin = Admin::where('email', $request->email)->first();
         if ($admin && Hash::check($request->password, $admin->password_hash)) {
             Auth::guard('admin')->login($admin);
-            return redirect()->route('admin.dashboard');
+            
+            // Redirect based on role
+            switch ($admin->role) {
+                case 'Provost':
+                    return redirect()->route('provost.dashboard');
+                case 'Co-Provost':
+                    return redirect()->route('co-provost.dashboard');
+                case 'Staff':
+                    return redirect()->route('staff.dashboard');
+                default:
+                    return redirect()->route('admin.dashboard');
+            }
         }
 
         return redirect()->back()->with('error', 'Invalid credentials. Please try again.');

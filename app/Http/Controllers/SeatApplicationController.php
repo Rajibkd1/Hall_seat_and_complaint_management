@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SeatApplication;
 use App\Models\Student;
+use App\Models\AuditLog;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use App\Mail\ApplicationStatusUpdated;
 use App\Mail\AdminMessageEmail;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SeatApplicationController extends Controller
 {
@@ -169,41 +171,79 @@ class SeatApplicationController extends Controller
     public function updateStatus(Request $request, SeatApplication $application)
     {
         $validated = $request->validate([
-            'status' => 'required|in:pending,approved,rejected,waitlisted',
-            'send_email' => 'nullable|boolean',
+            'status' => 'required|in:pending,approved,verified,rejected,waitlisted',
             'email_message' => 'nullable|string|max:2000',
+            'send_email' => 'nullable|boolean',
         ]);
 
         $oldStatus = $application->status;
         $newStatus = $validated['status'];
         $statusChanged = $oldStatus !== $newStatus;
+        $sendEmailRequested = $request->has('send_email') && $request->input('send_email') == '1';
 
+        // Update status if it has changed
         if ($statusChanged) {
             $application->status = $newStatus;
             $application->save();
+
+            // Create audit log entry
+            $admin = Auth::guard('admin')->user();
+            AuditLog::create([
+                'application_id' => $application->application_id,
+                'admin_id' => $admin ? $admin->admin_id : null,
+                'action_type' => 'status_update',
+                'old_status' => $oldStatus,
+                'new_status' => $newStatus,
+                'message' => $validated['email_message'] ?? null,
+                'details' => json_encode([
+                    'changed_by_admin' => $admin ? $admin->name : 'System',
+                    'timestamp' => now()->toDateTimeString(),
+                    'email_requested' => $sendEmailRequested
+                ])
+            ]);
         }
 
         $message = 'Application status ' . ($statusChanged ? 'updated to ' . $newStatus : 'remains ' . $oldStatus) . '.';
 
-        // Handle email sending only if checkbox is checked and email message is provided
+        // Send email notification if requested by admin (regardless of status change)
         $emailSent = false;
-        if ($request->has('send_email') && $request->input('send_email') == '1' && !empty($request->input('email_message'))) {
+        if ($sendEmailRequested) {
             $student = $application->student;
-            
+
             if ($student && $student->email) {
                 try {
+                    $emailMessage = $validated['email_message'] ?? ($statusChanged ? 'Your application status has been updated.' : 'Message from administration regarding your application.');
                     Mail::to($student->email)->send(
-                        new ApplicationStatusUpdated($application, $request->input('email_message'), $newStatus)
+                        new ApplicationStatusUpdated($application, $emailMessage, $application->status)
                     );
                     $emailSent = true;
                     $message .= ' Email notification sent successfully.';
+
+                    // Log successful email sending
+                    Log::info('Application status email sent successfully', [
+                        'application_id' => $application->application_id,
+                        'student_email' => $student->email,
+                        'status' => $application->status,
+                        'admin_id' => Auth::guard('admin')->id()
+                    ]);
                 } catch (\Exception $e) {
-                    Log::error('Failed to send application status email: ' . $e->getMessage());
-                    $message .= ' However, email notification failed to send.';
+                    Log::error('Failed to send application status email', [
+                        'application_id' => $application->application_id,
+                        'student_email' => $student->email ?? 'N/A',
+                        'error' => $e->getMessage(),
+                        'admin_id' => Auth::guard('admin')->id()
+                    ]);
+                    $message .= ' However, email notification failed to send. Please check email configuration.';
                 }
             } else {
                 $message .= ' However, no valid email address found for student.';
+                Log::warning('Email requested but no student email found', [
+                    'application_id' => $application->application_id,
+                    'student_id' => $application->student_id
+                ]);
             }
+        } elseif ($statusChanged) {
+            $message .= ' No email notification sent (not requested).';
         }
 
         return redirect()->route('admin.applications.view', $application->application_id)
@@ -222,6 +262,12 @@ class SeatApplicationController extends Controller
         $student = $application->student;
 
         if (!$student || !$student->email) {
+            Log::warning('Custom email attempted but no student email found', [
+                'application_id' => $application->application_id,
+                'student_id' => $application->student_id,
+                'admin_id' => Auth::guard('admin')->id()
+            ]);
+
             return redirect()
                 ->route('admin.applications.view', $application->application_id)
                 ->with('error', 'Could not find student email address.');
@@ -232,15 +278,79 @@ class SeatApplicationController extends Controller
                 new AdminMessageEmail($validated['subject'], $validated['message'])
             );
 
+            // Log successful email sending
+            Log::info('Custom admin email sent successfully', [
+                'application_id' => $application->application_id,
+                'student_email' => $student->email,
+                'subject' => $validated['subject'],
+                'admin_id' => Auth::guard('admin')->id()
+            ]);
+
             return redirect()
                 ->route('admin.applications.view', $application->application_id)
                 ->with('success', 'Email sent successfully.');
         } catch (\Exception $e) {
-            Log::error('Failed to send custom admin email: ' . $e->getMessage());
+            Log::error('Failed to send custom admin email', [
+                'application_id' => $application->application_id,
+                'student_email' => $student->email,
+                'subject' => $validated['subject'],
+                'error' => $e->getMessage(),
+                'admin_id' => Auth::guard('admin')->id()
+            ]);
 
             return redirect()
                 ->route('admin.applications.view', $application->application_id)
-                ->with('error', 'Failed to send email. Please try again later.');
+                ->with('error', 'Failed to send email. Please check email configuration and try again.');
         }
+    }
+
+    // List approved and verified applications
+    public function approvedApplications()
+    {
+        $approvedApplications = SeatApplication::with('student')
+            ->where('status', 'approved')
+            ->orderBy('application_date', 'desc')
+            ->get();
+
+        return view('admin.applications.approved', compact('approvedApplications'));
+    }
+
+    // Show details of approved application
+    public function approvedShow(SeatApplication $application)
+    {
+        // Ensure the application is approved
+        if ($application->status !== 'approved') {
+            return redirect()->route('admin.applications.approved')
+                ->with('error', 'This application is not approved.');
+        }
+
+        $application->load('student');
+        return view('admin.applications.approved_show', compact('application'));
+    }
+
+    // Generate PDF report of approved applications
+    public function generatePDFReport()
+    {
+        $approvedApplications = SeatApplication::with('student')
+            ->where('status', 'approved')
+            ->orderBy('application_date', 'desc')
+            ->get();
+
+        $pdf = Pdf::loadView('admin.applications.pdf_report', compact('approvedApplications'));
+
+        return $pdf->stream('approved_applications_report_' . date('Y-m-d') . '.pdf');
+    }
+
+    // Download PDF report
+    public function downloadPDFReport()
+    {
+        $approvedApplications = SeatApplication::with('student')
+            ->where('status', 'approved')
+            ->orderBy('application_date', 'desc')
+            ->get();
+
+        $pdf = Pdf::loadView('admin.applications.pdf_report', compact('approvedApplications'));
+
+        return $pdf->download('approved_applications_report_' . date('Y-m-d') . '.pdf');
     }
 }

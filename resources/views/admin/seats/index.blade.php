@@ -1,4 +1,5 @@
-@extends('layouts.admin_app')
+@include('layouts.admin_layout_helper')
+@extends($layout)
 
 @section('title', 'Seat Management')
 
@@ -309,5 +310,11 @@
     </div>
 
     <link rel="stylesheet" href="{{ asset('css/seat_management.css') }}">
+    <script>
+        // Set the base URL for API calls based on current route
+        window.seatManagementConfig = {
+            baseUrl: '/admin'
+        };
+    </script>
     <script src="{{ asset('js/seat_management.js') }}"></script>
 @endsection

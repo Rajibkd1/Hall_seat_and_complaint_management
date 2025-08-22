@@ -17,7 +17,16 @@
                 </a>
             </li>
 
-            <!-- View Students Tab -->
+            <!-- Role-based Navigation Items -->
+            @php
+                $admin = auth('admin')->user();
+                $isProvost = $admin && $admin->isProvost();
+                $isCoProvost = $admin && $admin->isCoProvost();
+                $isStaff = $admin && $admin->isStaff();
+            @endphp
+
+            <!-- Students Tab - Only for Provost and Co-Provost -->
+            @if($isProvost || $isCoProvost)
             <li class="relative">
                 <a href="{{ route('admin.students') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_admin_menu') === 'students' ? 'active-tab-indicator' : 'border-transparent' }}">
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-blue-200/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
@@ -27,8 +36,9 @@
                     <span class="text-xs font-semibold group-hover:text-slate-800 transition-all duration-300 relative z-10">Students</span>
                 </a>
             </li>
+            @endif
 
-            <!-- Complaints Tab -->
+            <!-- Complaints Tab - All roles can access -->
             <li class="relative">
                 <a href="{{ route('admin.complaints') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_admin_menu') === 'complaints' ? 'active-tab-indicator' : 'border-transparent' }}">
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-orange-200/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
@@ -39,7 +49,7 @@
                 </a>
             </li>
 
-            <!-- Notices Tab -->
+            <!-- Notices Tab - All roles can access -->
             <li class="relative">
                 <a href="{{ route('admin.notices') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_admin_menu') === 'notices' ? 'active-tab-indicator' : 'border-transparent' }}">
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-green-200/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
@@ -50,7 +60,8 @@
                 </a>
             </li>
 
-            <!-- Applications Tab -->
+            <!-- Applications Tab - Only for Provost and Co-Provost -->
+            @if($isProvost || $isCoProvost)
             <li class="relative">
                 <a href="{{ route('admin.applications.index') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_admin_menu') === 'applications' ? 'active-tab-indicator' : 'border-transparent' }}">
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-purple-200/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
@@ -60,8 +71,10 @@
                     <span class="text-xs font-semibold group-hover:text-slate-800 transition-all duration-300 relative z-10">Applications</span>
                 </a>
             </li>
+            @endif
 
-            <!-- Seats Tab -->
+            <!-- Seats Tab - Only for Provost -->
+            @if($isProvost)
             <li class="relative">
                 <a href="{{ route('admin.seats.index') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_admin_menu') === 'seats' ? 'active-tab-indicator' : 'border-transparent' }}">
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-indigo-200/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
@@ -71,6 +84,7 @@
                     <span class="text-xs font-semibold group-hover:text-slate-800 transition-all duration-300 relative z-10">Seats</span>
                 </a>
             </li>
+            @endif
 
             <!-- Sign Out Tab -->
             <li class="relative">

@@ -15,6 +15,7 @@
     </div>
     <div class="overflow-y-auto h-full pb-20">
         <ul class="py-4 space-y-1">
+            <!-- Dashboard - Always visible -->
             <li><a href="{{ route('admin.dashboard') }}"
                     class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ (session('active_admin_menu') ?? 'dashboard') === 'dashboard' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
                     <div class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
@@ -22,6 +23,16 @@
                     </div>
                     <span class="font-medium">Dashboard</span>
                 </a></li>
+
+            @php
+                $admin = auth('admin')->user();
+                $isProvost = $admin && $admin->isProvost();
+                $isCoProvost = $admin && $admin->isCoProvost();
+                $isStaff = $admin && $admin->isStaff();
+            @endphp
+
+            <!-- Students - Only for Provost and Co-Provost -->
+            @if($isProvost || $isCoProvost)
             <li><a href="{{ route('admin.students') }}"
                     class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'students' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
                     <div class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
@@ -29,6 +40,9 @@
                     </div>
                     <span class="font-medium">View Students</span>
                 </a></li>
+            @endif
+
+            <!-- Complaints - All roles can access -->
             <li><a href="{{ route('admin.complaints') }}"
                     class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'complaints' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
                     <div class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
@@ -36,6 +50,8 @@
                     </div>
                     <span class="font-medium">Complaints</span>
                 </a></li>
+
+            <!-- Notices - All roles can access -->
             <li><a href="{{ route('admin.notices') }}"
                     class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'notices' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
                     <div class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
@@ -43,6 +59,9 @@
                     </div>
                     <span class="font-medium">Notices</span>
                 </a></li>
+
+            <!-- Applications - Only for Provost and Co-Provost -->
+            @if($isProvost || $isCoProvost)
             <li><a href="{{ route('admin.applications.index') }}"
                     class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'applications' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
                     <div class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
@@ -50,6 +69,10 @@
                     </div>
                     <span class="font-medium">Applications</span>
                 </a></li>
+            @endif
+
+            <!-- Seats - Only for Provost -->
+            @if($isProvost)
             <li><a href="{{ route('admin.seats.index') }}"
                     class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'seats' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
                     <div class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
@@ -57,6 +80,9 @@
                     </div>
                     <span class="font-medium">Seats</span>
                 </a></li>
+            @endif
+
+            <!-- Sign Out -->
             <li class="mt-6 pt-4 border-t border-gray-700">
                 <form action="{{ route('admin.logout') }}" method="POST">
                     @csrf

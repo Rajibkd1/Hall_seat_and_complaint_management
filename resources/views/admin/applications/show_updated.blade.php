@@ -1,4 +1,5 @@
-@extends('layouts.admin_app')
+@include('layouts.admin_layout_helper')
+@extends($layout)
 
 @section('content')
     <div class="min-h-screen bg-gray-100 p-8">

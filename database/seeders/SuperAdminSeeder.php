@@ -14,10 +14,11 @@ class SuperAdminSeeder extends Seeder
      */
     public function run()
     {
+        // Single Super Admin
         SuperAdmin::create([
             'name' => 'Super Admin',
-            'email' => 'superadmin@example.com',
-            'phone' => '1234567890',
+            'email' => 'superadmin@university.edu',
+            'phone' => '+8801712345678',
             'password_hash' => Hash::make('password123'),
         ]);
     }

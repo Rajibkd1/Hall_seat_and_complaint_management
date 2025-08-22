@@ -8,6 +8,7 @@ use App\Models\SeatAllotment;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SeatController extends Controller
 {
@@ -139,19 +140,69 @@ class SeatController extends Controller
     
     public function getSeatDetails($seatId)
     {
-        $seat = Seat::with(['seatAllotments.student', 'seatAllotments.seatApplication'])
-                   ->findOrFail($seatId);
-        
-        $currentAllotment = $seat->seatAllotments()
-                                ->where('status', 'active')
-                                ->with(['student', 'seatApplication'])
-                                ->first();
-        
-        return response()->json([
-            'success' => true,
-            'seat' => $seat,
-            'allotment' => $currentAllotment
-        ]);
+        try {
+            // Load seat with all necessary relationships using the new helper methods
+            $seat = Seat::with([
+                'currentAllotment', // This will load student, admin, and application through the relationship
+                'seatAllotments.student', 
+                'seatAllotments.admin',
+                'seatAllotments.application'
+            ])->findOrFail($seatId);
+            
+            // Get the current active allotment using the helper method
+            $currentAllotment = $seat->currentAllotment;
+            
+            // If no active allotment but seat is occupied, try to find the most recent allotment
+            if (!$currentAllotment && $seat->status === 'occupied') {
+                $currentAllotment = $seat->seatAllotments()
+                    ->with(['student', 'admin', 'application'])
+                    ->latest('start_date')
+                    ->first();
+            }
+            
+            // Prepare the response data
+            $responseData = [
+                'success' => true,
+                'seat' => $seat->makeHidden(['seatAllotments']), // Hide the full allotments list to reduce payload
+                'allotment' => $currentAllotment
+            ];
+            
+            // Add student information if available
+            if ($currentAllotment && $currentAllotment->student) {
+                $responseData['student'] = $currentAllotment->student;
+            }
+            
+            // Add admin information if available
+            if ($currentAllotment && $currentAllotment->admin) {
+                $responseData['admin'] = $currentAllotment->admin;
+            }
+            
+            // Add application information if available
+            if ($currentAllotment && $currentAllotment->application) {
+                $responseData['application'] = $currentAllotment->application;
+            }
+            
+            return response()->json($responseData);
+            
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Seat not found',
+                'error' => 'The requested seat does not exist.'
+            ], 404);
+            
+        } catch (\Exception $e) {
+            Log::error('Error loading seat details: ' . $e->getMessage(), [
+                'seat_id' => $seatId,
+                'exception' => $e
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Error loading seat details',
+                'error' => 'An unexpected error occurred while loading seat information.'
+            ], 500);
+        }
     }
     
     public function assignSeat(Request $request)
@@ -291,5 +342,25 @@ class SeatController extends Controller
             'success' => true,
             'students' => $students
         ]);
+    }
+
+    public function showAssignmentPage($seatId)
+    {
+        $seat = Seat::findOrFail($seatId);
+        
+        // Check if seat is available for assignment
+        if ($seat->status !== 'vacant') {
+            return redirect()->back()->with('error', 'This seat is not available for assignment.');
+        }
+        
+        // Get available students for assignment
+        $availableStudents = SeatApplication::where('status', 'approved')
+                                          ->whereDoesntHave('seatAllotments', function($query) {
+                                              $query->where('status', 'active');
+                                          })
+                                          ->with('student')
+                                          ->get();
+        
+        return view('admin.seats.assign', compact('seat', 'availableStudents'));
     }
 }

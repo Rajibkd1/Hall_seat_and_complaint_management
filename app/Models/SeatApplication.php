@@ -71,4 +71,20 @@ class SeatApplication extends Model
     {
         return $this->hasMany(SeatAllotment::class, 'application_id');
     }
+
+    /**
+     * Get the audit logs for this application.
+     */
+    public function auditLogs()
+    {
+        return $this->hasMany(AuditLog::class, 'application_id', 'application_id');
+    }
+
+    /**
+     * Get the valid status values.
+     */
+    public static function getStatusOptions(): array
+    {
+        return ['pending', 'approved', 'verified', 'rejected', 'waitlisted', 'allocated'];
+    }
 }

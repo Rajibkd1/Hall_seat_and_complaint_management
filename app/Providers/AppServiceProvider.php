@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use App\View\Composers\AdminLayoutComposer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -11,7 +13,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Register RouteHelper
+        require_once app_path('Helpers/RouteHelper.php');
     }
 
     /**
@@ -19,6 +22,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Register the AdminLayoutComposer for all admin views
+        View::composer([
+            'admin.*',
+            'co_provost.*',
+            'staff.*'
+        ], AdminLayoutComposer::class);
     }
 }

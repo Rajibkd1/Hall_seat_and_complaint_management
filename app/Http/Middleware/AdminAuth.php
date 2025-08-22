@@ -20,6 +20,14 @@ class AdminAuth
             return redirect()->route('admin.login.page');
         }
 
+        $admin = Auth::guard('admin')->user();
+
+        // Check if admin is verified
+        if (!$admin->is_verified) {
+            Auth::guard('admin')->logout();
+            return redirect()->route('admin.login.page')->with('error', 'Your account is not verified yet.');
+        }
+
         Auth::shouldUse('admin');
 
         return $next($request);

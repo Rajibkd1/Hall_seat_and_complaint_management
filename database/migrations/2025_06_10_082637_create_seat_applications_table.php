@@ -29,7 +29,7 @@ public function up()
         $table->text('documents_uploaded');
         $table->string('special_note')->nullable();
         $table->enum('type', ['new', 'renewal']);
-        $table->enum('status', ['pending', 'approved', 'rejected', 'waitlisted']);
+        $table->enum('status', ['pending', 'approved', 'rejected', 'waitlisted', 'allocated']);
         $table->decimal('score');
         $table->timestamp('submission_date');
         $table->boolean('admin_override');

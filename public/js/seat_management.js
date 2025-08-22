@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Get base URL from global config, fallback to '/admin' if not set
+    const baseUrl = window.seatManagementConfig?.baseUrl || "/admin";
+
     // Elements
     const floorSelect = document.getElementById("floor");
     const blockSelect = document.getElementById("block");
@@ -126,7 +129,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Fetch rooms with enhanced error handling
-        fetch(`/admin/seats/rooms?floor=${currentFloor}&block=${currentBlock}`)
+        fetch(
+            `${baseUrl}/seats/rooms?floor=${currentFloor}&block=${currentBlock}`
+        )
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -309,7 +314,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Fetch room seats
         fetch(
-            `/admin/seats/room-seats?floor=${currentFloor}&block=${currentBlock}&room_number=${roomNumber}`
+            `${baseUrl}/seats/room-seats?floor=${currentFloor}&block=${currentBlock}&room_number=${roomNumber}`
         )
             .then((response) => {
                 if (!response.ok) {
@@ -367,7 +372,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             switch (seat.status) {
                 case "occupied":
-                    statusClass = "bg-gradient-to-br from-slate-800 via-slate-900 to-black text-white shadow-2xl";
+                    statusClass =
+                        "bg-gradient-to-br from-slate-800 via-slate-900 to-black text-white shadow-2xl";
                     statusText = "Occupied";
                     statusIcon = "👤";
                     textColor = "text-slate-800";
@@ -375,7 +381,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     borderEffect = "border-slate-700 hover:border-slate-600";
                     break;
                 case "maintenance":
-                    statusClass = "bg-gradient-to-br from-amber-500 via-orange-600 to-red-600 text-white shadow-2xl";
+                    statusClass =
+                        "bg-gradient-to-br from-amber-500 via-orange-600 to-red-600 text-white shadow-2xl";
                     statusText = "Maintenance";
                     statusIcon = "🔧";
                     textColor = "text-amber-600";
@@ -383,16 +390,19 @@ document.addEventListener("DOMContentLoaded", function () {
                     borderEffect = "border-amber-500 hover:border-amber-400";
                     break;
                 default:
-                    statusClass = "bg-gradient-to-br from-white via-gray-50 to-gray-100 text-slate-800 shadow-xl hover:shadow-2xl";
+                    statusClass =
+                        "bg-gradient-to-br from-white via-gray-50 to-gray-100 text-slate-800 shadow-xl hover:shadow-2xl";
                     statusText = "Available";
                     statusIcon = "✨";
                     textColor = "text-emerald-600";
-                    glowEffect = "shadow-gray-300/50 hover:shadow-emerald-200/50";
+                    glowEffect =
+                        "shadow-gray-300/50 hover:shadow-emerald-200/50";
                     borderEffect = "border-gray-200 hover:border-emerald-300";
             }
 
             // Display bed name properly (Fifth instead of E)
-            const bedDisplay = seat.bed_number === 'Fifth' ? 'Fifth' : seat.bed_number;
+            const bedDisplay =
+                seat.bed_number === "Fifth" ? "Fifth" : seat.bed_number;
 
             seatElement.innerHTML = `
                 <div class="seat-container flex flex-col items-center group">
@@ -411,7 +421,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         <div class="bed-label font-black text-lg mb-1 z-10 tracking-wide">${bedDisplay}</div>
                         
                         <!-- Seat ID with Subtle Styling -->
-                        <div class="seat-id text-xs opacity-80 font-medium z-10 bg-black/10 px-2 py-1 rounded-full">${seat.room_number}-${bedDisplay}</div>
+                        <div class="seat-id text-xs opacity-80 font-medium z-10 bg-black/10 px-2 py-1 rounded-full">${
+                            seat.room_number
+                        }-${bedDisplay}</div>
                         
                         <!-- Hover Overlay with Gradient -->
                         <div class="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-black/10 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
@@ -433,7 +445,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                     
                     <!-- Subtle Status Indicator -->
-                    <div class="status-dot w-2 h-2 rounded-full mt-2 transition-all duration-300 ${seat.status === 'occupied' ? 'bg-slate-800' : seat.status === 'maintenance' ? 'bg-amber-500' : 'bg-emerald-400'} group-hover:scale-150 group-hover:animate-pulse"></div>
+                    <div class="status-dot w-2 h-2 rounded-full mt-2 transition-all duration-300 ${
+                        seat.status === "occupied"
+                            ? "bg-slate-800"
+                            : seat.status === "maintenance"
+                            ? "bg-amber-500"
+                            : "bg-emerald-400"
+                    } group-hover:scale-150 group-hover:animate-pulse"></div>
                 </div>
             `;
 
@@ -445,34 +463,53 @@ document.addEventListener("DOMContentLoaded", function () {
             // Enhanced hover effects with multiple animations
             seatElement.addEventListener("mouseenter", () => {
                 seatElement.classList.add("animate-float");
-                const seatBox = seatElement.querySelector('.seat-box');
-                
+                const seatBox = seatElement.querySelector(".seat-box");
+
                 if (seat.status === "occupied") {
-                    seatBox.classList.add('ring-4', 'ring-slate-400', 'ring-opacity-50');
+                    seatBox.classList.add(
+                        "ring-4",
+                        "ring-slate-400",
+                        "ring-opacity-50"
+                    );
                 } else if (seat.status === "maintenance") {
-                    seatBox.classList.add('ring-4', 'ring-amber-400', 'ring-opacity-50');
+                    seatBox.classList.add(
+                        "ring-4",
+                        "ring-amber-400",
+                        "ring-opacity-50"
+                    );
                 } else {
-                    seatBox.classList.add('ring-4', 'ring-emerald-400', 'ring-opacity-50');
+                    seatBox.classList.add(
+                        "ring-4",
+                        "ring-emerald-400",
+                        "ring-opacity-50"
+                    );
                 }
-                
+
                 // Add shimmer effect
-                seatBox.classList.add('animate-shimmer');
+                seatBox.classList.add("animate-shimmer");
             });
 
             seatElement.addEventListener("mouseleave", () => {
                 seatElement.classList.remove("animate-float");
-                const seatBox = seatElement.querySelector('.seat-box');
-                seatBox.classList.remove('ring-4', 'ring-slate-400', 'ring-amber-400', 'ring-emerald-400', 'ring-opacity-50', 'animate-shimmer');
+                const seatBox = seatElement.querySelector(".seat-box");
+                seatBox.classList.remove(
+                    "ring-4",
+                    "ring-slate-400",
+                    "ring-amber-400",
+                    "ring-emerald-400",
+                    "ring-opacity-50",
+                    "animate-shimmer"
+                );
             });
 
             seatContainer.appendChild(seatElement);
         });
 
         // Add staggered entrance animation
-        const seatItems = seatContainer.querySelectorAll('.seat-item');
+        const seatItems = seatContainer.querySelectorAll(".seat-item");
         seatItems.forEach((item, index) => {
             setTimeout(() => {
-                item.classList.add('animate-slideInUp');
+                item.classList.add("animate-slideInUp");
             }, index * 100);
         });
     }
@@ -481,7 +518,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (seat.status === "occupied") {
             showSeatDetails(seat.seat_id);
         } else if (seat.status === "vacant") {
-            showAssignmentModal(seat.seat_id);
+            // Redirect to seat assignment page instead of showing modal
+            window.location.href = `${baseUrl}/seats/${seat.seat_id}/assign`;
         } else {
             showNotification(
                 "This seat is under maintenance and cannot be assigned.",
@@ -506,26 +544,106 @@ document.addEventListener("DOMContentLoaded", function () {
             seatModal.classList.remove("hidden");
         }
 
-        fetch(`/admin/seats/${seatId}/details`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                if (data.success) {
-                    displaySeatDetails(data.seat, data.allotment);
-                } else {
-                    showNotification("Failed to load seat details", "error");
-                    closeSeatModal();
-                }
-            })
-            .catch((error) => {
-                console.error("Error loading seat details:", error);
-                showNotification("Error loading seat details", "error");
-                closeSeatModal();
-            });
+        // Add retry mechanism with exponential backoff
+        let retryCount = 0;
+        const maxRetries = 3;
+        
+        function attemptFetch() {
+            fetch(`${baseUrl}/seats/${seatId}/details`)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    if (data.success) {
+                        displaySeatDetails(data.seat, data.allotment);
+                    } else {
+                        // Handle API-level errors (success: false)
+                        if (data.message) {
+                            showDetailedError(data.message, data.error || "Unknown error occurred");
+                        } else {
+                            showDetailedError("Failed to load seat details", "The server returned an unexpected response");
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error loading seat details:", error);
+                    retryCount++;
+                    
+                    if (retryCount <= maxRetries) {
+                        // Show retry message with countdown
+                        const retryDelay = Math.pow(2, retryCount) * 1000; // Exponential backoff
+                        showRetryMessage(retryCount, maxRetries, retryDelay, seatId);
+                        
+                        // Retry after delay
+                        setTimeout(attemptFetch, retryDelay);
+                    } else {
+                        // Max retries reached, show final error
+                        showDetailedError(
+                            "Unable to load seat details", 
+                            error.message || "Network error or server unavailable",
+                            seatId
+                        );
+                    }
+                });
+        }
+        
+        // Start the first attempt
+        attemptFetch();
+    }
+
+    function showRetryMessage(retryCount, maxRetries, delay, seatId) {
+        const modalContent = document.getElementById("modalContent");
+        if (!modalContent) return;
+        
+        const seconds = delay / 1000;
+        modalContent.innerHTML = `
+            <div class="flex flex-col items-center justify-center py-8 text-center">
+                <div class="text-4xl mb-4">🔄</div>
+                <div class="text-blue-600 font-semibold mb-2">Connection Issue</div>
+                <div class="text-gray-500 text-sm mb-3">
+                    Attempt ${retryCount} of ${maxRetries}. Retrying in ${seconds} seconds...
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                    <div class="bg-blue-500 h-2 rounded-full transition-all duration-${delay}" style="width: ${(retryCount/maxRetries)*100}%"></div>
+                </div>
+                <button onclick="showSeatDetails(${seatId})" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm">
+                    Retry Now
+                </button>
+            </div>
+        `;
+    }
+
+    function showDetailedError(title, message, seatId = null) {
+        const modalContent = document.getElementById("modalContent");
+        if (!modalContent) return;
+        
+        modalContent.innerHTML = `
+            <div class="flex flex-col items-center justify-center py-8 text-center">
+                <div class="text-6xl mb-4">⚠️</div>
+                <div class="text-red-600 font-semibold mb-2">${title}</div>
+                <div class="text-gray-500 text-sm mb-4 max-w-md">${message}</div>
+                <div class="flex gap-2">
+                    ${seatId ? `
+                    <button onclick="showSeatDetails(${seatId})" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm">
+                        Try Again
+                    </button>
+                    ` : ''}
+                    <button onclick="closeSeatModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm">
+                        Close
+                    </button>
+                </div>
+                ${seatId ? `
+                <div class="mt-4 text-xs text-gray-400">
+                    Seat ID: ${seatId}
+                </div>
+                ` : ''}
+            </div>
+        `;
+        
+        showNotification(title, "error");
     }
 
     function displaySeatDetails(seat, allotment) {
@@ -598,21 +716,51 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl border border-purple-200">
                     <label class="block text-sm font-semibold text-purple-900 mb-3 flex items-center gap-2">
                         <div class="w-5 h-5 bg-purple-500 rounded-lg flex items-center justify-center text-white text-xs">👥</div>
-                        Select Student:
+                        Select Student from Approved Applications:
                     </label>
-                    <select name="application_id" required class="w-full border-2 border-purple-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-white shadow-sm">
-                        <option value="">Choose a student...</option>
-                        <!-- Options will be loaded dynamically -->
-                    </select>
-                    <div class="mt-2 text-xs text-purple-600">Select from approved applications</div>
+                    
+                    <!-- Search Input -->
+                    <div class="mb-4">
+                        <div class="relative">
+                            <input type="text" id="studentSearch" placeholder="Search students by name, email, or university ID..." 
+                                class="w-full border-2 border-purple-200 rounded-xl px-4 py-3 pl-10 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-white shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Student List Container -->
+                    <div id="studentListContainer" class="max-h-64 overflow-y-auto border-2 border-purple-200 rounded-xl bg-white">
+                        <div class="p-4 text-center text-purple-600">
+                            <div class="loading-spinner mb-2"></div>
+                            Loading approved applications...
+                        </div>
+                    </div>
+                    
+                    <!-- Selected Student Display -->
+                    <div id="selectedStudentDisplay" class="mt-4 p-3 bg-green-50 border border-green-200 rounded-xl hidden">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">✓</div>
+                            <div>
+                                <div class="font-semibold text-green-900" id="selectedStudentName"></div>
+                                <div class="text-sm text-green-600" id="selectedStudentDetails"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" name="application_id" id="selectedApplicationId" required>
+                    <div class="mt-2 text-xs text-purple-600">Click on a student to select them for seat assignment</div>
                 </div>
                 
                 <div class="flex gap-3">
-                    <button type="submit" class="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-4 rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2">
+                    <button type="submit" id="assignSeatBtn" disabled class="flex-1 bg-gradient-to-r from-gray-400 to-gray-500 text-white py-3 px-4 rounded-xl transition-all duration-200 font-medium shadow-lg flex items-center justify-center gap-2 cursor-not-allowed">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                         </svg>
-                        Assign Seat
+                        Select a Student First
                     </button>
                     <button type="button" onclick="closeAssignmentModal()" class="flex-1 bg-gradient-to-r from-gray-400 to-gray-500 text-white py-3 px-4 rounded-xl hover:from-gray-500 hover:to-gray-600 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -636,37 +784,186 @@ document.addEventListener("DOMContentLoaded", function () {
         if (form) {
             form.addEventListener("submit", handleSeatAssignment);
         }
+
+        // Handle search functionality
+        const searchInput = document.getElementById("studentSearch");
+        if (searchInput) {
+            searchInput.addEventListener("input", function() {
+                filterStudents(this.value);
+            });
+        }
     }
 
+    // Global variable to store all students for filtering
+    let allStudents = [];
+    let selectedStudent = null;
+
     function loadAvailableStudents() {
-        const select = document.querySelector('select[name="application_id"]');
-        if (!select) return;
+        const studentListContainer = document.getElementById("studentListContainer");
+        if (!studentListContainer) return;
 
         // Show loading state
-        select.innerHTML = '<option value="">Loading students...</option>';
+        studentListContainer.innerHTML = `
+            <div class="p-4 text-center text-purple-600">
+                <div class="loading-spinner mb-2"></div>
+                Loading approved applications...
+            </div>
+        `;
 
-        fetch("/admin/seats/available-students")
+        fetch(`${baseUrl}/seats/available-students`)
             .then((response) => response.json())
             .then((data) => {
-                if (data.success) {
-                    select.innerHTML =
-                        '<option value="">Choose a student...</option>';
-                    data.students.forEach((student) => {
-                        const option = document.createElement("option");
-                        option.value = student.application_id;
-                        option.textContent = `${student.name} (${student.email})`;
-                        select.appendChild(option);
-                    });
+                if (data.success && data.students.length > 0) {
+                    allStudents = data.students;
+                    displayStudentList(allStudents);
                 } else {
-                    select.innerHTML =
-                        '<option value="">No approved applications found</option>';
+                    studentListContainer.innerHTML = `
+                        <div class="p-8 text-center text-gray-500">
+                            <div class="text-4xl mb-3">📋</div>
+                            <div class="font-medium mb-1">No Approved Applications</div>
+                            <div class="text-sm text-gray-400">There are no approved applications available for seat assignment.</div>
+                        </div>
+                    `;
                 }
             })
             .catch((error) => {
                 console.error("Error loading students:", error);
-                select.innerHTML =
-                    '<option value="">Error loading students</option>';
+                studentListContainer.innerHTML = `
+                    <div class="p-8 text-center text-red-500">
+                        <div class="text-4xl mb-3">⚠️</div>
+                        <div class="font-medium mb-1">Error Loading Students</div>
+                        <div class="text-sm text-red-400">Please try again later.</div>
+                    </div>
+                `;
             });
+    }
+
+    function displayStudentList(students) {
+        const studentListContainer = document.getElementById("studentListContainer");
+        if (!studentListContainer) return;
+
+        if (students.length === 0) {
+            studentListContainer.innerHTML = `
+                <div class="p-8 text-center text-gray-500">
+                    <div class="text-4xl mb-3">🔍</div>
+                    <div class="font-medium mb-1">No Students Found</div>
+                    <div class="text-sm text-gray-400">Try adjusting your search criteria.</div>
+                </div>
+            `;
+            return;
+        }
+
+        studentListContainer.innerHTML = "";
+
+        students.forEach((student, index) => {
+            const studentElement = document.createElement("div");
+            studentElement.className = `student-item cursor-pointer p-4 border-b border-purple-100 hover:bg-purple-50 transition-all duration-200 animate-fade-in`;
+            studentElement.style.animationDelay = `${index * 0.05}s`;
+            studentElement.dataset.applicationId = student.application_id;
+
+            studentElement.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <div class="font-semibold text-purple-900 mb-1">${student.name}</div>
+                        <div class="text-sm text-purple-600 mb-1">${student.email}</div>
+                        <div class="text-xs text-purple-500">Application ID: ${student.application_id}</div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 text-sm font-medium">
+                            ${student.name.charAt(0).toUpperCase()}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            studentElement.addEventListener("click", () => {
+                selectStudent(student, studentElement);
+            });
+
+            // Add hover effects
+            studentElement.addEventListener("mouseenter", () => {
+                studentElement.classList.add("transform", "scale-105", "shadow-md");
+            });
+
+            studentElement.addEventListener("mouseleave", () => {
+                if (!studentElement.classList.contains("selected")) {
+                    studentElement.classList.remove("transform", "scale-105", "shadow-md");
+                }
+            });
+
+            studentListContainer.appendChild(studentElement);
+        });
+    }
+
+    function selectStudent(student, element) {
+        // Remove previous selection
+        const previousSelected = document.querySelector(".student-item.selected");
+        if (previousSelected) {
+            previousSelected.classList.remove("selected", "bg-green-100", "border-green-300");
+            previousSelected.classList.add("hover:bg-purple-50");
+        }
+
+        // Add selection to current element
+        element.classList.add("selected", "bg-green-100", "border-green-300");
+        element.classList.remove("hover:bg-purple-50");
+
+        // Update selected student
+        selectedStudent = student;
+
+        // Update hidden input
+        const applicationIdInput = document.getElementById("selectedApplicationId");
+        if (applicationIdInput) {
+            applicationIdInput.value = student.application_id;
+        }
+
+        // Show selected student display
+        const selectedDisplay = document.getElementById("selectedStudentDisplay");
+        const selectedName = document.getElementById("selectedStudentName");
+        const selectedDetails = document.getElementById("selectedStudentDetails");
+
+        if (selectedDisplay && selectedName && selectedDetails) {
+            selectedName.textContent = student.name;
+            selectedDetails.textContent = `${student.email} • Application ID: ${student.application_id}`;
+            selectedDisplay.classList.remove("hidden");
+        }
+
+        // Enable assign button
+        const assignBtn = document.getElementById("assignSeatBtn");
+        if (assignBtn) {
+            assignBtn.disabled = false;
+            assignBtn.classList.remove("bg-gradient-to-r", "from-gray-400", "to-gray-500", "cursor-not-allowed");
+            assignBtn.classList.add("bg-gradient-to-r", "from-green-500", "to-green-600", "hover:from-green-600", "hover:to-green-700", "transform", "hover:scale-105");
+            assignBtn.innerHTML = `
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                Assign Seat to ${student.name}
+            `;
+        }
+
+        // Add success animation
+        element.classList.add("animate-pulse");
+        setTimeout(() => {
+            element.classList.remove("animate-pulse");
+        }, 1000);
+    }
+
+    function filterStudents(searchTerm) {
+        if (!searchTerm.trim()) {
+            displayStudentList(allStudents);
+            return;
+        }
+
+        const filteredStudents = allStudents.filter(student => {
+            const searchLower = searchTerm.toLowerCase();
+            return (
+                student.name.toLowerCase().includes(searchLower) ||
+                student.email.toLowerCase().includes(searchLower) ||
+                student.application_id.toString().includes(searchLower)
+            );
+        });
+
+        displayStudentList(filteredStudents);
     }
 
     function handleSeatAssignment(e) {
@@ -682,7 +979,7 @@ document.addEventListener("DOMContentLoaded", function () {
             '<div class="loading-spinner"></div> Assigning...';
         submitBtn.disabled = true;
 
-        fetch("/admin/seats/assign", {
+        fetch(`${baseUrl}/seats/assign`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -839,7 +1136,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "Are you sure you want to release this seat? This action cannot be undone."
             )
         ) {
-            fetch(`/admin/seats/${seatId}/release`, {
+            fetch(`${baseUrl}/seats/${seatId}/release`, {
                 method: "DELETE",
                 headers: {
                     "X-CSRF-TOKEN":

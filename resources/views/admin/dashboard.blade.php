@@ -1,348 +1,389 @@
-@extends('layouts.admin_app')
+@extends($layout)
 
 @section('content')
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 sm:p-6 lg:p-8">
-        <div class="max-w-7xl mx-auto">
-            <!-- Header Section with Admin Info -->
-            <div class="bg-white rounded-2xl shadow-xl p-6 mb-8 border border-gray-100">
-                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between">
-                    <div class="flex items-center space-x-4 mb-4 lg:mb-0">
-                        <!-- Profile Picture Placeholder -->
+    <div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 relative overflow-hidden">
+        <!-- Decorative Background Elements -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div
+                class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/10 to-indigo-400/10 rounded-full blur-3xl">
+            </div>
+            <div
+                class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-emerald-400/10 to-teal-400/10 rounded-full blur-3xl">
+            </div>
+        </div>
+
+        <!-- Welcome Section with Admin Details -->
+        <div class="relative overflow-hidden bg-gradient-to-br from-slate-800 via-slate-900 to-indigo-900">
+            <div class="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-indigo-600/20 to-purple-600/20"></div>
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60"
+                xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff"
+                fill-opacity="0.03"%3E%3Cpath
+                d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"
+                /%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+
+            <div class="relative container mx-auto px-4 sm:px-6 py-12 sm:py-16">
+                <div
+                    class="flex flex-col items-center text-center lg:flex-row lg:text-left lg:items-center lg:justify-between">
+                    <div class="flex-1 mb-8 lg:mb-0 lg:pr-8">
                         <div
-                            class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
-                            <i class="fas fa-user-shield text-white text-2xl"></i>
+                            class="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm text-blue-200 mb-4 border border-white/20">
+                            <i class="fas fa-crown mr-2"></i>
+                            {{ auth('admin')->user()->role ?? 'Admin' }} Dashboard
                         </div>
-                        <div>
-                            <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Welcome back, {{ $admin->name }}!</h1>
-                            <p class="text-gray-600 flex items-center mt-1">
-                                <i class="fas fa-envelope text-blue-500 mr-2"></i>
-                                {{ $admin->email }}
-                            </p>
-                            {{-- <p class="text-sm text-gray-500 mt-1">
-                                <i class="fas fa-clock text-green-500 mr-2"></i>
-                                Last login: {{ $admin->updated_at->format('M d, Y - h:i A') }}
-                            </p> --}}
+                        <h1
+                            class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light mb-4 sm:mb-6 animate-fade-in leading-tight">
+                            Welcome back,<br class="sm:hidden">
+                            <span
+                                class="bg-gradient-to-r from-blue-200 to-indigo-200 bg-clip-text text-transparent font-medium">{{ auth('admin')->user()->name }}</span>
+                        </h1>
+
+                        <!-- Admin Details - Hidden on Mobile (<640px), Visible on Tablet+ (≥640px) -->
+                        <div
+                            class="hidden sm:flex flex-col sm:flex-row sm:flex-wrap gap-4 sm:gap-6 text-sm sm:text-base lg:text-lg">
+                            <div
+                                class="flex items-center justify-center lg:justify-start group bg-slate-700/40 backdrop-blur-sm rounded-lg px-4 py-3 border border-slate-600/30 hover:bg-slate-700/50 transition-all duration-300">
+                                <div
+                                    class="p-2 bg-blue-500/20 rounded-lg mr-3 group-hover:bg-blue-500/30 transition-all duration-300">
+                                    <i class="fas fa-envelope text-blue-200 flex-shrink-0"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-blue-200 uppercase tracking-wider mb-1">Email</p>
+                                    <span class="text-white font-medium truncate">{{ auth('admin')->user()->email }}</span>
+                                </div>
+                            </div>
+
+                            @if (auth('admin')->user()->role)
+                                <div
+                                    class="flex items-center justify-center lg:justify-start group bg-slate-700/40 backdrop-blur-sm rounded-lg px-4 py-3 border border-slate-600/30 hover:bg-slate-700/50 transition-all duration-300">
+                                    <div
+                                        class="p-2 bg-emerald-500/20 rounded-lg mr-3 group-hover:bg-emerald-500/30 transition-all duration-300">
+                                        <i class="fas fa-user-tag text-emerald-200 flex-shrink-0"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-emerald-200 uppercase tracking-wider mb-1">Role</p>
+                                        <span class="text-white font-medium truncate">{{ auth('admin')->user()->role }}</span>
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if (auth('admin')->user()->department)
+                                <div
+                                    class="flex items-center justify-center lg:justify-start group bg-slate-700/40 backdrop-blur-sm rounded-lg px-4 py-3 border border-slate-600/30 hover:bg-slate-700/50 transition-all duration-300">
+                                    <div
+                                        class="p-2 bg-indigo-500/20 rounded-lg mr-3 group-hover:bg-indigo-500/30 transition-all duration-300">
+                                        <i class="fas fa-building text-indigo-200 flex-shrink-0"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-indigo-200 uppercase tracking-wider mb-1">Department</p>
+                                        <span class="text-white font-medium">{{ auth('admin')->user()->department }}</span>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
-                    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
-                        <button
-                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center">
-                            <i class="fas fa-cog mr-2"></i>
-                            Settings
-                        </button>
-                        <button
-                            class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200 flex items-center">
-                            <i class="fas fa-bell mr-2"></i>
-                            Notifications
-                        </button>
+
+                    <!-- Profile Picture - Hidden on Mobile (<640px), Visible on Tablet+ (≥640px) -->
+                    <div class="hidden sm:block flex-shrink-0">
+                        <div class="relative group">
+                            <div
+                                class="w-24 h-24 sm:w-28 sm:h-28 lg:w-36 lg:h-36 bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border-4 border-white/30 shadow-2xl group-hover:scale-105 transition-all duration-500">
+                                <i class="fas fa-crown text-3xl sm:text-4xl lg:text-5xl text-white/80"></i>
+                            </div>
+                            <div
+                                class="absolute -bottom-2 -right-2 w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full border-4 border-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-300">
+                                <i class="fas fa-check text-white text-sm"></i>
+                            </div>
+                            <div
+                                class="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400/20 to-indigo-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-slate-50 to-transparent"></div>
+        </div>
+
+        <div class="container mx-auto px-4 sm:px-6 -mt-8 relative z-10">
+            <!-- Statistics Cards -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
+                <div
+                    class="stat-card group bg-white/90 backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-2xl p-4 sm:p-6 border border-slate-200/50 hover:border-blue-300/50 transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 relative overflow-hidden">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    </div>
+                    <div class="relative flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                        <div class="mb-3 sm:mb-0">
+                            <p class="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">Total
+                                Students</p>
+                            <p
+                                class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-800 group-hover:text-blue-600 transition-colors duration-300">
+                                {{ number_format($totalStudents ?? 0) }}</p>
+                            <p class="text-xs sm:text-sm text-emerald-600 mt-1">
+                                <i class="fas fa-arrow-up mr-1"></i>
+                                +{{ $recentStudents ?? 0 }} this week
+                            </p>
+                        </div>
+                        <div class="self-end sm:self-auto">
+                            <div
+                                class="p-3 sm:p-4 bg-gradient-to-br from-blue-100 to-blue-50 rounded-xl group-hover:from-blue-500 group-hover:to-blue-600 transition-all duration-300">
+                                <i
+                                    class="fas fa-users text-xl sm:text-2xl text-blue-600 group-hover:text-white transition-colors duration-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="stat-card group bg-white/90 backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-2xl p-4 sm:p-6 border border-slate-200/50 hover:border-emerald-300/50 transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 relative overflow-hidden">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    </div>
+                    <div class="relative flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                        <div class="mb-3 sm:mb-0">
+                            <p class="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">
+                                Applications</p>
+                            <p
+                                class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-800 group-hover:text-emerald-600 transition-colors duration-300">
+                                {{ number_format($totalApplications ?? 0) }}</p>
+                            <p class="text-xs sm:text-sm text-amber-600 mt-1">
+                                <i class="fas fa-clock mr-1"></i>
+                                {{ $pendingApplications ?? 0 }} pending
+                            </p>
+                        </div>
+                        <div class="self-end sm:self-auto">
+                            <div
+                                class="p-3 sm:p-4 bg-gradient-to-br from-emerald-100 to-emerald-50 rounded-xl group-hover:from-emerald-500 group-hover:to-emerald-600 transition-all duration-300">
+                                <i
+                                    class="fas fa-file-alt text-xl sm:text-2xl text-emerald-600 group-hover:text-white transition-colors duration-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="stat-card group bg-white/90 backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-2xl p-4 sm:p-6 border border-slate-200/50 hover:border-red-300/50 transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 relative overflow-hidden">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-red-500/5 to-rose-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    </div>
+                    <div class="relative flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                        <div class="mb-3 sm:mb-0">
+                            <p class="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">
+                                Complaints</p>
+                            <p
+                                class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-800 group-hover:text-red-600 transition-colors duration-300">
+                                {{ number_format($totalComplaints ?? 0) }}</p>
+                            <p class="text-xs sm:text-sm text-red-600 mt-1">
+                                <i class="fas fa-exclamation-triangle mr-1"></i>
+                                {{ $pendingComplaints ?? 0 }} pending
+                            </p>
+                        </div>
+                        <div class="self-end sm:self-auto">
+                            <div
+                                class="p-3 sm:p-4 bg-gradient-to-br from-red-100 to-red-50 rounded-xl group-hover:from-red-500 group-hover:to-red-600 transition-all duration-300">
+                                <i
+                                    class="fas fa-exclamation-circle text-xl sm:text-2xl text-red-600 group-hover:text-white transition-colors duration-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="stat-card group bg-white/90 backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-2xl p-4 sm:p-6 border border-slate-200/50 hover:border-purple-300/50 transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 relative overflow-hidden">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    </div>
+                    <div class="relative flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                        <div class="mb-3 sm:mb-0">
+                            <p class="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">Notices
+                            </p>
+                            <p
+                                class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-800 group-hover:text-purple-600 transition-colors duration-300">
+                                {{ number_format($totalNotices ?? 0) }}</p>
+                            <p class="text-xs sm:text-sm text-purple-600 mt-1">
+                                <i class="fas fa-eye mr-1"></i>
+                                {{ $activeNotices ?? 0 }} active
+                            </p>
+                        </div>
+                        <div class="self-end sm:self-auto">
+                            <div
+                                class="p-3 sm:p-4 bg-gradient-to-br from-purple-100 to-purple-50 rounded-xl group-hover:from-purple-500 group-hover:to-purple-600 transition-all duration-300">
+                                <i
+                                    class="fas fa-bullhorn text-xl sm:text-2xl text-purple-600 group-hover:text-white transition-colors duration-300"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Statistics Cards -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <!-- Total Students Card -->
-                <div
-                    class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500 hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center justify-between">
-                        <div class="min-w-0">
-                            <p class="text-sm font-medium text-gray-600 uppercase tracking-wider">Total Students</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format($totalStudents) }}</p>
-                            <p class="text-sm text-green-600 mt-1">
-                                <i class="fas fa-arrow-up mr-1"></i>
-                                +{{ $recentStudents }} this week
-                            </p>
-                        </div>
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-users text-blue-600 text-xl"></i>
-                        </div>
+            <!-- Role Information -->
+            <div
+                class="bg-white/90 backdrop-blur-xl rounded-2xl shadow-lg border border-slate-200/50 p-6 sm:p-8 mb-12 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-indigo-500/5 to-slate-500/5"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-8">
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center">
+                            <div class="p-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg mr-3">
+                                <i class="fas fa-crown text-white"></i>
+                            </div>
+                            {{ auth('admin')->user()->role ?? 'Admin' }} Permissions
+                        </h2>
                     </div>
-                </div>
-
-                <!-- Total Applications Card -->
-                <div
-                    class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500 hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center justify-between">
-                        <div class="min-w-0">
-                            <p class="text-sm font-medium text-gray-600 uppercase tracking-wider">Applications</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format($totalApplications) }}</p>
-                            <p class="text-sm text-orange-600 mt-1">
-                                <i class="fas fa-clock mr-1"></i>
-                                {{ $pendingApplications }} pending
-                            </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        @if(auth('admin')->user()->canApproveNotices())
+                        <div class="flex items-center space-x-3 p-4 bg-blue-50/50 rounded-lg border border-blue-200/50">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-blue-600"></i>
+                            </div>
+                            <span class="text-slate-700 font-medium">Create and approve notices</span>
                         </div>
-                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-file-alt text-green-600 text-xl"></i>
+                        @endif
+                        @if(auth('admin')->user()->canAllocateSeats())
+                        <div class="flex items-center space-x-3 p-4 bg-blue-50/50 rounded-lg border border-blue-200/50">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-blue-600"></i>
+                            </div>
+                            <span class="text-slate-700 font-medium">Allocate seats to students</span>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Total Complaints Card -->
-                <div
-                    class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-red-500 hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center justify-between">
-                        <div class="min-w-0">
-                            <p class="text-sm font-medium text-gray-600 uppercase tracking-wider">Complaints</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format($totalComplaints) }}</p>
-                            <p class="text-sm text-red-600 mt-1">
-                                <i class="fas fa-exclamation-triangle mr-1"></i>
-                                {{ $pendingComplaints }} pending
-                            </p>
+                        @endif
+                        @if(auth('admin')->user()->canCreateAdmins())
+                        <div class="flex items-center space-x-3 p-4 bg-blue-50/50 rounded-lg border border-blue-200/50">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-blue-600"></i>
+                            </div>
+                            <span class="text-slate-700 font-medium">Create admin accounts</span>
                         </div>
-                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-exclamation-circle text-red-600 text-xl"></i>
+                        @endif
+                        @if(auth('admin')->user()->canManageComplaints())
+                        <div class="flex items-center space-x-3 p-4 bg-blue-50/50 rounded-lg border border-blue-200/50">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-blue-600"></i>
+                            </div>
+                            <span class="text-slate-700 font-medium">Manage complaints</span>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Total Notices Card -->
-                <div
-                    class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500 hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center justify-between">
-                        <div class="min-w-0">
-                            <p class="text-sm font-medium text-gray-600 uppercase tracking-wider">Notices</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format($totalNotices) }}</p>
-                            <p class="text-sm text-purple-600 mt-1">
-                                <i class="fas fa-eye mr-1"></i>
-                                {{ $activeNotices }} active
-                            </p>
-                        </div>
-                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-bullhorn text-purple-600 text-xl"></i>
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
 
             <!-- Quick Actions -->
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
-                    <i class="fas fa-bolt text-yellow-600 mr-3"></i>
-                    Quick Actions
-                </h2>
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    <a href="{{ route('admin.notices.create') }}"
-                        class="flex items-center justify-center p-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 text-center">
-                        <i class="fas fa-plus mr-2"></i>
-                        Create Notice
-                    </a>
-                    <a href="{{ route('admin.students') }}"
-                        class="flex items-center justify-center p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 text-center">
-                        <i class="fas fa-users mr-2"></i>
-                        Manage Students
-                    </a>
-                    <a href="{{ route('admin.complaints') }}"
-                        class="flex items-center justify-center p-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 text-center">
-                        <i class="fas fa-exclamation-circle mr-2"></i>
-                        Review Complaints
-                    </a>
-                    <a href="{{ route('admin.applications.index') }}"
-                        class="flex items-center justify-center p-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 text-center">
-                        <i class="fas fa-file-alt mr-2"></i>
-                        Review Applications
-                    </a>
-                </div>
-            </div>
-
-            <!-- Recent Activity Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8 mb-8">
-                <!-- Recent Notices -->
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-bold text-gray-800 flex items-center">
-                            <i class="fas fa-bullhorn text-purple-600 mr-3"></i>
-                            Recent Notices
-                        </h2>
-                        <a href="{{ route('admin.notices') }}"
-                            class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                            View All <i class="fas fa-arrow-right ml-1"></i>
-                        </a>
-                    </div>
-                    <div class="space-y-4 max-h-[300px] overflow-y-auto">
-                        @forelse($recentNotices as $notice)
-                            <div
-                                class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
-                                <div class="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-gray-900 truncate">{{ $notice->title }}</p>
-                                    <p class="text-xs text-gray-500 mt-1">
-                                        {{ $notice->date_posted->format('M d, Y') }} •
-                                        <span class="capitalize">{{ $notice->notice_type }}</span>
-                                    </p>
-                                </div>
-                                <span
-                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                                {{ $notice->status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
-                                    {{ ucfirst($notice->status) }}
-                                </span>
+            <div
+                class="bg-white/90 backdrop-blur-xl rounded-2xl shadow-lg border border-slate-200/50 p-6 sm:p-8 mb-12 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-indigo-500/5 to-purple-500/5"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-8">
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center">
+                            <div class="p-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg mr-3">
+                                <i class="fas fa-bolt text-white"></i>
                             </div>
-                        @empty
-                            <p class="text-gray-500 text-center py-4">No recent notices</p>
-                        @endforelse
-                    </div>
-                </div>
-
-                <!-- Recent Complaints -->
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-bold text-gray-800 flex items-center">
-                            <i class="fas fa-exclamation-circle text-red-600 mr-3"></i>
-                            Recent Complaints
+                            Quick Actions
                         </h2>
-                        <a href="{{ route('admin.complaints') }}"
-                            class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                            View All <i class="fas fa-arrow-right ml-1"></i>
-                        </a>
+                        <div class="hidden sm:flex items-center text-sm text-slate-500">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Click any action to get started
+                        </div>
                     </div>
-                    <div class="space-y-4 max-h-[300px] overflow-y-auto">
-                        @forelse($recentComplaints as $complaint)
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
+                        @if(auth('admin')->user()->canViewStudents())
+                        <a href="{{ \App\Helpers\RouteHelper::getRoleBasedRoute('students') }}"
+                            class="action-btn group bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl p-4 sm:p-6 text-center transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-2xl relative overflow-hidden">
                             <div
-                                class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
-                                <div class="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-gray-900 truncate">{{ $complaint->subject }}</p>
-                                    <p class="text-xs text-gray-500 mt-1">
-                                        By {{ $complaint->student->name ?? 'Unknown' }} •
-                                        {{ $complaint->created_at->format('M d, Y') }}
-                                    </p>
-                                </div>
-                                <span
-                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                                {{ $complaint->status === 'pending'
-                                    ? 'bg-yellow-100 text-yellow-800'
-                                    : ($complaint->status === 'resolved'
-                                        ? 'bg-green-100 text-green-800'
-                                        : 'bg-blue-100 text-blue-800') }}">
-                                    {{ ucfirst($complaint->status) }}
-                                </span>
+                                class="absolute inset-0 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             </div>
-                        @empty
-                            <p class="text-gray-500 text-center py-4">No recent complaints</p>
-                        @endforelse
+                            <div class="relative">
+                                <div
+                                    class="p-3 bg-white/10 rounded-lg mb-3 mx-auto w-fit group-hover:bg-white/20 transition-all duration-300">
+                                    <i class="fas fa-users text-2xl"></i>
+                                </div>
+                                <p class="font-semibold text-sm">Students</p>
+                            </div>
+                        </a>
+                        @endif
+
+                        @if(auth('admin')->user()->canManageComplaints())
+                        <a href="{{ \App\Helpers\RouteHelper::getRoleBasedRoute('complaints') }}"
+                            class="action-btn group bg-gradient-to-br from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-xl p-4 sm:p-6 text-center transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-2xl relative overflow-hidden">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-rose-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            </div>
+                            <div class="relative">
+                                <div
+                                    class="p-3 bg-white/10 rounded-lg mb-3 mx-auto w-fit group-hover:bg-white/20 transition-all duration-300">
+                                    <i class="fas fa-exclamation-triangle text-2xl"></i>
+                                </div>
+                                <p class="font-semibold text-sm">Complaints</p>
+                            </div>
+                        </a>
+                        @endif
+
+                        @if(auth('admin')->user()->canApproveNotices())
+                        <a href="{{ \App\Helpers\RouteHelper::getRoleBasedRoute('notices.create') }}"
+                            class="action-btn group bg-gradient-to-br from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-xl p-4 sm:p-6 text-center transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-2xl relative overflow-hidden">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            </div>
+                            <div class="relative">
+                                <div
+                                    class="p-3 bg-white/10 rounded-lg mb-3 mx-auto w-fit group-hover:bg-white/20 transition-all duration-300">
+                                    <i class="fas fa-plus-circle text-2xl"></i>
+                                </div>
+                                <p class="font-semibold text-sm">Create Notice</p>
+                            </div>
+                        </a>
+                        @endif
+
+                        @if(auth('admin')->user()->canVerifyApplications())
+                        <a href="{{ \App\Helpers\RouteHelper::getRoleBasedRoute('applications.index') }}"
+                            class="action-btn group bg-gradient-to-br from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white rounded-xl p-4 sm:p-6 text-center transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-2xl relative overflow-hidden">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-yellow-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            </div>
+                            <div class="relative">
+                                <div
+                                    class="p-3 bg-white/10 rounded-lg mb-3 mx-auto w-fit group-hover:bg-white/20 transition-all duration-300">
+                                    <i class="fas fa-file-alt text-2xl"></i>
+                                </div>
+                                <p class="font-semibold text-sm">Applications</p>
+                            </div>
+                        </a>
+                        @endif
+
+                        @if(auth('admin')->user()->canAllocateSeats())
+                        <a href="{{ \App\Helpers\RouteHelper::getRoleBasedRoute('seats.index') }}"
+                            class="action-btn group bg-gradient-to-br from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl p-4 sm:p-6 text-center transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-2xl relative overflow-hidden">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-violet-500/20 to-indigo-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            </div>
+                            <div class="relative">
+                                <div
+                                    class="p-3 bg-white/10 rounded-lg mb-3 mx-auto w-fit group-hover:bg-white/20 transition-all duration-300">
+                                    <i class="fas fa-bed text-2xl"></i>
+                                </div>
+                                <p class="font-semibold text-sm">Seat Allocation</p>
+                            </div>
+                        </a>
+                        @endif
+
+                        @if(auth('admin')->user()->canCreateAdmins())
+                        <a href="{{ \App\Helpers\RouteHelper::getRoleBasedRoute('create_admin') }}"
+                            class="action-btn group bg-gradient-to-br from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white rounded-xl p-4 sm:p-6 text-center transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-2xl relative overflow-hidden">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            </div>
+                            <div class="relative">
+                                <div
+                                    class="p-3 bg-white/10 rounded-lg mb-3 mx-auto w-fit group-hover:bg-white/20 transition-all duration-300">
+                                    <i class="fas fa-user-plus text-2xl"></i>
+                                </div>
+                                <p class="font-semibold text-sm">Create People</p>
+                            </div>
+                        </a>
+                        @endif
                     </div>
-                </div>
-            </div>
-
-            <!-- Recent Applications -->
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-xl font-bold text-gray-800 flex items-center">
-                        <i class="fas fa-file-alt text-green-600 mr-3"></i>
-                        Recent Applications
-                    </h2>
-                    <a href="{{ route('admin.applications.index') }}"
-                        class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                        View All <i class="fas fa-arrow-right ml-1"></i>
-                    </a>
-                </div>
-                <div class="overflow-x-auto max-h-[300px] overflow-y-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="hidden lg:table-header-group bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Student</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Application Date</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse($recentApplications as $application)
-                                <tr class="hover:bg-gray-50 transition-colors duration-200">
-                                    <!-- Desktop/Tablet View -->
-                                    <td class="hidden lg:table-cell px-6 py-4">
-                                        <div class="flex items-center">
-                                            <div
-                                                class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                                                <img src="{{ $application->student->profile_image_url }}" alt="{{ $application->student->name ?? 'Unknown' }}" class="w-full h-full object-cover">
-                                            </div>
-                                            <div class="ml-3">
-                                                <p class="text-sm font-medium text-gray-900">
-                                                    {{ $application->student->name ?? 'Unknown' }}</p>
-                                                <p class="text-xs text-gray-500">
-                                                    {{ $application->student->student_id ?? 'N/A' }}</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="hidden lg:table-cell px-6 py-4 text-sm text-gray-500">
-                                        {{ $application->created_at->format('M d, Y') }}
-                                    </td>
-                                    <td class="hidden lg:table-cell px-6 py-4">
-                                        <span
-                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                                        {{ $application->status === 'pending'
-                                            ? 'bg-yellow-100 text-yellow-800'
-                                            : ($application->status === 'approved'
-                                                ? 'bg-green-100 text-green-800'
-                                                : 'bg-red-100 text-red-800') }}">
-                                            {{ ucfirst($application->status) }}
-                                        </span>
-                                    </td>
-                                    <td class="hidden lg:table-cell px-6 py-4 text-sm font-medium text-right lg:text-left">
-                                        <a href="{{ route('admin.applications.view', $application->application_id) }}"
-                                            class="text-blue-600 hover:text-blue-900">
-                                            View Details
-                                        </a>
-                                    </td>
-
-                                    <!-- Mobile View -->
-                                    <td class="block lg:hidden p-4">
-                                        <div class="flex items-center justify-between text-sm flex-nowrap">
-                                            <!-- Student Name/Icon -->
-                                            <div class="flex items-center space-x-1 flex-shrink-0 min-w-0">
-                                                <div class="w-7 h-7 rounded-full overflow-hidden flex-shrink-0">
-                                                    <img src="{{ $application->student->profile_image_url }}" alt="{{ $application->student->name ?? 'Unknown' }}" class="w-full h-full object-cover">
-                                                </div>
-                                                <span class="font-medium text-gray-900 text-xs truncate">{{ $application->student->name ?? 'Unknown' }}</span>
-                                            </div>
-
-                                            <div class="flex items-center space-x-2 flex-shrink-0">
-                                                <!-- Date Icon -->
-                                                <i class="fas fa-calendar-alt text-gray-500 text-sm" title="{{ $application->created_at->format('M d, Y') }}"></i>
-
-                                                <!-- Status Icon -->
-                                                @php
-                                                    $statusIcon = '';
-                                                    $statusColor = '';
-                                                    if ($application->status === 'pending') {
-                                                        $statusIcon = 'fas fa-clock';
-                                                        $statusColor = 'text-yellow-600';
-                                                    } elseif ($application->status === 'approved') {
-                                                        $statusIcon = 'fas fa-check-circle';
-                                                        $statusColor = 'text-green-600';
-                                                    } else {
-                                                        $statusIcon = 'fas fa-times-circle';
-                                                        $statusColor = 'text-red-600';
-                                                    }
-                                                @endphp
-                                                <i class="{{ $statusIcon }} {{ $statusColor }} text-sm" title="{{ ucfirst($application->status) }}"></i>
-
-                                                <!-- View Details Icon -->
-                                                <a href="{{ route('admin.applications.view', $application->application_id) }}" class="text-blue-600 text-sm">
-                                                    <i class="fas fa-arrow-right" title="View Details"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="hidden lg:table-cell px-6 py-4 text-center text-gray-500">No recent applications
-                                    </td>
-                                    <td class="block lg:hidden px-6 py-4 text-center text-gray-500">No recent applications
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
     <script src="{{ asset('js/dashboard.js') }}"></script>
 @endsection
