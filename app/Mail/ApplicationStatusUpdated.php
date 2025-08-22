@@ -15,16 +15,16 @@ class ApplicationStatusUpdated extends Mailable
     use Queueable, SerializesModels;
 
     public $application;
-    public $message;
+    public $adminMessage;
     public $status;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(SeatApplication $application, $message, $status)
+    public function __construct(SeatApplication $application, $adminMessage, $status)
     {
         $this->application = $application;
-        $this->message = $message;
+        $this->adminMessage = $adminMessage;
         $this->status = $status;
     }
 

@@ -71,6 +71,17 @@
                     <span class="text-xs font-semibold group-hover:text-slate-800 transition-all duration-300 relative z-10">Applications</span>
                 </a>
             </li>
+
+            <!-- Allocated Students Tab - Only for Provost and Co-Provost -->
+            <li class="relative">
+                <a href="{{ route('admin.applications.allocated') }}" class="tab-link group flex flex-col items-center justify-center text-slate-600 py-3 px-6 font-medium transition-all duration-500 border-b-4 min-w-[100px] rounded-t-md relative overflow-hidden {{ session('active_admin_menu') === 'allocated_students' ? 'active-tab-indicator' : 'border-transparent' }}">
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-teal-200/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    <div class="bg-gradient-to-br from-teal-100 to-teal-50 px-4 py-2 rounded-md mb-2 group-hover:bg-gradient-to-br group-hover:from-teal-200 group-hover:to-teal-100 transition-all duration-500 shadow-md group-hover:shadow-xl relative z-10">
+                        <i class="fas fa-user-check text-lg text-teal-600 group-hover:text-teal-800 transition-colors duration-300 drop-shadow-sm"></i>
+                    </div>
+                    <span class="text-xs font-semibold group-hover:text-slate-800 transition-all duration-300 relative z-10">Allocated</span>
+                </a>
+            </li>
             @endif
 
             <!-- Seats Tab - Only for Provost -->

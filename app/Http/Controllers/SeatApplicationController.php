@@ -353,4 +353,75 @@ class SeatApplicationController extends Controller
 
         return $pdf->download('approved_applications_report_' . date('Y-m-d') . '.pdf');
     }
+
+    // List allocated students
+    public function allocatedStudents()
+    {
+        // Set active menu for navigation
+        session(['active_admin_menu' => 'allocated_students']);
+        
+        $allocatedStudents = \App\Models\SeatAllotment::with([
+            'student',
+            'seat',
+            'application',
+            'admin'
+        ])
+            ->where('status', 'active')
+            ->orderBy('start_date', 'desc')
+            ->get();
+
+        return view('admin.applications.allocated', compact('allocatedStudents'));
+    }
+
+    // Show details of allocated student
+    public function allocatedShow(\App\Models\SeatAllotment $allotment)
+    {
+        // Set active menu for navigation
+        session(['active_admin_menu' => 'allocated_students']);
+        
+        // Ensure the allotment is active
+        if ($allotment->status !== 'active') {
+            return redirect()->route('admin.applications.allocated')
+                ->with('error', 'This seat allotment is not active.');
+        }
+
+        $allotment->load(['student', 'seat', 'application', 'admin']);
+        return view('admin.applications.allocated_show', compact('allotment'));
+    }
+
+    // Generate PDF report of allocated students
+    public function generateAllocatedPDFReport()
+    {
+        $allocatedStudents = \App\Models\SeatAllotment::with([
+            'student',
+            'seat',
+            'application',
+            'admin'
+        ])
+            ->where('status', 'active')
+            ->orderBy('start_date', 'desc')
+            ->get();
+
+        $pdf = Pdf::loadView('admin.applications.allocated_pdf_report', compact('allocatedStudents'));
+
+        return $pdf->stream('allocated_students_report_' . date('Y-m-d') . '.pdf');
+    }
+
+    // Download PDF report of allocated students
+    public function downloadAllocatedPDFReport()
+    {
+        $allocatedStudents = \App\Models\SeatAllotment::with([
+            'student',
+            'seat',
+            'application',
+            'admin'
+        ])
+            ->where('status', 'active')
+            ->orderBy('start_date', 'desc')
+            ->get();
+
+        $pdf = Pdf::loadView('admin.applications.allocated_pdf_report', compact('allocatedStudents'));
+
+        return $pdf->download('allocated_students_report_' . date('Y-m-d') . '.pdf');
+    }
 }

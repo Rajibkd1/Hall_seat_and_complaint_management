@@ -175,6 +175,12 @@ Route::middleware(['admin-auth', 'set-active-menu'])->prefix('admin')->group(fun
         // PDF Report Routes
         Route::get('/applications/pdf/generate', [SeatApplicationController::class, 'generatePDFReport'])->name('admin.applications.pdf.generate');
         Route::get('/applications/pdf/download', [SeatApplicationController::class, 'downloadPDFReport'])->name('admin.applications.pdf.download');
+
+        // Allocated Students Routes
+        Route::get('/allocated-students', [SeatApplicationController::class, 'allocatedStudents'])->name('admin.applications.allocated');
+        Route::get('/allocated-students/{allotment}', [SeatApplicationController::class, 'allocatedShow'])->name('admin.applications.allocated.show');
+        Route::get('/allocated-students/pdf/generate', [SeatApplicationController::class, 'generateAllocatedPDFReport'])->name('admin.applications.allocated.pdf.generate');
+        Route::get('/allocated-students/pdf/download', [SeatApplicationController::class, 'downloadAllocatedPDFReport'])->name('admin.applications.allocated.pdf.download');
     });
 
     // Seat Management Routes (All can view)
@@ -238,6 +244,12 @@ Route::middleware(['admin-auth', 'role-permission:Provost'])->prefix('provost')-
     // PDF Report Routes
     Route::get('/applications/pdf/generate', [SeatApplicationController::class, 'generatePDFReport'])->name('provost.applications.pdf.generate');
     Route::get('/applications/pdf/download', [SeatApplicationController::class, 'downloadPDFReport'])->name('provost.applications.pdf.download');
+    
+    // Allocated Students Routes
+    Route::get('/allocated-students', [SeatApplicationController::class, 'allocatedStudents'])->name('provost.applications.allocated');
+    Route::get('/allocated-students/{allotment}', [SeatApplicationController::class, 'allocatedShow'])->name('provost.applications.allocated.show');
+    Route::get('/allocated-students/pdf/generate', [SeatApplicationController::class, 'generateAllocatedPDFReport'])->name('provost.applications.allocated.pdf.generate');
+    Route::get('/allocated-students/pdf/download', [SeatApplicationController::class, 'downloadAllocatedPDFReport'])->name('provost.applications.allocated.pdf.download');
     Route::get('/seats', [ProvostController::class, 'seats'])->name('provost.seats.index');
     Route::get('/seats/rooms', [ProvostController::class, 'getRooms'])->name('provost.seats.rooms');
     Route::get('/seats/room-seats', [ProvostController::class, 'getRoomSeats'])->name('provost.seats.room_seats');
@@ -286,6 +298,12 @@ Route::middleware(['admin-auth', 'role-permission:Co-Provost'])->prefix('co-prov
     // PDF Report Routes
     Route::get('/applications/pdf/generate', [SeatApplicationController::class, 'generatePDFReport'])->name('co-provost.applications.pdf.generate');
     Route::get('/applications/pdf/download', [SeatApplicationController::class, 'downloadPDFReport'])->name('co-provost.applications.pdf.download');
+    
+    // Allocated Students Routes
+    Route::get('/allocated-students', [SeatApplicationController::class, 'allocatedStudents'])->name('co-provost.applications.allocated');
+    Route::get('/allocated-students/{allotment}', [SeatApplicationController::class, 'allocatedShow'])->name('co-provost.applications.allocated.show');
+    Route::get('/allocated-students/pdf/generate', [SeatApplicationController::class, 'generateAllocatedPDFReport'])->name('co-provost.applications.allocated.pdf.generate');
+    Route::get('/allocated-students/pdf/download', [SeatApplicationController::class, 'downloadAllocatedPDFReport'])->name('co-provost.applications.allocated.pdf.download');
 
     // Co-Provost Seat Management (View Only - No Allocation)
     Route::get('/seats', [CoProvostController::class, 'seats'])->name('co-provost.seats.index');
