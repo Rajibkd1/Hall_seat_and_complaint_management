@@ -1,8 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
-        <h1 class="text-3xl font-bold mb-6">Seat Application</h1>
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="container mx-auto px-4 max-w-5xl">
+        <!-- Header Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8 p-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">Seat Application</h1>
+                    <p class="text-gray-600">Complete your hall seat application form</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-right">
+                        <p class="text-sm text-gray-500">Applicant</p>
+                        <p class="font-semibold text-gray-900">{{ $student->name }}</p>
+                        <p class="text-sm text-gray-600">{{ $student->university_id }}</p>
+                    </div>
+                    <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-gray-200 bg-gray-100">
+                        @if($student->profile_image)
+                            <img src="{{ $student->profile_image_url }}" alt="Profile" class="w-full h-full object-cover">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
 
         {{-- Profile Validation Modal --}}
         @if (!empty($missingFields))
@@ -11,54 +38,106 @@
 
         {{-- Success message --}}
         @if (session('success'))
-            <div class="mb-6 p-4 bg-green-100 text-green-700 rounded">
-                {{ session('success') }}
+            <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    {{ session('success') }}
+                </div>
             </div>
         @endif
 
         {{-- Validation Errors --}}
         @if ($errors->any())
-            <div class="mb-6 p-4 bg-red-100 text-red-700 rounded">
-                <ul class="list-disc list-inside">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+            <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-800 rounded-lg">
+                <div class="flex items-start">
+                    <svg class="w-5 h-5 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                        <p class="font-medium mb-2">Please correct the following errors:</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
             </div>
         @endif
+
         @if ($existingApplication)
-            <div class="mb-6 p-4 bg-yellow-100 text-yellow-800 rounded">
-                <strong>Note:</strong> You have already submitted a seat application.
+            <div class="mb-6 p-4 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    <strong>Note:</strong> You have already submitted a seat application.
+                </div>
             </div>
 
             <!-- Summary of Submitted Data -->
-            <div class="border border-gray-300 rounded-lg p-6 bg-gray-50">
-                <h2 class="text-xl font-bold mb-4">Submitted Application Details</h2>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Submitted Application Details</h2>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div><strong>Name:</strong> {{ $existingApplication->student_name }}</div>
-                    <div><strong>University ID:</strong> {{ $student->university_id }}</div>
-                    <div><strong>Department:</strong> {{ $existingApplication->department }}</div>
-                    <div><strong>Academic Year:</strong> {{ $existingApplication->academic_year }}</div>
-                    <div><strong>Guardian Name:</strong> {{ $existingApplication->guardian_name }}</div>
-                    <div><strong>Guardian Mobile:</strong> {{ $existingApplication->guardian_mobile }}</div>
-                    <div><strong>Relationship:</strong> {{ $existingApplication->guardian_relationship }}</div>
-                    <div><strong>Program:</strong> {{ ucfirst($existingApplication->program) }}</div>
-                    <div><strong>CGPA:</strong> {{ $existingApplication->cgpa }}</div>
-                    <div><strong>Physical Condition:</strong> {{ ucfirst($existingApplication->physical_condition) }}</div>
-                    <div><strong>Family Status:</strong>
-                        {{ str_replace('-', ' ', ucfirst($existingApplication->family_status)) }}</div>
-                    <div><strong>Application Date:</strong>
-                        {{ \Carbon\Carbon::parse($existingApplication->application_date)->format('d M Y') }}</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div class="space-y-1">
+                        <p class="text-gray-500 text-xs uppercase tracking-wide">Name</p>
+                        <p class="font-medium text-gray-900">{{ $existingApplication->student_name }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-gray-500 text-xs uppercase tracking-wide">University ID</p>
+                        <p class="font-medium text-gray-900">{{ $student->university_id }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-gray-500 text-xs uppercase tracking-wide">Department</p>
+                        <p class="font-medium text-gray-900">{{ $existingApplication->department }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-gray-500 text-xs uppercase tracking-wide">Academic Year</p>
+                        <p class="font-medium text-gray-900">{{ $existingApplication->academic_year }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-gray-500 text-xs uppercase tracking-wide">Guardian Name</p>
+                        <p class="font-medium text-gray-900">{{ $existingApplication->guardian_name }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-gray-500 text-xs uppercase tracking-wide">Guardian Mobile</p>
+                        <p class="font-medium text-gray-900">{{ $existingApplication->guardian_mobile }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-gray-500 text-xs uppercase tracking-wide">Relationship</p>
+                        <p class="font-medium text-gray-900">{{ $existingApplication->guardian_relationship }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-gray-500 text-xs uppercase tracking-wide">Program</p>
+                        <p class="font-medium text-gray-900">{{ ucfirst($existingApplication->program) }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-gray-500 text-xs uppercase tracking-wide">CGPA</p>
+                        <p class="font-medium text-gray-900">{{ $existingApplication->cgpa }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-gray-500 text-xs uppercase tracking-wide">Physical Condition</p>
+                        <p class="font-medium text-gray-900">{{ ucfirst($existingApplication->physical_condition) }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-gray-500 text-xs uppercase tracking-wide">Family Status</p>
+                        <p class="font-medium text-gray-900">{{ str_replace('-', ' ', ucfirst($existingApplication->family_status)) }}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-gray-500 text-xs uppercase tracking-wide">Application Date</p>
+                        <p class="font-medium text-gray-900">{{ \Carbon\Carbon::parse($existingApplication->application_date)->format('d M Y') }}</p>
+                    </div>
                 </div>
 
                 <!-- Optional: Download links for uploaded documents -->
-                <div class="mt-6">
-                    <h3 class="font-semibold mb-2">Uploaded Documents:</h3>
-                    <ul class="list-disc list-inside text-blue-600">
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <h3 class="font-semibold text-gray-900 mb-4">Uploaded Documents</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         @php
                             $documents = [
-                                'University ID' => $existingApplication->university_id_doc,
                                 'Marksheet' => $existingApplication->marksheet_doc,
                                 'Birth Certificate' => $existingApplication->birth_certificate_doc,
                                 'Financial Certificate' => $existingApplication->financial_certificate_doc,
@@ -71,87 +150,84 @@
 
                         @foreach ($documents as $label => $file)
                             @if ($file)
-                                <li>
-                                    <a href="{{ asset('storage/' . $file) }}" target="_blank"
-                                        class="underline hover:text-blue-800">
-                                        {{ $label }}
-                                    </a>
-                                </li>
+                                <a href="{{ asset('storage/' . $file) }}" target="_blank" class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                    <svg class="w-5 h-5 text-gray-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
+                                    </svg>
+                                    <span class="text-sm font-medium text-gray-700">{{ $label }}</span>
+                                </a>
                             @endif
                         @endforeach
-                    </ul>
+                    </div>
                 </div>
             </div>
         @else
-            <form action="{{ route('seat-application.submit') }}" method="POST" enctype="multipart/form-data"
-                id="applicationForm" class="space-y-8">
+            <form action="{{ route('seat-application.submit') }}" method="POST" enctype="multipart/form-data" id="applicationForm" class="space-y-8">
                 @csrf
 
                 <!-- Personal Information Section -->
-                <div class="border border-gray-300 rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">1. Personal Information:</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-8 h-8 bg-gray-900 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</div>
+                        <h3 class="text-xl font-semibold text-gray-900">Personal Information</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label for="student_name" class="block text-sm font-medium text-gray-700 mb-1">Student
-                                Name</label>
-                            <input type="text" name="student_name" id="student_name" value="{{ $student->name }}"
-                                readonly
-                                class="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 cursor-not-allowed focus:outline-none">
+                            <label for="student_name" class="block text-sm font-medium text-gray-700 mb-2">Student Name</label>
+                            <input type="text" name="student_name" id="student_name" value="{{ $student->name }}" readonly
+                                class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-600 cursor-not-allowed focus:outline-none">
                         </div>
 
                         <div>
-                            <label for="department" class="block text-sm font-medium text-gray-700 mb-1">Department</label>
-                            <input type="text" name="department" id="department" value="{{ $student->department }}"
-                                readonly
-                                class="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 cursor-not-allowed focus:outline-none">
+                            <label for="department" class="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                            <input type="text" name="department" id="department" value="{{ $student->department }}" readonly
+                                class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-600 cursor-not-allowed focus:outline-none">
                         </div>
+                        
                         <div>
-                            <label for="university_id" class="block text-sm font-medium text-gray-700 mb-1">University ID
-                                (Roll Number)</label>
-                            <input type="text" name="university_id" id="university_id"
-                                value="{{ $student->university_id }}" readonly
-                                class="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 cursor-not-allowed focus:outline-none">
+                            <label for="university_id" class="block text-sm font-medium text-gray-700 mb-2">University ID (Roll Number)</label>
+                            <input type="text" name="university_id" id="university_id" value="{{ $student->university_id }}" readonly
+                                class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-600 cursor-not-allowed focus:outline-none">
                         </div>
 
-
                         <div>
-                            <label for="academic_year" class="block text-sm font-medium text-gray-700 mb-1">Session</label>
-                            <input type="text" name="academic_year" id="academic_year"
-                                value="{{ $student->session_year }}" readonly
-                                class="w-full bg-gray-100 border border-gray-300 rounded-md px-3 py-2 cursor-not-allowed focus:outline-none">
+                            <label for="academic_year" class="block text-sm font-medium text-gray-700 mb-2">Session</label>
+                            <input type="text" name="academic_year" id="academic_year" value="{{ $student->session_year }}" readonly
+                                class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-600 cursor-not-allowed focus:outline-none">
                         </div>
+                        
                         <div>
-                            <label for="guardian_name" class="block text-sm font-medium text-gray-700 mb-1">Guardian's
-                                Name</label>
-                            <input type="text" name="guardian_name" id="guardian_name"
-                                value="{{ old('guardian_name') }}" required
-                                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <label for="guardian_name" class="block text-sm font-medium text-gray-700 mb-2">Guardian's Name <span class="text-red-500">*</span></label>
+                            <input type="text" name="guardian_name" id="guardian_name" value="{{ old('guardian_name') }}" required
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
                         </div>
+                        
                         <div>
-                            <label for="guardian_mobile" class="block text-sm font-medium text-gray-700 mb-1">Guardian's
-                                Mobile Number</label>
-                            <input type="tel" name="guardian_mobile" id="guardian_mobile"
-                                value="{{ old('guardian_mobile') }}" required
-                                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <label for="guardian_mobile" class="block text-sm font-medium text-gray-700 mb-2">Guardian's Mobile Number <span class="text-red-500">*</span></label>
+                            <input type="tel" name="guardian_mobile" id="guardian_mobile" value="{{ old('guardian_mobile') }}" required
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
                         </div>
+                        
                         <div class="md:col-span-2">
-                            <label for="guardian_relationship"
-                                class="block text-sm font-medium text-gray-700 mb-1">Relationship with Student</label>
-                            <input type="text" name="guardian_relationship" id="guardian_relationship"
-                                value="{{ old('guardian_relationship') }}" required
-                                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <label for="guardian_relationship" class="block text-sm font-medium text-gray-700 mb-2">Relationship with Student <span class="text-red-500">*</span></label>
+                            <input type="text" name="guardian_relationship" id="guardian_relationship" value="{{ old('guardian_relationship') }}" required
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
                         </div>
                     </div>
                 </div>
 
-                <!-- General Information Section -->
-                <div class="border border-gray-300 rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">2. General Information:</h3>
+                <!-- Academic Information Section -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-8 h-8 bg-gray-900 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</div>
+                        <h3 class="text-xl font-semibold text-gray-900">Academic Information</h3>
+                    </div>
 
                     <!-- Program Selection -->
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Program</label>
-                        <div class="flex flex-wrap gap-4">
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Program <span class="text-red-500">*</span></label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             @php
                                 $programs = [
                                     'bachelor' => 'Bachelor',
@@ -162,24 +238,21 @@
                                 $oldProgram = old('program');
                             @endphp
                             @foreach ($programs as $value => $label)
-                                <label class="flex items-center">
-                                    <input type="radio" name="program" value="{{ $value }}"
-                                        {{ $oldProgram === $value ? 'checked' : '' }} class="mr-2">
-                                    <span class="text-sm">{{ $label }}</span>
+                                <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                    <input type="radio" name="program" value="{{ $value }}" {{ $oldProgram === $value ? 'checked' : '' }} class="mr-3 text-gray-600 focus:ring-gray-500">
+                                    <span class="text-sm font-medium">{{ $label }}</span>
                                 </label>
                             @endforeach
                         </div>
                     </div>
 
                     <!-- Current Semester and GPA -->
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                         <div>
-                            <label for="semester_year" class="block text-sm font-medium text-gray-700 mb-1">Current
-                                Year</label>
+                            <label for="semester_year" class="block text-sm font-medium text-gray-700 mb-2">Current Year <span class="text-red-500">*</span></label>
                             <select name="semester_year" id="semester_year" required
-                                class="w-full border border-gray-300 rounded-md px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="" disabled {{ old('semester_year') ? '' : 'selected' }}>Select year
-                                </option>
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                                <option value="" disabled {{ old('semester_year') ? '' : 'selected' }}>Select year</option>
                                 <option value="1" {{ old('semester_year') == 1 ? 'selected' : '' }}>1st Year</option>
                                 <option value="2" {{ old('semester_year') == 2 ? 'selected' : '' }}>2nd Year</option>
                                 <option value="3" {{ old('semester_year') == 3 ? 'selected' : '' }}>3rd Year</option>
@@ -188,54 +261,43 @@
                             </select>
                         </div>
 
-
                         <div>
-                            <label for="semester_term" class="block text-sm font-medium text-gray-700 mb-1">
-                                Term <span class="text-red-500">*</span>
-                            </label>
+                            <label for="semester_term" class="block text-sm font-medium text-gray-700 mb-2">Term <span class="text-red-500">*</span></label>
                             <select name="semester_term" id="semester_term" required
-                                class="w-full border border-gray-300 rounded-md px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="" disabled {{ old('semester_term') ? '' : 'selected' }}>Select term
-                                </option>
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                                <option value="" disabled {{ old('semester_term') ? '' : 'selected' }}>Select term</option>
                                 <option value="1" {{ old('semester_term') == 1 ? 'selected' : '' }}>1</option>
                                 <option value="2" {{ old('semester_term') == 2 ? 'selected' : '' }}>2</option>
                             </select>
                         </div>
 
                         <div>
-                            <label for="cgpa" class="block text-sm font-medium text-gray-700 mb-1">cGPA <span
-                                    class="text-red-500">*</span></label>
-                            <input type="number" step="0.01" min="0" max="4" name="cgpa"
-                                id="cgpa" value="{{ old('cgpa') }}" required placeholder="e.g., 3.75"
-                                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-
-                        <div class="flex items-end">
-                            <span class="text-sm text-gray-600 pb-2">out of 4.00</span>
+                            <label for="cgpa" class="block text-sm font-medium text-gray-700 mb-2">cGPA (out of 4.00) <span class="text-red-500">*</span></label>
+                            <input type="number" step="0.01" min="0" max="4" name="cgpa" id="cgpa" value="{{ old('cgpa') }}" required placeholder="e.g., 3.75"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
                         </div>
                     </div>
 
                     <!-- Physical Condition -->
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Physical Condition</label>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Physical Condition <span class="text-red-500">*</span></label>
                         @php
                             $physicalConditions = ['normal' => 'Normal', 'disabled' => 'Disabled'];
                             $oldPhysical = old('physical_condition');
                         @endphp
-                        <div class="flex gap-4">
+                        <div class="grid grid-cols-2 gap-4">
                             @foreach ($physicalConditions as $value => $label)
-                                <label class="flex items-center">
-                                    <input type="radio" name="physical_condition" value="{{ $value }}"
-                                        {{ $oldPhysical === $value ? 'checked' : '' }} class="mr-2">
-                                    <span class="text-sm">{{ $label }}</span>
+                                <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                    <input type="radio" name="physical_condition" value="{{ $value }}" {{ $oldPhysical === $value ? 'checked' : '' }} class="mr-3 text-gray-600 focus:ring-gray-500">
+                                    <span class="text-sm font-medium">{{ $label }}</span>
                                 </label>
                             @endforeach
                         </div>
                     </div>
 
                     <!-- Family Status -->
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Family Status</label>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Family Status <span class="text-red-500">*</span></label>
                         @php
                             $familyStatuses = [
                                 'both-alive' => 'Both parents alive',
@@ -245,64 +307,59 @@
                             ];
                             $oldFamily = old('family_status');
                         @endphp
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             @foreach ($familyStatuses as $value => $label)
-                                <label class="flex items-center">
-                                    <input type="radio" name="family_status" value="{{ $value }}"
-                                        {{ $oldFamily === $value ? 'checked' : '' }} class="mr-2">
-                                    <span class="text-sm">{{ $label }}</span>
+                                <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                    <input type="radio" name="family_status" value="{{ $value }}" {{ $oldFamily === $value ? 'checked' : '' }} class="mr-3 text-gray-600 focus:ring-gray-500">
+                                    <span class="text-sm font-medium">{{ $label }}</span>
                                 </label>
                             @endforeach
                         </div>
                     </div>
 
                     <!-- Addresses -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
-                            <label for="permanent_address" class="block text-sm font-medium text-gray-700 mb-1">Permanent
-                                Address</label>
+                            <label for="permanent_address" class="block text-sm font-medium text-gray-700 mb-2">Permanent Address</label>
                             <textarea name="permanent_address" id="permanent_address" rows="3"
-                                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('permanent_address') }}</textarea>
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">{{ old('permanent_address') }}</textarea>
                         </div>
                         <div>
-                            <label for="current_address" class="block text-sm font-medium text-gray-700 mb-1">Current
-                                Address</label>
+                            <label for="current_address" class="block text-sm font-medium text-gray-700 mb-2">Current Address</label>
                             <textarea name="current_address" id="current_address" rows="3"
-                                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('current_address') }}</textarea>
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">{{ old('current_address') }}</textarea>
                         </div>
                     </div>
 
                     <!-- Co-curricular Activities -->
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Co-curricular Activities</label>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Co-curricular Activities</label>
                         @php
                             $activitiesList = ['bncc' => 'BNCC', 'rover' => 'Rover Scout'];
                             $oldActivities = old('activities', []);
                         @endphp
-                        <div class="flex gap-4">
+                        <div class="grid grid-cols-2 gap-4">
                             @foreach ($activitiesList as $value => $label)
-                                <label class="flex items-center">
-                                    <input type="checkbox" name="activities[]" value="{{ $value }}"
-                                        {{ in_array($value, $oldActivities) ? 'checked' : '' }} class="mr-2">
-                                    <span class="text-sm">{{ $label }}</span>
+                                <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                    <input type="checkbox" name="activities[]" value="{{ $value }}" {{ in_array($value, $oldActivities) ? 'checked' : '' }} class="mr-3 text-gray-600 focus:ring-gray-500 rounded">
+                                    <span class="text-sm font-medium">{{ $label }}</span>
                                 </label>
                             @endforeach
                         </div>
                     </div>
 
                     <!-- Other Information -->
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Other Information</label>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Other Information</label>
                         @php
                             $otherInfoList = ['ethnic' => 'Ethnic Minority', 'foreign' => 'Foreign Student'];
                             $oldOtherInfo = old('other_info', []);
                         @endphp
-                        <div class="flex gap-4">
+                        <div class="grid grid-cols-2 gap-4">
                             @foreach ($otherInfoList as $value => $label)
-                                <label class="flex items-center">
-                                    <input type="checkbox" name="other_info[]" value="{{ $value }}"
-                                        {{ in_array($value, $oldOtherInfo) ? 'checked' : '' }} class="mr-2">
-                                    <span class="text-sm">{{ $label }}</span>
+                                <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                    <input type="checkbox" name="other_info[]" value="{{ $value }}" {{ in_array($value, $oldOtherInfo) ? 'checked' : '' }} class="mr-3 text-gray-600 focus:ring-gray-500 rounded">
+                                    <span class="text-sm font-medium">{{ $label }}</span>
                                 </label>
                             @endforeach
                         </div>
@@ -310,12 +367,15 @@
                 </div>
 
                 <!-- Document Upload Section -->
-                <div class="border border-gray-300 rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Required Documents:</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-8 h-8 bg-gray-900 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">3</div>
+                        <h3 class="text-xl font-semibold text-gray-900">Required Documents</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         @php
                             $fileFields = [
-                                'university_id_doc' => 'University ID Card',
                                 'marksheet' => 'Latest Semester Marksheet',
                                 'birthCertificate' => 'Birth Certificate/National ID',
                                 'financialCertificate' => 'Financial Status Certificate (if applicable)',
@@ -326,79 +386,56 @@
                             ];
                         @endphp
 
-                        @foreach (array_slice($fileFields, 0, 4) as $name => $label)
+                        @foreach ($fileFields as $name => $label)
                             <div>
-                                <label for="{{ $name }}"
-                                    class="block text-sm font-medium text-gray-700 mb-2">{{ $label }}</label>
-                                <input type="file" name="{{ $name }}" id="{{ $name }}"
-                                    accept=".pdf,.jpg,.jpeg,.png"
-                                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <label for="{{ $name }}" class="block text-sm font-medium text-gray-700 mb-2">{{ $label }}</label>
+                                <input type="file" name="{{ $name }}" id="{{ $name }}" accept=".pdf,.jpg,.jpeg,.png"
+                                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100">
                             </div>
                         @endforeach
-
-                        <div class="space-y-4">
-                            @foreach (array_slice($fileFields, 4) as $name => $label)
-                                @if ($name !== 'signature')
-                                    {{-- Signature input separate below --}}
-                                    <div>
-                                        <label for="{{ $name }}"
-                                            class="block text-sm font-medium text-gray-700 mb-2">{{ $label }}</label>
-                                        <input type="file" name="{{ $name }}" id="{{ $name }}"
-                                            accept=".pdf,.jpg,.jpeg,.png"
-                                            class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    </div>
-                                @endif
-                            @endforeach
-                        </div>
                     </div>
-                </div>
-
-                <!-- Signature Section -->
-                <div class="border border-gray-300 rounded-lg p-6 mt-4">
-                    <label for="signature" class="block text-sm font-medium text-gray-700 mb-1">Student's
-                        Signature</label>
-                    <input type="file" name="signature" id="signature" accept=".jpg,.jpeg,.png"
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
 
                 <!-- Declaration Section -->
-                <div class="border border-gray-300 rounded-lg p-6 bg-blue-50 mt-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">I hereby declare that:</h3>
-                    <div class="space-y-3">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-8 h-8 bg-gray-900 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">4</div>
+                        <h3 class="text-xl font-semibold text-gray-900">Declaration</h3>
+                    </div>
+                    
+                    <div class="space-y-4">
                         <div class="flex items-start">
                             <input type="checkbox" id="declaration_info_correct" name="declaration_info_correct" required
-                                class="mr-3 mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                            <label for="declaration_info_correct" class="text-sm text-gray-700">All the information
-                                provided above is correct</label>
+                                class="mr-4 mt-1 h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded">
+                            <label for="declaration_info_correct" class="text-sm text-gray-700 leading-relaxed">All the information provided above is correct and complete to the best of my knowledge.</label>
                         </div>
                         <div class="flex items-start">
                             <input type="checkbox" id="declaration_will_stay" name="declaration_will_stay" required
-                                class="mr-3 mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                            <label for="declaration_will_stay" class="text-sm text-gray-700">I will occupy any type of
-                                seat allocated to me in the hall</label>
+                                class="mr-4 mt-1 h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded">
+                            <label for="declaration_will_stay" class="text-sm text-gray-700 leading-relaxed">I will occupy any type of seat allocated to me in the hall and abide by all hall rules and regulations.</label>
                         </div>
                         <div class="flex items-start">
                             <input type="checkbox" id="declaration_seven_days" name="declaration_seven_days" required
-                                class="mr-3 mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                            <label for="declaration_seven_days" class="text-sm text-gray-700">If I do not occupy the hall
-                                within seven days of seat allocation, I will never apply for a seat again</label>
+                                class="mr-4 mt-1 h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded">
+                            <label for="declaration_seven_days" class="text-sm text-gray-700 leading-relaxed">If I do not occupy the hall within seven days of seat allocation, I understand that my application will be cancelled.</label>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Application Date</label>
+                                <p class="text-sm text-gray-600">{{ date('d M Y') }}</p>
+                            </div>
+                            <input type="hidden" name="application_date" value="{{ date('Y-m-d') }}">
                         </div>
                     </div>
                 </div>
 
-                <div class="border border-gray-300 rounded-lg p-6 mt-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                    <p class="py-2 px-3 border border-gray-300 rounded-md bg-gray-100 text-gray-700 select-none">
-                        {{ old('application_date', date('Y-m-d')) }}
-                    </p>
-                    <input type="hidden" name="application_date" value="{{ old('application_date', date('Y-m-d')) }}">
-                </div>
-
-
                 <!-- Submit Button -->
-                <div class="text-center pt-6">
+                <div class="text-center">
                     <button type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition duration-200 shadow-md">
+                        class="bg-gray-900 hover:bg-gray-800 text-white font-semibold py-4 px-12 rounded-lg transition duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                         Submit Application
                     </button>
                 </div>

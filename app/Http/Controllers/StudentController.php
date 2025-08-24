@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Log;
 
 class StudentController extends Controller
 {
-
-
     public function profile()
     {
         $student = Auth::guard('student')->user();
@@ -42,6 +40,13 @@ class StudentController extends Controller
         /** @var \App\Models\Student $student */
         $student = Auth::guard('student')->user();
 
+        // Log the incoming request for debugging
+        Log::info('Profile update request received', [
+            'has_profile_image' => $request->hasFile('profile_image'),
+            'files' => $request->allFiles(),
+            'all_data' => $request->except(['password', '_token'])
+        ]);
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'university_id' => 'required|string|max:255|unique:students,university_id,' . $student->student_id . ',student_id',
@@ -54,79 +59,120 @@ class StudentController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
+            Log::error('Profile update validation failed', ['errors' => $validator->errors()]);
+            
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+            
+            return back()->withErrors($validator)->withInput();
         }
 
         $dataToUpdate = $request->except(['profile_image', 'id_card_front', 'id_card_back', 'email', '_token']);
 
         // Handle profile image upload
         if ($request->hasFile('profile_image')) {
-            // Delete old profile image if it exists
-            if ($student->profile_image && Storage::disk('public')->exists($student->profile_image)) {
-                Storage::disk('public')->delete($student->profile_image);
+            Log::info('Processing profile image upload');
+            
+            try {
+                // Delete old profile image if it exists
+                if ($student->profile_image && Storage::disk('public')->exists($student->profile_image)) {
+                    Storage::disk('public')->delete($student->profile_image);
+                    Log::info('Deleted old profile image: ' . $student->profile_image);
+                }
+
+                $file = $request->file('profile_image');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'profile_' . $student->university_id . '_' . time() . '.' . $extension;
+                $path = $file->storeAs('profile_images', $filename, 'public');
+
+                $dataToUpdate['profile_image'] = $path;
+                Log::info('Profile image uploaded successfully: ' . $path);
+            } catch (\Exception $e) {
+                Log::error('Profile image upload failed: ' . $e->getMessage());
+                
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Failed to upload profile image: ' . $e->getMessage()
+                    ], 500);
+                }
+                
+                return back()->withErrors(['profile_image' => 'Failed to upload profile image'])->withInput();
             }
-
-            $file = $request->file('profile_image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'profile_' . $student->university_id . '_' . time() . '.' . $extension;
-            $path = $file->storeAs('profile_images', $filename, 'public');
-
-            $dataToUpdate['profile_image'] = $path;
         }
 
         // Handle ID card front upload
         if ($request->hasFile('id_card_front')) {
-            // Delete old ID card front if it exists
-            if ($student->id_card_front && Storage::disk('public')->exists($student->id_card_front)) {
-                Storage::disk('public')->delete($student->id_card_front);
+            Log::info('Processing ID card front upload');
+            
+            try {
+                // Delete old ID card front if it exists
+                if ($student->id_card_front && Storage::disk('public')->exists($student->id_card_front)) {
+                    Storage::disk('public')->delete($student->id_card_front);
+                }
+
+                $file = $request->file('id_card_front');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'id_front_' . $student->university_id . '_' . time() . '.' . $extension;
+                $path = $file->storeAs('id_cards', $filename, 'public');
+
+                $dataToUpdate['id_card_front'] = $path;
+                Log::info('ID card front uploaded successfully: ' . $path);
+            } catch (\Exception $e) {
+                Log::error('ID card front upload failed: ' . $e->getMessage());
             }
-
-            $file = $request->file('id_card_front');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'id_front_' . $student->university_id . '_' . time() . '.' . $extension;
-            $path = $file->storeAs('id_cards', $filename, 'public');
-
-            $dataToUpdate['id_card_front'] = $path;
         }
 
         // Handle ID card back upload
         if ($request->hasFile('id_card_back')) {
-            // Delete old ID card back if it exists
-            if ($student->id_card_back && Storage::disk('public')->exists($student->id_card_back)) {
-                Storage::disk('public')->delete($student->id_card_back);
+            Log::info('Processing ID card back upload');
+            
+            try {
+                // Delete old ID card back if it exists
+                if ($student->id_card_back && Storage::disk('public')->exists($student->id_card_back)) {
+                    Storage::disk('public')->delete($student->id_card_back);
+                }
+
+                $file = $request->file('id_card_back');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'id_back_' . $student->university_id . '_' . time() . '.' . $extension;
+                $path = $file->storeAs('id_cards', $filename, 'public');
+
+                $dataToUpdate['id_card_back'] = $path;
+                Log::info('ID card back uploaded successfully: ' . $path);
+            } catch (\Exception $e) {
+                Log::error('ID card back upload failed: ' . $e->getMessage());
             }
-
-            $file = $request->file('id_card_back');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'id_back_' . $student->university_id . '_' . time() . '.' . $extension;
-            $path = $file->storeAs('id_cards', $filename, 'public');
-
-            $dataToUpdate['id_card_back'] = $path;
         }
 
         try {
+            Log::info('Updating student data', ['data' => $dataToUpdate]);
             $student->update($dataToUpdate);
+            Log::info('Student profile updated successfully');
 
-            // Check if request is AJAX (for backward compatibility)
-            if ($request->ajax()) {
+            // Check if request is AJAX
+            if ($request->ajax() || $request->wantsJson()) {
                 return response()->json([
                     'success' => true,
                     'message' => 'Profile updated successfully!',
-                    'student' => $student->fresh()->load('seatAllotment.seat')
+                    'student' => $student->fresh()
                 ]);
             }
 
             // For regular form submission, redirect with success message
             return redirect()->route('student.profile')->with('success', 'Profile updated successfully!');
         } catch (\Exception $e) {
-            Log::error('Profile update error: ' . $e->getMessage());
+            Log::error('Profile update error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
 
             // Check if request is AJAX
-            if ($request->ajax()) {
+            if ($request->ajax() || $request->wantsJson()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'An error occurred while updating your profile. Please try again.',

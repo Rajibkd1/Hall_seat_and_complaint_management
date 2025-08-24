@@ -164,36 +164,59 @@ class EditProfileManager {
         // Show loading state
         this.saveBtn.classList.add('loading');
         this.saveBtn.disabled = true;
+        const originalHTML = this.saveBtn.innerHTML;
+        this.saveBtn.innerHTML = '<svg class="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Saving...';
         
         try {
             const formData = new FormData(this.form);
+            
+            // Get CSRF token
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || 
+                             document.querySelector('input[name="_token"]')?.value;
             
             const response = await fetch(this.form.action, {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    ...(csrfToken && { 'X-CSRF-TOKEN': csrfToken })
                 }
             });
             
+            const contentType = response.headers.get('content-type');
+            
             if (response.ok) {
-                const result = await response.json();
-                if (result.success) {
+                if (contentType && contentType.includes('application/json')) {
+                    const result = await response.json();
+                    if (result.success) {
+                        this.showNotification('Success', 'Profile updated successfully!', 'success');
+                        // Redirect to profile page after a short delay
+                        setTimeout(() => {
+                            window.location.href = '/student/profile';
+                        }, 1500);
+                    } else {
+                        this.handleValidationErrors(result.errors || {});
+                        this.showNotification('Update Failed', result.message || 'Failed to update profile', 'error');
+                    }
+                } else {
+                    // Handle HTML response (likely a redirect)
                     this.showNotification('Success', 'Profile updated successfully!', 'success');
-                    // Redirect to profile page after a short delay
                     setTimeout(() => {
                         window.location.href = '/student/profile';
                     }, 1500);
-                } else {
-                    this.handleValidationErrors(result.errors || {});
-                    this.showNotification('Update Failed', result.message || 'Failed to update profile', 'error');
                 }
             } else {
-                // Handle non-AJAX response (redirect)
-                if (response.redirected) {
-                    window.location.href = response.url;
+                if (contentType && contentType.includes('application/json')) {
+                    const result = await response.json();
+                    if (result.errors) {
+                        this.handleValidationErrors(result.errors);
+                        this.showNotification('Validation Error', 'Please correct the errors and try again', 'error');
+                    } else {
+                        this.showNotification('Update Failed', result.message || 'Failed to update profile', 'error');
+                    }
                 } else {
-                    throw new Error('Network response was not ok');
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
             }
         } catch (error) {
@@ -202,6 +225,7 @@ class EditProfileManager {
         } finally {
             this.saveBtn.classList.remove('loading');
             this.saveBtn.disabled = false;
+            this.saveBtn.innerHTML = originalHTML;
         }
     }
 
@@ -218,7 +242,7 @@ class EditProfileManager {
             if (field) {
                 field.classList.add('border-red-500');
                 const errorElement = document.createElement('span');
-                errorElement.className = 'error-message';
+                errorElement.className = 'error-message text-red-600 text-sm mt-1 block';
                 errorElement.textContent = errors[fieldName][0];
                 field.parentNode.appendChild(errorElement);
             }
@@ -332,7 +356,7 @@ class EditProfileManager {
         if (!isValid) {
             field.classList.add('border-red-500');
             const errorElement = document.createElement('span');
-            errorElement.className = 'error-message';
+            errorElement.className = 'error-message text-red-600 text-sm mt-1 block';
             errorElement.textContent = errorMessage;
             field.parentNode.appendChild(errorElement);
         }
@@ -415,32 +439,32 @@ class EditProfileManager {
         }
 
         const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
+        notification.className = `notification ${type} bg-white rounded-lg shadow-lg border p-4 max-w-sm transform transition-all duration-300 translate-x-full opacity-0`;
         
         const icons = {
-            success: `<svg class="notification-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #10b981;">
+            success: `<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                       </svg>`,
-            error: `<svg class="notification-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #ef4444;">
+            error: `<svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>`,
-            warning: `<svg class="notification-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #f59e0b;">
+            warning: `<svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                       </svg>`,
-            info: `<svg class="notification-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #3b82f6;">
+            info: `<svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                    </svg>`
         };
         
         notification.innerHTML = `
-            <div class="notification-content">
+            <div class="flex items-start">
                 ${icons[type]}
-                <div class="notification-text">
-                    <div class="notification-title">${title}</div>
-                    <div>${message}</div>
+                <div class="ml-3 flex-1">
+                    <div class="text-sm font-medium text-gray-900">${title}</div>
+                    <div class="text-sm text-gray-600 mt-1">${message}</div>
                 </div>
-                <button class="notification-close" onclick="this.parentElement.parentElement.remove()">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
+                <button class="ml-4 text-gray-400 hover:text-gray-600" onclick="this.parentElement.parentElement.remove()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
@@ -451,12 +475,12 @@ class EditProfileManager {
         
         // Show notification
         setTimeout(() => {
-            notification.classList.add('show');
+            notification.classList.remove('translate-x-full', 'opacity-0');
         }, 100);
         
         // Auto remove after 5 seconds
         setTimeout(() => {
-            notification.classList.remove('show');
+            notification.classList.add('translate-x-full', 'opacity-0');
             setTimeout(() => {
                 if (notification.parentNode) {
                     notification.remove();

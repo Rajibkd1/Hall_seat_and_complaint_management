@@ -61,6 +61,9 @@
                             action="{{ route('student.profile.update') }}" enctype="multipart/form-data">
                             @csrf
 
+                            <!-- Hidden Profile Image Input -->
+                            <input type="file" id="profileImageUpload" name="profile_image" accept="image/*" class="hidden">
+
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                 <!-- Student Name -->
                                 <div class="space-y-2">
@@ -238,8 +241,6 @@
                                         <span class="text-white text-sm font-medium">Change Photo</span>
                                     </div>
                                 </div>
-                                <input type="file" id="profileImageUpload" name="profile_image" accept="image/*"
-                                    class="hidden">
                                 <p class="mt-2 text-sm text-gray-600">Click to upload new photo</p>
                                 <p class="text-xs text-gray-500">JPG, PNG, GIF up to 2MB</p>
                                 @error('profile_image')
