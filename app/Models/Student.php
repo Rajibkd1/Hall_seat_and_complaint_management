@@ -18,6 +18,8 @@ class Student extends Authenticatable
         'university_id',
         'profile_image',
         'university_id_card_image',
+        'id_card_front',
+        'id_card_back',
         'email',
         'phone',
         'department',
@@ -35,16 +37,66 @@ class Student extends Authenticatable
     protected $hidden = [
         'password_hash',
     ];
+
+    protected $appends = ['profile_image_url'];
+
     // Relationships
     public function seatApplications()
     {
         return $this->hasMany(SeatApplication::class, 'student_id');
     }
-    protected $appends = ['profile_image_url'];
+
+    public function seatAllotment()
+    {
+        return $this->hasOne(SeatAllotment::class, 'student_id');
+    }
+
+    public function currentSeat()
+    {
+        return $this->hasOneThrough(
+            Seat::class,
+            SeatAllotment::class,
+            'student_id',
+            'seat_id',
+            'student_id',
+            'seat_id'
+        );
+    }
+
+    // Accessors
     public function getProfileImageUrlAttribute()
     {
         return $this->profile_image
             ? asset('storage/' . $this->profile_image)
-            : asset('images/default.png');
+            : asset('images/default-avatar.png');
+    }
+
+    public function getIdCardFrontUrlAttribute()
+    {
+        return $this->id_card_front
+            ? asset('storage/' . $this->id_card_front)
+            : null;
+    }
+
+    public function getIdCardBackUrlAttribute()
+    {
+        return $this->id_card_back
+            ? asset('storage/' . $this->id_card_back)
+            : null;
+    }
+
+    // Helper methods
+    public function hasActiveSeat()
+    {
+        return $this->seatAllotment()->exists();
+    }
+
+    public function getSeatDetails()
+    {
+        if ($this->hasActiveSeat()) {
+            $allotment = $this->seatAllotment()->with('seat')->first();
+            return $allotment ? $allotment->seat : null;
+        }
+        return null;
     }
 }

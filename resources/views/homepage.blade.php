@@ -11,151 +11,152 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.4/dist/lenis.css">
-    <link rel="stylesheet" href="{{ asset('css/homepage.css') }}">
-    <script src="https://unpkg.com/lenis@1.3.4/dist/lenis.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/homepage_professional.css') }}">
 </head>
 
-<body class="min-h-screen animated-bg">
+<body class="min-h-screen bg-gray-50">
     <!-- Professional Header -->
-    <header class="bg-white/95 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-gray-200">
+    <header class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
         <nav class="max-w-7xl mx-auto px-4 py-4 sm:px-6">
-            <div class="header-container">
-                <!-- Enhanced Logo -->
-                <div class="logo-section">
-                    <div class="logo-icon">
-                        <i class="fas fa-university text-2xl text-blue-600"></i>
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-university text-white text-lg"></i>
                     </div>
-                    <div class="logo-content">
-                        <span class="logo-text">Institutional Housing</span>
-                        <span class="logo-subtitle">Management System</span>
+                    <div>
+                        <div class="text-lg font-semibold text-gray-900">Institutional Housing</div>
+                        <div class="text-xs text-gray-500 uppercase tracking-wide">Management System</div>
                     </div>
                 </div>
 
                 <!-- Navigation Menu -->
-                <div class="nav-menu hidden lg:flex">
-                    <a href="#services" class="nav-link">Services</a>
-                    <a href="#process" class="nav-link">Process</a>
-                    <a href="#support" class="nav-link">Support</a>
-                    <a href="#contact" class="nav-link">Contact</a>
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="#services"
+                        class="text-gray-600 hover:text-gray-900 font-medium transition-colors">Services</a>
+                    <a href="#process"
+                        class="text-gray-600 hover:text-gray-900 font-medium transition-colors">Process</a>
+                    <a href="#support"
+                        class="text-gray-600 hover:text-gray-900 font-medium transition-colors">Support</a>
+                    <a href="#contact"
+                        class="text-gray-600 hover:text-gray-900 font-medium transition-colors">Contact</a>
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <button class="mobile-menu-btn lg:hidden" id="mobileMenuBtn">
-                    <span class="hamburger-line"></span>
-                    <span class="hamburger-line"></span>
-                    <span class="hamburger-line"></span>
+                <button class="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                    id="mobileMenuBtn">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
                 </button>
 
                 <!-- Auth Buttons -->
-                <div class="auth-buttons">
-                    <a href="{{ route('student.auth', ['form_type' => 'login']) }}" class="header-btn header-login">
-                        <i class="fas fa-sign-in-alt"></i>
-                        <span>Login</span>
+                <div class="hidden lg:flex items-center space-x-3">
+                    <a href="{{ route('student.auth', ['form_type' => 'login']) }}"
+                        class="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium transition-colors">
+                        Login
                     </a>
-                    <a href="{{ route('student.auth', ['form_type' => 'register']) }}" class="header-btn header-signup">
-                        <i class="fas fa-user-plus"></i>
-                        <span>Signup</span>
+                    <a href="{{ route('student.auth', ['form_type' => 'register']) }}"
+                        class="px-6 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 font-medium transition-colors">
+                        Sign Up
                     </a>
                 </div>
             </div>
         </nav>
 
         <!-- Mobile Menu Overlay -->
-        <div class="mobile-menu-overlay hidden" id="mobileMenuOverlay">
-            <div class="mobile-menu-content">
-                <div class="mobile-menu-header">
-                    <div class="mobile-logo">
-                        <i class="fas fa-university text-xl text-blue-600"></i>
-                        <span class="mobile-logo-text">Hall Management</span>
+        <div class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40 hidden" id="mobileMenuOverlay">
+            <div class="fixed inset-y-0 right-0 max-w-xs w-full bg-white shadow-xl">
+                <div class="flex items-center justify-between p-4 border-b border-gray-200">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-gray-900 rounded-md flex items-center justify-center">
+                            <i class="fas fa-university text-white text-sm"></i>
+                        </div>
+                        <span class="font-semibold text-gray-900">Hall Management</span>
                     </div>
-                    <button class="mobile-menu-close" id="mobileMenuClose">
-                        <i class="fas fa-times"></i>
+                    <button class="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                        id="mobileMenuClose">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
                     </button>
                 </div>
-                <nav class="mobile-nav">
-                    <a href="#services" class="mobile-nav-link">Services</a>
-                    <a href="#process" class="mobile-nav-link">Process</a>
-                    <a href="#support" class="mobile-nav-link">Support</a>
-                    <a href="#contact" class="mobile-nav-link">Contact</a>
+                <nav class="p-4 space-y-4">
+                    <a href="#services" class="block py-2 text-gray-700 hover:text-gray-900 font-medium">Services</a>
+                    <a href="#process" class="block py-2 text-gray-700 hover:text-gray-900 font-medium">Process</a>
+                    <a href="#support" class="block py-2 text-gray-700 hover:text-gray-900 font-medium">Support</a>
+                    <a href="#contact" class="block py-2 text-gray-700 hover:text-gray-900 font-medium">Contact</a>
                 </nav>
-                <div class="mobile-auth-buttons">
+                <div class="p-4 border-t border-gray-200 space-y-3">
                     <a href="{{ route('student.auth', ['form_type' => 'login']) }}"
-                        class="mobile-auth-btn mobile-login">
-                        <i class="fas fa-sign-in-alt"></i>
-                        <span>Login</span>
+                        class="block w-full py-2 px-4 text-center text-gray-700 hover:text-gray-900 font-medium border border-gray-300 rounded-md hover:bg-gray-50">
+                        Login
                     </a>
                     <a href="{{ route('student.auth', ['form_type' => 'register']) }}"
-                        class="mobile-auth-btn mobile-signup">
-                        <i class="fas fa-user-plus"></i>
-                        <span>Signup</span>
+                        class="block w-full py-2 px-4 text-center bg-gray-900 text-white rounded-md hover:bg-gray-800 font-medium">
+                        Sign Up
                     </a>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Hall Notices Section - First View -->
-    <section class="notices-section scroll-fade bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        <div class="max-w-7xl mx-auto px-4 py-16 sm:px-6">
+    <!-- Hall Notices Section -->
+    <section class="bg-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center mb-12">
-                <h2 class="section-title">
-                    <span class="text-gradient">Official Announcements</span>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                    Official Announcements
                 </h2>
-                <p class="section-subtitle">
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
                     Stay informed with official notices, policy updates, and important communications from the
                     institutional housing administration
                 </p>
             </div>
 
-            <!-- Enhanced Search Section -->
+            <!-- Search Section -->
             <div class="max-w-2xl mx-auto mb-8">
-                <div class="relative group">
+                <div class="relative">
                     <input type="text" id="searchInput" placeholder="Search notices, events, announcements..."
-                        class="w-full px-6 py-4 bg-white/90 backdrop-blur-md border-2 border-gray-200 rounded-2xl text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 shadow-lg hover:shadow-xl text-base md:text-lg">
-
-                    <!-- Search Icon -->
-                    <div class="absolute right-4 top-1/2 transform -translate-y-1/2 transition-all duration-300">
-                        <svg class="w-6 h-6 text-gray-400 group-focus-within:text-blue-500" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
+                        class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent">
+                    <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </div>
-
-                    <!-- Search Loading Indicator -->
-                    <div id="searchLoader" class="absolute right-4 top-1/2 transform -translate-y-1/2 hidden">
-                        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                    <div id="searchLoader" class="absolute right-3 top-1/2 transform -translate-y-1/2 hidden">
+                        <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-900"></div>
                     </div>
-
-                    <!-- Search Results Count -->
-                    <div id="searchResults" class="absolute left-6 -bottom-8 text-sm text-gray-500 hidden">
+                    <div id="searchResults" class="absolute left-4 -bottom-6 text-sm text-gray-500 hidden">
                         <span id="resultsCount">0</span> results found
                     </div>
                 </div>
             </div>
 
             <!-- Filter Tags -->
-            <div class="flex flex-wrap justify-center gap-3 mb-8">
+            <div class="flex flex-wrap justify-center gap-2 mb-8">
                 <button
-                    class="filter-tag active px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 border border-blue-500 rounded-full text-white text-sm font-semibold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                    class="filter-tag active px-4 py-2 bg-gray-900 text-white rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
                     data-filter="all">
-                    <span class="mr-2">📋</span>All Notices
+                    All Notices
                 </button>
                 <button
-                    class="filter-tag px-6 py-3 bg-white/80 backdrop-blur-md border border-gray-200 rounded-full text-gray-700 text-sm font-semibold hover:bg-white hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                    class="filter-tag px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors"
                     data-filter="announcement">
-                    <span class="mr-2">📢</span>Announcements
+                    Announcements
                 </button>
                 <button
-                    class="filter-tag px-6 py-3 bg-white/80 backdrop-blur-md border border-gray-200 rounded-full text-gray-700 text-sm font-semibold hover:bg-white hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                    class="filter-tag px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors"
                     data-filter="event">
-                    <span class="mr-2">🎉</span>Events
+                    Events
                 </button>
                 <button
-                    class="filter-tag px-6 py-3 bg-white/80 backdrop-blur-md border border-gray-200 rounded-full text-gray-700 text-sm font-semibold hover:bg-white hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                    class="filter-tag px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors"
                     data-filter="deadline">
-                    <span class="mr-2">⏰</span>Deadlines
+                    Deadlines
                 </button>
             </div>
 
@@ -170,26 +171,54 @@
                 @if ($notices->isNotEmpty())
                     <div id="noticesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($notices as $index => $notice)
-                            <div class="notice-card bg-white/90 backdrop-blur-lg rounded-2xl p-6 border border-gray-200/50 cursor-pointer transition-all duration-300 hover:shadow-2xl shadow-lg animate-notice-appear relative group"
-                                style="animation-delay: {{ $index * 0.1 }}s"
+                            <div class="notice-card bg-white rounded-lg p-6 border border-gray-200 cursor-pointer transition-all duration-200 hover:shadow-lg hover:border-gray-300"
                                 data-notice-id="{{ $notice->notice_id }}"
                                 data-notice-type="{{ $notice->notice_type }}"
                                 data-notice-title="{{ strtolower($notice->title) }}"
                                 data-notice-description="{{ strtolower($notice->description) }}">
 
-                                <div class="priority-badge">
-                                    <div
-                                        class="w-10 h-10 notice-priority-{{ $notice->notice_type === 'deadline' ? 'high' : ($notice->notice_type === 'event' ? 'medium' : 'low') }} rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                        {{ $notice->notice_type === 'deadline' ? '⏰' : ($notice->notice_type === 'event' ? '🎉' : '📢') }}
+                                <div class="flex items-start justify-between mb-4">
+                                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        @if ($notice->notice_type === 'deadline')
+                                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        @elseif($notice->notice_type === 'event')
+                                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                                </path>
+                                            </svg>
+                                        @else
+                                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z">
+                                                </path>
+                                            </svg>
+                                        @endif
                                     </div>
+                                    @if ($notice->attachment)
+                                        <div class="w-5 h-5 text-gray-400" title="Has attachment">
+                                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <div class="mb-4">
-                                    <h3
-                                        class="text-xl font-bold text-gray-800 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors duration-300">
-                                        {{ $notice->title }}</h3>
+                                    <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                                        {{ $notice->title }}
+                                    </h3>
                                     <p class="text-gray-600 text-sm line-clamp-3 leading-relaxed">
-                                        {{ Str::limit($notice->description, 150) }}</p>
+                                        {{ Str::limit($notice->description, 150) }}
+                                    </p>
                                 </div>
 
                                 <div class="flex items-center justify-between text-gray-500 text-sm">
@@ -203,21 +232,15 @@
                                             </svg>
                                             {{ $notice->date_posted->format('M d, Y') }}
                                         </span>
-                                        <span
-                                            class="px-3 py-1 bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 rounded-full text-xs font-semibold">
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium">
                                             {{ ucfirst($notice->notice_type) }}
                                         </span>
                                     </div>
-                                    <div class="flex items-center space-x-2">
-                                        @if ($notice->attachment)
-                                            <span class="text-green-600" title="Has attachment">📎</span>
-                                        @endif
-                                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
-                                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 5l7 7-7 7"></path>
-                                        </svg>
-                                    </div>
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7"></path>
+                                    </svg>
                                 </div>
                             </div>
                         @endforeach
@@ -225,8 +248,8 @@
 
                     <div class="text-center mt-12">
                         <a href="{{ route('student.hall-notice') }}"
-                            class="inline-block px-8 py-4 btn-gradient text-white rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                            <span class="relative z-10">📋 View All Notices</span>
+                            class="inline-block px-8 py-3 bg-gray-900 text-white rounded-md font-medium hover:bg-gray-800 transition-colors">
+                            View All Notices
                         </a>
                     </div>
                 @else
@@ -308,45 +331,49 @@
     </div>
 
     <!-- Hero Section -->
-    <section class="hero-section scroll-fade">
-        <div class="max-w-7xl mx-auto px-4 py-20 sm:px-6 lg:py-32">
+    <section class="bg-gray-50 py-20 lg:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center">
-                <h1 class="hero-title">
-                    Official <span class="text-gradient">Institutional Housing</span> Platform
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+                    Official Institutional Housing Platform
                 </h1>
-                <p class="hero-subtitle">
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-10 leading-relaxed">
                     Secure, compliant, and efficient student housing administration system.
                     Manage accommodations, track applications, and resolve concerns through our official institutional
                     platform.
                 </p>
-                <div class="hero-buttons">
-                    <a href="{{ route('student.auth', ['form_type' => 'register']) }}" class="btn-primary">
-                        <i class="fas fa-user-graduate mr-2"></i>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                    <a href="{{ route('student.auth', ['form_type' => 'register']) }}"
+                        class="px-8 py-4 bg-gray-900 text-white rounded-md font-semibold hover:bg-gray-800 transition-colors">
                         Student Portal Access
                     </a>
-                    <a href="#process" class="btn-secondary">
-                        <i class="fas fa-info-circle mr-2"></i>
+                    <a href="#process"
+                        class="px-8 py-4 border border-gray-300 text-gray-700 rounded-md font-semibold hover:bg-gray-50 transition-colors">
                         Learn More
                     </a>
                 </div>
 
-                <!-- Add institutional statistics -->
-                <div class="hero-stats mt-12">
-                    <div class="stat-item">
-                        <div class="stat-number">{{ $statistics['total_students'] ?? 0 }}</div>
-                        <div class="stat-label">Registered Students</div>
+                <!-- Statistics -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-gray-900 mb-2">{{ $statistics['total_students'] ?? 0 }}
+                        </div>
+                        <div class="text-sm text-gray-600 uppercase tracking-wide">Registered Students</div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-number">{{ $statistics['satisfaction_rate'] ?? 0 }}%</div>
-                        <div class="stat-label">Satisfaction Rate</div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-gray-900 mb-2">
+                            {{ $statistics['satisfaction_rate'] ?? 0 }}%</div>
+                        <div class="text-sm text-gray-600 uppercase tracking-wide">Satisfaction Rate</div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-number">{{ $statistics['occupancy_rate'] ?? 0 }}%</div>
-                        <div class="stat-label">Occupancy Rate</div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-gray-900 mb-2">{{ $statistics['occupancy_rate'] ?? 0 }}%
+                        </div>
+                        <div class="text-sm text-gray-600 uppercase tracking-wide">Occupancy Rate</div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-number">{{ $statistics['resolved_complaints'] ?? 0 }}</div>
-                        <div class="stat-label">Issues Resolved</div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-gray-900 mb-2">
+                            {{ $statistics['resolved_complaints'] ?? 0 }}</div>
+                        <div class="text-sm text-gray-600 uppercase tracking-wide">Issues Resolved</div>
                     </div>
                 </div>
             </div>
@@ -354,16 +381,19 @@
     </section>
 
     <!-- Services Section -->
-    <section id="services" class="features-section scroll-fade">
-        <div class="max-w-7xl mx-auto px-4 py-20 sm:px-6">
+    <section id="services" class="bg-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center mb-16">
-                <h2 class="section-title">Institutional Housing Services</h2>
-                <p class="section-subtitle">Comprehensive student accommodation management with institutional standards
-                    and compliance</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                    Institutional Housing Services
+                </h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Comprehensive student accommodation management with institutional standards and compliance
+                </p>
             </div>
 
-            <div class="features-grid">
-                <div class="feature-card scroll-scale" style="--delay: 0.1s">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-building"></i>
                     </div>
@@ -373,13 +403,13 @@
                         policies, and compliance with institutional regulations.
                     </p>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check"></i> Policy-compliant allocation</li>
-                        <li><i class="fas fa-check"></i> Fair distribution system</li>
-                        <li><i class="fas fa-check"></i> Institutional standards</li>
+                        <li><i class="fas fa-check-circle"></i> Policy-compliant allocation</li>
+                        <li><i class="fas fa-check-circle"></i> Fair distribution system</li>
+                        <li><i class="fas fa-check-circle"></i> Institutional standards</li>
                     </ul>
                 </div>
 
-                <div class="feature-card scroll-scale" style="--delay: 0.2s">
+                <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-clipboard-list"></i>
                     </div>
@@ -389,13 +419,13 @@
                         regular status updates for all applicants.
                     </p>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check"></i> Transparent process</li>
-                        <li><i class="fas fa-check"></i> Institutional oversight</li>
-                        <li><i class="fas fa-check"></i> Regular updates</li>
+                        <li><i class="fas fa-check-circle"></i> Transparent process</li>
+                        <li><i class="fas fa-check-circle"></i> Institutional oversight</li>
+                        <li><i class="fas fa-check-circle"></i> Regular updates</li>
                     </ul>
                 </div>
 
-                <div class="feature-card scroll-scale" style="--delay: 0.3s">
+                <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-balance-scale"></i>
                     </div>
@@ -405,13 +435,13 @@
                         documented resolution processes for student concerns.
                     </p>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check"></i> Formal procedures</li>
-                        <li><i class="fas fa-check"></i> Escalation protocols</li>
-                        <li><i class="fas fa-check"></i> Documented outcomes</li>
+                        <li><i class="fas fa-check-circle"></i> Formal procedures</li>
+                        <li><i class="fas fa-check-circle"></i> Escalation protocols</li>
+                        <li><i class="fas fa-check-circle"></i> Documented outcomes</li>
                     </ul>
                 </div>
 
-                <div class="feature-card scroll-scale" style="--delay: 0.4s">
+                <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-certificate"></i>
                     </div>
@@ -421,9 +451,9 @@
                         institution standards and regulations.
                     </p>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check"></i> Regulatory compliance</li>
-                        <li><i class="fas fa-check"></i> Data protection</li>
-                        <li><i class="fas fa-check"></i> Institutional standards</li>
+                        <li><i class="fas fa-check-circle"></i> Regulatory compliance</li>
+                        <li><i class="fas fa-check-circle"></i> Data protection</li>
+                        <li><i class="fas fa-check-circle"></i> Institutional standards</li>
                     </ul>
                 </div>
             </div>
@@ -431,15 +461,19 @@
     </section>
 
     <!-- Process Section -->
-    <section id="process" class="how-it-works-section scroll-fade">
-        <div class="max-w-7xl mx-auto px-4 py-20 sm:px-6">
+    <section id="process" class="bg-gray-50 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center mb-16">
-                <h2 class="section-title">Institutional Process</h2>
-                <p class="section-subtitle">Official procedures for student housing application and management</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                    Institutional Process
+                </h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Official procedures for student housing application and management
+                </p>
             </div>
 
-            <div class="process-timeline">
-                <div class="process-step scroll-slide-left" style="--delay: 0.1s">
+            <div class="space-y-8">
+                <div class="process-step">
                     <div class="step-number">1</div>
                     <div class="step-content">
                         <h3 class="step-title">Student Registration</h3>
@@ -452,7 +486,7 @@
                     </div>
                 </div>
 
-                <div class="process-step scroll-slide-right" style="--delay: 0.2s">
+                <div class="process-step">
                     <div class="step-number">2</div>
                     <div class="step-content">
                         <h3 class="step-title">Formal Application</h3>
@@ -465,7 +499,7 @@
                     </div>
                 </div>
 
-                <div class="process-step scroll-slide-left" style="--delay: 0.3s">
+                <div class="process-step">
                     <div class="step-number">3</div>
                     <div class="step-content">
                         <h3 class="step-title">Review Process</h3>
@@ -478,7 +512,7 @@
                     </div>
                 </div>
 
-                <div class="process-step scroll-slide-right" style="--delay: 0.4s">
+                <div class="process-step">
                     <div class="step-number">4</div>
                     <div class="step-content">
                         <h3 class="step-title">Official Allocation</h3>
@@ -497,16 +531,19 @@
 
 
     <!-- Support Section -->
-    <section id="support" class="faq-section scroll-fade">
-        <div class="max-w-7xl mx-auto px-4 py-20 sm:px-6">
+    <section id="support" class="bg-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center mb-16">
-                <h2 class="section-title">Student Support & Information</h2>
-                <p class="section-subtitle">Essential information and answers to common inquiries about institutional
-                    housing services</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                    Student Support & Information
+                </h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Essential information and answers to common inquiries about institutional housing services
+                </p>
             </div>
 
-            <div class="faq-container">
-                <div class="faq-item scroll-scale" style="--delay: 0.1s">
+            <div class="max-w-4xl mx-auto space-y-4">
+                <div class="faq-item">
                     <button class="faq-question">
                         <span>What are the eligibility requirements for institutional housing?</span>
                         <i class="fas fa-chevron-down"></i>
@@ -518,7 +555,7 @@
                     </div>
                 </div>
 
-                <div class="faq-item scroll-scale" style="--delay: 0.2s">
+                <div class="faq-item">
                     <button class="faq-question">
                         <span>What official documentation is required for housing applications?</span>
                         <i class="fas fa-chevron-down"></i>
@@ -530,7 +567,7 @@
                     </div>
                 </div>
 
-                <div class="faq-item scroll-scale" style="--delay: 0.3s">
+                <div class="faq-item">
                     <button class="faq-question">
                         <span>What is the official processing timeline for housing applications?</span>
                         <i class="fas fa-chevron-down"></i>
@@ -542,7 +579,7 @@
                     </div>
                 </div>
 
-                <div class="faq-item scroll-scale" style="--delay: 0.4s">
+                <div class="faq-item">
                     <button class="faq-question">
                         <span>How does the institutional grievance process work?</span>
                         <i class="fas fa-chevron-down"></i>
@@ -554,7 +591,7 @@
                     </div>
                 </div>
 
-                <div class="faq-item scroll-scale" style="--delay: 0.5s">
+                <div class="faq-item">
                     <button class="faq-question">
                         <span>How is student data protected and secured?</span>
                         <i class="fas fa-chevron-down"></i>
@@ -566,7 +603,7 @@
                     </div>
                 </div>
 
-                <div class="faq-item scroll-scale" style="--delay: 0.6s">
+                <div class="faq-item">
                     <button class="faq-question">
                         <span>What support is available for students with special accommodation needs?</span>
                         <i class="fas fa-chevron-down"></i>
@@ -582,16 +619,19 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="contact-section scroll-fade">
-        <div class="max-w-7xl mx-auto px-4 py-20 sm:px-6">
+    <section id="contact" class="bg-gray-50 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center mb-16">
-                <h2 class="section-title">Official Contact Information</h2>
-                <p class="section-subtitle">Connect with institutional housing administration for official inquiries
-                    and support</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                    Official Contact Information
+                </h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Connect with institutional housing administration for official inquiries and support
+                </p>
             </div>
 
-            <div class="contact-grid">
-                <div class="contact-info scroll-slide-left" style="--delay: 0.1s">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="contact-info">
                     <h3 class="contact-title">Institutional Housing Office</h3>
                     <p class="contact-description">Official contact channels for institutional housing services,
                         applications, and student support inquiries.
@@ -599,7 +639,7 @@
 
                     <div class="contact-methods">
                         <div class="contact-method">
-                            <i class="fas fa-envelope text-blue-600"></i>
+                            <i class="fas fa-envelope text-gray-600"></i>
                             <div>
                                 <div class="method-label">Official Email</div>
                                 <div class="method-value">housing@institution.edu</div>
@@ -607,7 +647,7 @@
                         </div>
 
                         <div class="contact-method">
-                            <i class="fas fa-phone text-green-600"></i>
+                            <i class="fas fa-phone text-gray-600"></i>
                             <div>
                                 <div class="method-label">Administrative Office</div>
                                 <div class="method-value">+1 (555) 123-4567</div>
@@ -615,7 +655,7 @@
                         </div>
 
                         <div class="contact-method">
-                            <i class="fas fa-clock text-purple-600"></i>
+                            <i class="fas fa-clock text-gray-600"></i>
                             <div>
                                 <div class="method-label">Office Hours</div>
                                 <div class="method-value">Mon-Fri: 8:00 AM - 5:00 PM</div>
@@ -623,7 +663,7 @@
                         </div>
 
                         <div class="contact-method">
-                            <i class="fas fa-map-marker-alt text-orange-600"></i>
+                            <i class="fas fa-map-marker-alt text-gray-600"></i>
                             <div>
                                 <div class="method-label">Physical Address</div>
                                 <div class="method-value">Student Housing Administration, Building A, Room 205</div>
@@ -632,7 +672,7 @@
                     </div>
                 </div>
 
-                <div class="contact-form scroll-slide-right" style="--delay: 0.2s">
+                <div class="contact-form">
                     <h3 class="contact-title">Official Inquiry Form</h3>
                     <form class="contact-form-container">
                         <div class="form-group">
@@ -674,17 +714,21 @@
     </section>
 
     <!-- Enhanced Quick Access Section -->
-    <section class="quick-access-section scroll-fade">
-        <div class="max-w-7xl mx-auto px-4 py-20 sm:px-6">
+    <section class="bg-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center mb-16">
-                <h2 class="section-title">Access Institutional Services</h2>
-                <p class="section-subtitle">Official student housing services and administrative support</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                    Access Institutional Services
+                </h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Official student housing services and administrative support
+                </p>
             </div>
 
-            <div class="quick-access-container">
-                <div class="quick-access-card scroll-scale" style="--delay: 0.1s">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="quick-access-card">
                     <div class="quick-access-icon">
-                        <i class="fas fa-university text-blue-600"></i>
+                        <i class="fas fa-university text-gray-600"></i>
                     </div>
                     <h4 class="quick-access-title">Housing Application</h4>
                     <p class="quick-access-description">Submit official housing application with required institutional
@@ -694,9 +738,9 @@
                     </a>
                 </div>
 
-                <div class="quick-access-card scroll-scale" style="--delay: 0.2s">
+                <div class="quick-access-card">
                     <div class="quick-access-icon">
-                        <i class="fas fa-clipboard-check text-green-600"></i>
+                        <i class="fas fa-clipboard-check text-gray-600"></i>
                     </div>
                     <h4 class="quick-access-title">Application Status</h4>
                     <p class="quick-access-description">Monitor official application status and receive institutional
@@ -706,9 +750,9 @@
                     </a>
                 </div>
 
-                <div class="quick-access-card scroll-scale" style="--delay: 0.3s">
+                <div class="quick-access-card">
                     <div class="quick-access-icon">
-                        <i class="fas fa-info-circle text-purple-600"></i>
+                        <i class="fas fa-info-circle text-gray-600"></i>
                     </div>
                     <h4 class="quick-access-title">Administrative Support</h4>
                     <p class="quick-access-description">Access institutional housing administration for official
@@ -722,12 +766,12 @@
     </section>
 
     <!-- Professional Footer -->
-    <footer class="footer-section">
+    <footer class="bg-gray-900 text-white">
         <div class="max-w-7xl mx-auto px-4 py-16 sm:px-6">
-            <div class="footer-content">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div class="footer-brand">
                     <div class="footer-logo">
-                        <i class="fas fa-university text-2xl text-blue-600"></i>
+                        <i class="fas fa-university text-2xl text-gray-300"></i>
                         <div>
                             <div class="footer-logo-text">Institutional Housing</div>
                             <div class="footer-logo-subtitle">Official Student Administration</div>
@@ -739,29 +783,27 @@
                     </p>
                 </div>
 
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4 class="footer-heading">Services</h4>
-                        <a href="#services" class="footer-link">Housing Services</a>
-                        <a href="#process" class="footer-link">Application Process</a>
-                        <a href="#support" class="footer-link">Student Support</a>
-                    </div>
+                <div class="footer-column">
+                    <h4 class="footer-heading">Services</h4>
+                    <a href="#services" class="footer-link">Housing Services</a>
+                    <a href="#process" class="footer-link">Application Process</a>
+                    <a href="#support" class="footer-link">Student Support</a>
+                </div>
 
-                    <div class="footer-column">
-                        <h4 class="footer-heading">Administration</h4>
-                        <a href="#contact" class="footer-link">Contact Administration</a>
-                        <a href="#" class="footer-link">Policies & Procedures</a>
-                        <a href="#" class="footer-link">Privacy Policy</a>
-                        <a href="#" class="footer-link">Terms of Service</a>
-                    </div>
+                <div class="footer-column">
+                    <h4 class="footer-heading">Administration</h4>
+                    <a href="#contact" class="footer-link">Contact Administration</a>
+                    <a href="#" class="footer-link">Policies & Procedures</a>
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                </div>
 
-                    <div class="footer-column">
-                        <h4 class="footer-heading">Institution</h4>
-                        <a href="#" class="footer-link">About Institution</a>
-                        <a href="#" class="footer-link">Academic Calendar</a>
-                        <a href="#" class="footer-link">Student Resources</a>
-                        <a href="#" class="footer-link">Campus Directory</a>
-                    </div>
+                <div class="footer-column">
+                    <h4 class="footer-heading">Institution</h4>
+                    <a href="#" class="footer-link">About Institution</a>
+                    <a href="#" class="footer-link">Academic Calendar</a>
+                    <a href="#" class="footer-link">Student Resources</a>
+                    <a href="#" class="footer-link">Campus Directory</a>
                 </div>
             </div>
 

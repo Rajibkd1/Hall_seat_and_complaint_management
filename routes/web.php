@@ -74,7 +74,9 @@ Route::post('/super-admin/verify-otp', [SuperAdminAuthController::class, 'verify
 Route::middleware('student-auth')->group(function () {
     Route::get('/student/dashboard', [StudentAuthController::class, 'dashboard'])->name('student.dashboard');
     Route::get('/student/profile', [\App\Http\Controllers\StudentController::class, 'profile'])->name('student.profile');
+    Route::get('/student/profile/edit', [\App\Http\Controllers\StudentController::class, 'editProfile'])->name('student.profile.edit');
     Route::post('/student/profile', [\App\Http\Controllers\StudentController::class, 'update'])->name('student.profile.update');
+    Route::post('/student/upload-id-card', [\App\Http\Controllers\StudentController::class, 'uploadIdCard'])->name('student.upload.id_card');
     Route::post('/student/logout', [StudentAuthController::class, 'logout'])->name('student.logout');
     // Complaint List
     Route::get('/complaint_list', [StudentComplaintController::class, 'complaintList'])->name('student.complaint_list');

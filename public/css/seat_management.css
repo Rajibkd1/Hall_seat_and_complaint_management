@@ -1,6 +1,6 @@
-/* Elegant Seat Management Styles */
+/* Professional Seat Management Styles */
 
-/* Subtle Animations */
+/* Basic Animations */
 @keyframes fade-in {
     from {
         opacity: 0;
@@ -23,29 +23,98 @@
     }
 }
 
-@keyframes shimmer {
+@keyframes spin {
     0% {
-        background-position: -200px 0;
+        transform: rotate(0deg);
     }
     100% {
-        background-position: calc(200px + 100%) 0;
+        transform: rotate(360deg);
     }
 }
 
-/* Apply animations */
+/* Apply basic animations */
 .animate-fade-in {
-    animation: fade-in 0.4s ease-out;
+    animation: fade-in 0.3s ease-out;
 }
 
 .animate-scale-in {
     animation: scale-in 0.2s ease-out;
 }
 
-/* Room Cards */
-.room-card {
+/* Pie Chart Styles */
+.pie-chart {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    position: relative;
+    display: inline-block;
+    margin: 0 auto;
+}
+
+.pie-chart::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(
+        #10b981 0deg var(--available-angle),
+        #1f2937 var(--available-angle) var(--occupied-angle),
+        #f59e0b var(--occupied-angle) 360deg
+    );
+}
+
+.pie-chart::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
     background: white;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.pie-chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 4px;
+    font-size: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.legend-color {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.legend-available {
+    background-color: #10b981;
+}
+
+.legend-occupied {
+    background-color: #1f2937;
+}
+
+.legend-maintenance {
+    background-color: #f59e0b;
+}
+
+/* Professional Room Cards */
+.room-card {
+    background: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border: 1px solid #e5e7eb;
     padding: 1.5rem;
     cursor: pointer;
@@ -54,8 +123,8 @@
 }
 
 .room-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
     border-color: #d1d5db;
 }
 
@@ -64,7 +133,7 @@
 }
 
 .room-box {
-    background: white;
+    background: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     padding: 1.5rem;
@@ -74,18 +143,18 @@
 
 .room-box:hover {
     border-color: #9ca3af;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Seat Buttons */
+/* Professional Seat Buttons */
 .seat-btn {
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 8px;
-    font-weight: 500;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 6px;
+    font-weight: 600;
     font-size: 0.875rem;
     transition: all 0.2s ease;
-    border: 1px solid;
+    border: 2px solid;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -98,48 +167,49 @@
 }
 
 .seat-box {
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 8px;
-    font-weight: 500;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 6px;
+    font-weight: 600;
     font-size: 0.875rem;
     transition: all 0.2s ease;
-    border: 1px solid;
+    border: 2px solid;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    position: relative;
 }
 
-/* Seat Status Styles */
+/* Clean Seat Status Styles */
 .seat-available,
 .seat-item[data-status="vacant"] .seat-box,
 .seat-box.available {
-    background: white;
-    border-color: #d1d5db;
-    color: #374151;
+    background: #ffffff;
+    border-color: #10b981;
+    color: #065f46;
 }
 
 .seat-available:hover,
 .seat-item[data-status="vacant"] .seat-box:hover,
 .seat-box.available:hover {
-    background: #f9fafb;
-    border-color: #9ca3af;
+    background: #f0fdf4;
+    border-color: #059669;
 }
 
 .seat-occupied,
 .seat-item[data-status="occupied"] .seat-box,
 .seat-box.occupied {
-    background: #10b981;
-    border-color: #10b981;
-    color: white;
+    background: #1f2937;
+    border-color: #1f2937;
+    color: #ffffff;
 }
 
 .seat-occupied:hover,
 .seat-item[data-status="occupied"] .seat-box:hover,
 .seat-box.occupied:hover {
-    background: #059669;
-    border-color: #059669;
+    background: #374151;
+    border-color: #374151;
 }
 
 .seat-maintenance,
@@ -147,7 +217,7 @@
 .seat-box.maintenance {
     background: #f59e0b;
     border-color: #f59e0b;
-    color: white;
+    color: #ffffff;
 }
 
 .seat-maintenance:hover,
@@ -169,7 +239,7 @@
 #seatModal .bg-white,
 #assignmentModal .bg-white {
     background: white;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     animation: scale-in 0.2s ease-out;
 }
 
@@ -178,7 +248,7 @@
     background: #3b82f6;
     color: white;
     padding: 0.75rem 1.5rem;
-    border-radius: 8px;
+    border-radius: 6px;
     font-weight: 500;
     transition: all 0.2s ease;
     border: none;
@@ -198,7 +268,7 @@
     background: #6b7280;
     color: white;
     padding: 0.5rem 1rem;
-    border-radius: 8px;
+    border-radius: 6px;
     font-weight: 500;
     transition: all 0.2s ease;
     border: none;
@@ -213,7 +283,7 @@
     background: #10b981;
     color: white;
     padding: 0.75rem 1.5rem;
-    border-radius: 8px;
+    border-radius: 6px;
     font-weight: 500;
     transition: all 0.2s ease;
     border: none;
@@ -267,13 +337,13 @@
 }
 
 .status-available {
-    background: #dbeafe;
-    color: #1e40af;
+    background: #dcfce7;
+    color: #166534;
 }
 
 .status-occupied {
-    background: #d1fae5;
-    color: #065f46;
+    background: #f3f4f6;
+    color: #374151;
 }
 
 .status-maintenance {
@@ -285,7 +355,7 @@
 .form-select {
     padding: 0.5rem 1rem;
     border: 1px solid #d1d5db;
-    border-radius: 8px;
+    border-radius: 6px;
     background: white;
     transition: all 0.2s ease;
 }
@@ -299,7 +369,7 @@
 .form-input {
     padding: 0.5rem 1rem;
     border: 1px solid #d1d5db;
-    border-radius: 8px;
+    border-radius: 6px;
     background: white;
     transition: all 0.2s ease;
 }
@@ -316,8 +386,8 @@
     top: 1rem;
     right: 1rem;
     padding: 1rem 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 50;
     transform: translateX(100%);
     transition: transform 0.3s ease;
@@ -343,12 +413,6 @@
 }
 
 /* Loading States */
-.loading-shimmer {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200px 100%;
-    animation: shimmer 1.5s infinite;
-}
-
 .loading-spinner {
     display: inline-block;
     width: 1.25rem;
@@ -359,89 +423,23 @@
     animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-}
-
-.animate-float {
-    animation: float 3s ease-in-out infinite;
-}
-
-/* Enhanced seat animations */
-@keyframes seatPulse {
-    0%, 100% { 
-        transform: scale(1);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    50% { 
-        transform: scale(1.05);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    }
-}
-
-@keyframes elegantGlow {
-    0%, 100% { 
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    50% { 
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
-    }
-}
-
-.seat-item:hover .seat-box {
-    animation: seatPulse 2s ease-in-out infinite;
-}
-
-.seat-container {
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.seat-icon {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.bed-label {
-    transition: all 0.3s ease-in-out;
-    letter-spacing: 0.05em;
-}
-
-.seat-status {
-    transition: all 0.3s ease-in-out;
-    font-weight: 600;
-}
-
-/* Enhanced room card animations */
-.room-item:hover .room-box {
-    animation: elegantGlow 2s ease-in-out infinite;
-}
-
-/* Sophisticated hover effects */
+/* Hover effects */
 .seat-item:hover {
-    transform: translateY(-5px) scale(1.05);
+    transform: translateY(-2px);
 }
 
 .room-item:hover {
-    transform: translateY(-3px) scale(1.02);
+    transform: translateY(-1px);
 }
 
-/* Enhanced status cards */
+/* Status cards */
 .status-card {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
 }
 
 .status-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Responsive Design */
@@ -460,6 +458,16 @@
     #seatContainer {
         grid-template-columns: repeat(4, 1fr);
     }
+    
+    .pie-chart {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .pie-chart::after {
+        width: 15px;
+        height: 15px;
+    }
 }
 
 @media (max-width: 640px) {
@@ -469,15 +477,6 @@
         height: 2.5rem;
         font-size: 0.625rem;
     }
-}
-
-/* Subtle hover effects */
-.hover-lift:hover {
-    transform: translateY(-1px);
-}
-
-.hover-shadow:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Grid layouts */
@@ -494,7 +493,7 @@
 
 /* Seat Details Card */
 .seat-details-card {
-    border-radius: 8px;
+    border-radius: 6px;
     padding: 1rem;
     margin-bottom: 1rem;
     border: 1px solid #e5e7eb;
@@ -502,7 +501,7 @@
 }
 
 .seat-details-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .student-info {
@@ -534,400 +533,16 @@
     }
 }
 
-/* Enhanced Beautiful Animations and Effects */
-
-/* Advanced floating animation */
-@keyframes advancedFloat {
-    0%, 100% {
-        transform: translateY(0px) rotate(0deg);
+/* Float animation for interactive elements */
+@keyframes float {
+    0%, 100% { 
+        transform: translateY(0px); 
     }
-    33% {
-        transform: translateY(-15px) rotate(1deg);
-    }
-    66% {
-        transform: translateY(-5px) rotate(-1deg);
+    50% { 
+        transform: translateY(-5px); 
     }
 }
 
-/* Sophisticated shimmer effect */
-@keyframes luxuryShimmer {
-    0% {
-        background-position: -200% 0;
-    }
-    100% {
-        background-position: 200% 0;
-    }
-}
-
-/* Elegant slide in animation */
-@keyframes slideInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-/* Bounce in animation */
-@keyframes bounceIn {
-    0% {
-        opacity: 0;
-        transform: scale(0.3) rotate(-10deg);
-    }
-    50% {
-        opacity: 1;
-        transform: scale(1.05) rotate(2deg);
-    }
-    70% {
-        transform: scale(0.98) rotate(-1deg);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1) rotate(0deg);
-    }
-}
-
-/* Enhanced glow effect */
-@keyframes luxuryGlow {
-    0%, 100% {
-        box-shadow: 0 0 30px rgba(71, 85, 105, 0.4), 0 0 60px rgba(71, 85, 105, 0.2);
-    }
-    50% {
-        box-shadow: 0 0 40px rgba(71, 85, 105, 0.6), 0 0 80px rgba(71, 85, 105, 0.3);
-    }
-}
-
-/* Apply enhanced animations */
-.animate-advanced-float {
-    animation: advancedFloat 8s ease-in-out infinite;
-}
-
-.animate-slide-up {
-    animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.animate-bounce-in {
-    animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-/* Enhanced seat styling with luxury effects */
-.seat-box-enhanced {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-}
-
-.seat-box-enhanced::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-    transition: left 0.6s ease;
-}
-
-.seat-box-enhanced:hover::before {
-    left: 100%;
-}
-
-.seat-box-enhanced::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(71, 85, 105, 0.05) 0%, rgba(148, 163, 184, 0.05) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.seat-box-enhanced:hover::after {
-    opacity: 1;
-}
-
-.seat-box-enhanced:hover {
-    transform: translateY(-6px) scale(1.03);
-    box-shadow: 
-        0 25px 50px -12px rgba(0, 0, 0, 0.15),
-        0 0 0 1px rgba(255, 255, 255, 0.1),
-        0 0 20px rgba(71, 85, 105, 0.1);
-}
-
-/* Room card luxury enhancements */
-.room-card-luxury {
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%);
-}
-
-.room-card-luxury::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-    transform: rotate(45deg);
-    transition: transform 0.6s ease;
-    opacity: 0;
-}
-
-.room-card-luxury:hover::before {
-    transform: rotate(45deg) translate(50%, 50%);
-    opacity: 1;
-}
-
-.room-card-luxury::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(71, 85, 105, 0.08) 0%, rgba(148, 163, 184, 0.08) 100%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-
-.room-card-luxury:hover::after {
-    opacity: 1;
-}
-
-.room-card-luxury:hover {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow: 
-        0 35px 60px -12px rgba(0, 0, 0, 0.2),
-        0 0 0 1px rgba(255, 255, 255, 0.1),
-        0 0 40px rgba(71, 85, 105, 0.15);
-}
-
-/* Enhanced loading spinner */
-.loading-spinner-luxury {
-    width: 50px;
-    height: 50px;
-    border: 5px solid rgba(71, 85, 105, 0.1);
-    border-left-color: #475569;
-    border-top-color: #64748b;
-    border-radius: 50%;
-    animation: spin 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    position: relative;
-}
-
-.loading-spinner-luxury::after {
-    content: '';
-    position: absolute;
-    inset: 8px;
-    border: 2px solid transparent;
-    border-left-color: rgba(71, 85, 105, 0.3);
-    border-radius: 50%;
-    animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite reverse;
-}
-
-/* Status card luxury effects */
-.status-card-luxury {
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.status-card-luxury::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.8s ease;
-}
-
-.status-card-luxury:hover::before {
-    left: 100%;
-}
-
-.status-card-luxury:hover {
-    animation: luxuryGlow 3s ease-in-out infinite;
-    box-shadow: 0 0 30px rgba(71, 85, 105, 0.2);
-}
-
-/* Enhanced form elements */
-.form-select-luxury {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right 0.75rem center;
-    background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
-    padding-right: 3rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.form-select-luxury:hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    transform: translateY(-1px);
-}
-
-.form-select-luxury:focus {
-    box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.1), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    transform: translateY(-1px);
-}
-
-/* Elegant hover effects with shimmer */
-.elegant-hover-luxury {
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(90deg, #f8fafc 25%, #ffffff 50%, #f8fafc 75%);
-    background-size: 200% 100%;
-}
-
-.elegant-hover-luxury:hover {
-    animation: luxuryShimmer 2s ease-in-out infinite;
-}
-
-/* Button luxury enhancements */
-.btn-luxury {
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, #475569 0%, #334155 100%);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn-luxury::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.6s ease;
-}
-
-.btn-luxury:hover::before {
-    left: 100%;
-}
-
-.btn-luxury:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-}
-
-/* Card luxury enhancements */
-.card-luxury {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.card-luxury:hover {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.98) 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-}
-
-/* Text gradient effects */
-.text-gradient-luxury {
-    background: linear-gradient(135deg, #475569 0%, #334155 50%, #1e293b 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* Icon animations */
-.icon-float-luxury {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.icon-float-luxury:hover {
-    transform: translateY(-2px) rotate(5deg);
-}
-
-/* Enhanced shadow effects */
-.shadow-luxury {
-    box-shadow: 
-        0 25px 50px -12px rgba(0, 0, 0, 0.25),
-        0 0 0 1px rgba(255, 255, 255, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.shadow-luxury-hover:hover {
-    box-shadow: 
-        0 35px 60px -12px rgba(0, 0, 0, 0.3),
-        0 0 0 1px rgba(255, 255, 255, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        0 0 40px rgba(71, 85, 105, 0.15);
-}
-
-/* Backdrop blur effects */
-.backdrop-blur-luxury {
-    backdrop-filter: blur(25px) saturate(200%) brightness(110%);
-    -webkit-backdrop-filter: blur(25px) saturate(200%) brightness(110%);
-}
-
-/* Enhanced responsive design */
-@media (max-width: 768px) {
-    .animate-advanced-float {
-        animation-duration: 10s;
-    }
-    
-    .room-card-luxury:hover,
-    .seat-box-enhanced:hover {
-        transform: scale(1.02);
-    }
-}
-
-/* Dark mode luxury support */
-@media (prefers-color-scheme: dark) {
-    .seat-box-enhanced,
-    .room-card-luxury {
-        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    }
-    
-    .card-luxury {
-        background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-}
-
-/* Pulse animation for interactive elements */
-@keyframes luxuryPulse {
-    0%, 100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    50% {
-        transform: scale(1.05);
-        opacity: 0.8;
-    }
-}
-
-.pulse-luxury {
-    animation: luxuryPulse 2s ease-in-out infinite;
-}
-
-/* Sophisticated transitions */
-.transition-luxury {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.transition-luxury-slow {
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Enhanced focus states */
-.focus-luxury:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.2);
-    animation: luxuryGlow 2s ease-in-out infinite;
-}
-
-/* Gradient backgrounds */
-.bg-gradient-luxury {
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f8fafc 100%);
-}
-
-.bg-gradient-luxury-dark {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e293b 100%);
+.animate-float {
+    animation: float 2s ease-in-out infinite;
 }
