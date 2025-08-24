@@ -427,23 +427,13 @@
             // Close modal events
             if (closeBtn) {
                 closeBtn.addEventListener('click', function() {
-                    modal.classList.add('opacity-0');
-                    modal.querySelector('.bg-white').classList.remove('scale-100');
-                    modal.querySelector('.bg-white').classList.add('scale-95');
-                    setTimeout(() => {
-                        modal.classList.add('hidden');
-                    }, 300);
+                    closeModal();
                 });
             }
 
             if (cancelBtn) {
                 cancelBtn.addEventListener('click', function() {
-                    modal.classList.add('opacity-0');
-                    modal.querySelector('.bg-white').classList.remove('scale-100');
-                    modal.querySelector('.bg-white').classList.add('scale-95');
-                    setTimeout(() => {
-                        modal.classList.add('hidden');
-                    }, 300);
+                    closeModal();
                 });
             }
 
@@ -451,12 +441,7 @@
             if (modal) {
                 modal.addEventListener('click', function(e) {
                     if (e.target === modal) {
-                        modal.classList.add('opacity-0');
-                        modal.querySelector('.bg-white').classList.remove('scale-100');
-                        modal.querySelector('.bg-white').classList.add('scale-95');
-                        setTimeout(() => {
-                            modal.classList.add('hidden');
-                        }, 300);
+                        closeModal();
                     }
                 });
             }
@@ -464,14 +449,21 @@
             // Close modal with Escape key
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
-                    modal.classList.add('opacity-0');
-                    modal.querySelector('.bg-white').classList.remove('scale-100');
-                    modal.querySelector('.bg-white').classList.add('scale-95');
-                    setTimeout(() => {
-                        modal.classList.add('hidden');
-                    }, 300);
+                    closeModal();
                 }
             });
+
+            // Function to close modal and redirect to profile page
+            function closeModal() {
+                modal.classList.add('opacity-0');
+                modal.querySelector('.bg-white').classList.remove('scale-100');
+                modal.querySelector('.bg-white').classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    // Redirect to profile page after modal closes
+                    window.location.href = "{{ route('student.profile') }}";
+                }, 300);
+            }
         });
     </script>
 @endsection
