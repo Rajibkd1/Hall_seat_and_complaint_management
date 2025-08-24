@@ -56,7 +56,8 @@
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 <!-- Profile Information - Main Content -->
                 <div class="lg:col-span-3">
-                    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <!-- Personal Information Section -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-8">
                         <div class="px-6 py-4 border-b border-gray-200">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 bg-gray-600 rounded-lg flex items-center justify-center">
@@ -177,6 +178,128 @@
                                                 </path>
                                             </svg>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hall Seat and Profile Status Row -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Hall Seat Information -->
+                        @if ($seatDetails)
+                            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                                <div class="px-6 py-4 border-b border-gray-200">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-6 h-6 bg-gray-600 rounded-lg flex items-center justify-center">
+                                            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <h3 class="text-lg font-semibold text-gray-900">Hall Seat</h3>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm font-medium text-gray-700">Room:</span>
+                                            <span
+                                                class="text-sm font-medium text-gray-900">{{ $seatDetails->room_number }}</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm font-medium text-gray-700">Bed:</span>
+                                            <span
+                                                class="text-sm font-medium text-gray-900">{{ $seatDetails->bed_number }}</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm font-medium text-gray-700">Floor:</span>
+                                            <span class="text-sm font-medium text-gray-900">{{ $seatDetails->floor }}</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm font-medium text-gray-700">Block:</span>
+                                            <span class="text-sm font-medium text-gray-900">{{ $seatDetails->block }}</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm font-medium text-gray-700">Status:</span>
+                                            <span
+                                                class="inline-flex px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
+                                                Active
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                                <div class="px-6 py-4 border-b border-gray-200">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-6 h-6 bg-gray-600 rounded-lg flex items-center justify-center">
+                                            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <h3 class="text-lg font-semibold text-gray-900">Hall Seat</h3>
+                                    </div>
+                                </div>
+                                <div class="p-8 text-center">
+                                    <div
+                                        class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                    <p class="text-sm font-medium text-gray-600 mb-1">No seat assigned</p>
+                                    <p class="text-xs text-gray-500">Apply for a seat</p>
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Profile Stats -->
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                            <div class="px-6 py-4 border-b border-gray-200">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-6 h-6 bg-gray-600 rounded-lg flex items-center justify-center">
+                                        <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-900">Profile Status</h3>
+                                </div>
+                            </div>
+                            <div class="p-6 space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-gray-700">Completion</span>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                            <div class="h-full bg-gray-600 rounded-full"
+                                                style="width: {{ $profileCompletion ?? 75 }}%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-900">{{ $profileCompletion ?? 75 }}%</span>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 gap-3">
+                                    <div class="text-center p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                                        <div class="text-lg font-medium text-gray-900">
+                                            {{ $student->created_at->format('M Y') }}</div>
+                                        <div class="text-xs text-gray-600">Member Since</div>
+                                    </div>
+                                    <div class="text-center p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                                        <div class="text-lg font-medium text-gray-900">
+                                            {{ $student->updated_at->diffForHumans() }}</div>
+                                        <div class="text-xs text-gray-600">Last Updated</div>
                                     </div>
                                 </div>
                             </div>
@@ -321,125 +444,6 @@
                                             <p class="text-sm text-gray-500">No back image uploaded</p>
                                         </div>
                                     @endif
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Seat Information -->
-                    @if ($seatDetails)
-                        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-                            <div class="px-6 py-4 border-b border-gray-200">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-6 h-6 bg-gray-600 rounded-lg flex items-center justify-center">
-                                        <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <h3 class="text-lg font-semibold text-gray-900">Hall Seat</h3>
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="space-y-3">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-sm font-medium text-gray-700">Room:</span>
-                                        <span
-                                            class="text-sm font-medium text-gray-900">{{ $seatDetails->room_number }}</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-sm font-medium text-gray-700">Bed:</span>
-                                        <span
-                                            class="text-sm font-medium text-gray-900">{{ $seatDetails->bed_number }}</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-sm font-medium text-gray-700">Floor:</span>
-                                        <span class="text-sm font-medium text-gray-900">{{ $seatDetails->floor }}</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-sm font-medium text-gray-700">Block:</span>
-                                        <span class="text-sm font-medium text-gray-900">{{ $seatDetails->block }}</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-sm font-medium text-gray-700">Status:</span>
-                                        <span
-                                            class="inline-flex px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
-                                            Active
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @else
-                        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-                            <div class="px-6 py-4 border-b border-gray-200">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-6 h-6 bg-gray-600 rounded-lg flex items-center justify-center">
-                                        <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <h3 class="text-lg font-semibold text-gray-900">Hall Seat</h3>
-                                </div>
-                            </div>
-                            <div class="p-8 text-center">
-                                <div
-                                    class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                                        </path>
-                                    </svg>
-                                </div>
-                                <p class="text-sm font-medium text-gray-600 mb-1">No seat assigned</p>
-                                <p class="text-xs text-gray-500">Apply for a seat</p>
-                            </div>
-                        </div>
-                    @endif
-
-                    <!-- Profile Stats -->
-                    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-                        <div class="px-6 py-4 border-b border-gray-200">
-                            <div class="flex items-center gap-3">
-                                <div class="w-6 h-6 bg-gray-600 rounded-lg flex items-center justify-center">
-                                    <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
-                                        </path>
-                                    </svg>
-                                </div>
-                                <h3 class="text-lg font-semibold text-gray-900">Profile Status</h3>
-                            </div>
-                        </div>
-                        <div class="p-6 space-y-4">
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-700">Completion</span>
-                                <div class="flex items-center gap-2">
-                                    <div class="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                        <div class="h-full bg-gray-600 rounded-full"
-                                            style="width: {{ $profileCompletion ?? 75 }}%"></div>
-                                    </div>
-                                    <span class="text-sm font-medium text-gray-900">{{ $profileCompletion ?? 75 }}%</span>
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 gap-3">
-                                <div class="text-center p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                                    <div class="text-lg font-medium text-gray-900">
-                                        {{ $student->created_at->format('M Y') }}</div>
-                                    <div class="text-xs text-gray-600">Member Since</div>
-                                </div>
-                                <div class="text-center p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                                    <div class="text-lg font-medium text-gray-900">
-                                        {{ $student->updated_at->diffForHumans() }}</div>
-                                    <div class="text-xs text-gray-600">Last Updated</div>
                                 </div>
                             </div>
                         </div>
