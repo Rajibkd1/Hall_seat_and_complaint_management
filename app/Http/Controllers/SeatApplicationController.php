@@ -23,9 +23,48 @@ class SeatApplicationController extends Controller
 
         $existingApplication = SeatApplication::where('student_id', $studentId)->first();
 
+        // Check if student profile is complete before allowing seat application
+        $missingFields = $this->checkProfileCompleteness($student);
+        
+        if (!empty($missingFields)) {
+            session(['active_nav' => 'seat_application']);
+            return view('student.seat_application', compact('student', 'existingApplication', 'missingFields'));
+        }
+
         session(['active_nav' => 'seat_application']);
 
         return view('student.seat_application', compact('student', 'existingApplication'));
+    }
+
+    /**
+     * Check if student profile has all required fields for seat application
+     */
+    private function checkProfileCompleteness(Student $student)
+    {
+        $missingFields = [];
+
+        // Check required fields
+        if (empty($student->profile_image)) {
+            $missingFields[] = 'profile_image';
+        }
+
+        if (empty($student->id_card_front)) {
+            $missingFields[] = 'id_card_front';
+        }
+
+        if (empty($student->id_card_back)) {
+            $missingFields[] = 'id_card_back';
+        }
+
+        if (empty($student->phone)) {
+            $missingFields[] = 'phone';
+        }
+
+        if (empty($student->university_id)) {
+            $missingFields[] = 'university_id';
+        }
+
+        return $missingFields;
     }
     public function store(Request $request)
     {
