@@ -140,6 +140,10 @@ Route::middleware(['admin-auth', 'set-active-menu'])->prefix('admin')->group(fun
     Route::middleware('role-permission:view_students')->group(function () {
         Route::get('/students', [AdminController::class, 'students'])->name('admin.students');
         Route::get('/students/{student_id}', [AdminController::class, 'viewStudentProfile'])->name('admin.student.profile');
+        
+        // Student PDF routes
+        Route::get('/students/pdf/generate', [AdminController::class, 'generateStudentsPDFReport'])->name('admin.students.pdf.generate');
+        Route::get('/students/pdf/download', [AdminController::class, 'downloadStudentsPDFReport'])->name('admin.students.pdf.download');
     });
 
     // Complaint Management (All roles)
@@ -228,6 +232,10 @@ Route::middleware(['admin-auth', 'role-permission:Provost'])->prefix('provost')-
     // Provost-specific routes
     Route::get('/students', [ProvostController::class, 'students'])->name('provost.students');
     Route::get('/students/{student_id}', [ProvostController::class, 'viewStudentProfile'])->name('provost.student.profile');
+    
+    // Student PDF routes
+    Route::get('/students/pdf/generate', [AdminController::class, 'generateStudentsPDFReport'])->name('provost.students.pdf.generate');
+    Route::get('/students/pdf/download', [AdminController::class, 'downloadStudentsPDFReport'])->name('provost.students.pdf.download');
     Route::get('/complaints', [ProvostController::class, 'complaints'])->name('provost.complaints');
     Route::get('/complaints/{id}', [ProvostController::class, 'viewComplaint'])->name('provost.complaint.view');
     Route::post('/complaints/{id}/update-status', [ProvostController::class, 'updateComplaintStatus'])->name('provost.complaint.update_status');
@@ -284,6 +292,10 @@ Route::middleware(['admin-auth', 'role-permission:Co-Provost'])->prefix('co-prov
     // Co-Provost-specific routes
     Route::get('/students', [CoProvostController::class, 'students'])->name('co-provost.students');
     Route::get('/students/{student_id}', [CoProvostController::class, 'viewStudentProfile'])->name('co-provost.student.profile');
+    
+    // Student PDF routes
+    Route::get('/students/pdf/generate', [AdminController::class, 'generateStudentsPDFReport'])->name('co-provost.students.pdf.generate');
+    Route::get('/students/pdf/download', [AdminController::class, 'downloadStudentsPDFReport'])->name('co-provost.students.pdf.download');
     Route::get('/complaints', [CoProvostController::class, 'complaints'])->name('co-provost.complaints');
     Route::get('/complaints/{id}', [CoProvostController::class, 'viewComplaint'])->name('co-provost.complaint.view');
     Route::post('/complaints/{id}/update-status', [CoProvostController::class, 'updateComplaintStatus'])->name('co-provost.complaint.update_status');

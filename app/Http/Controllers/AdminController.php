@@ -7,6 +7,7 @@ use App\Models\Student;
 use App\Models\Complaint;
 use App\Models\HallNotice;
 use App\Models\SeatApplication;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
@@ -189,5 +190,25 @@ class AdminController extends Controller
         $application->save();
 
         return redirect()->route('admin.applications.view', $id)->with('success', 'Application status updated successfully.');
+    }
+
+    // Generate PDF report of all students
+    public function generateStudentsPDFReport()
+    {
+        $students = Student::orderBy('name', 'asc')->get();
+
+        $pdf = Pdf::loadView('admin.students.students_pdf_report', compact('students'));
+
+        return $pdf->stream('students_directory_report_' . date('Y-m-d') . '.pdf');
+    }
+
+    // Download PDF report of all students
+    public function downloadStudentsPDFReport()
+    {
+        $students = Student::orderBy('name', 'asc')->get();
+
+        $pdf = Pdf::loadView('admin.students.students_pdf_report', compact('students'));
+
+        return $pdf->download('students_directory_report_' . date('Y-m-d') . '.pdf');
     }
 }
