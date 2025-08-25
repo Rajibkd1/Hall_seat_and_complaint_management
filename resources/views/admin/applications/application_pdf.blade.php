@@ -238,14 +238,17 @@
         }
 
         .section-header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            background: #2c3e50;
             color: #ffffff;
-            padding: 12px 16px;
+            padding: 15px 20px;
             font-weight: bold;
-            font-size: 13px;
+            font-size: 14px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1.2px;
+            border-bottom: 3px solid #1a252f;
+            border-left: 5px solid #e74c3c;
+            margin: 0;
+            display: block;
         }
 
         .section-content {

@@ -43,7 +43,7 @@
             font-size: 16px;
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
             color: #2c3e50;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
         }
 
         .letterhead h1 {
@@ -53,7 +53,7 @@
             text-transform: uppercase;
             letter-spacing: 1.5px;
             color: #2c3e50;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         .letterhead .university {
@@ -78,7 +78,7 @@
             border: 3px solid #2c3e50;
             background: linear-gradient(135deg, #ecf0f1 0%, #bdc3c7 100%);
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .document-title h2 {
@@ -103,7 +103,7 @@
             width: 100%;
             margin-bottom: 20px;
             border-collapse: collapse;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .report-info .left,
@@ -128,7 +128,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             overflow: hidden;
         }
@@ -141,7 +141,7 @@
             font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
             border-bottom: 2px solid #1a252f;
         }
 
@@ -149,7 +149,7 @@
             padding: 10px 8px;
             border-bottom: 1px solid #bdc3c7;
             font-size: 9px;
-            vertical-align: top;
+            vertical-align: middle;
             background: #ffffff;
         }
 
@@ -159,6 +159,36 @@
 
         .applications-table tr:hover td {
             background: #e3f2fd;
+        }
+
+        /* Profile Picture Styling */
+        .profile-picture {
+            width: 40px;
+            height: 50px;
+            border: 2px solid #2c3e50;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            margin: 0 auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-picture img {
+            width: 36px;
+            height: 46px;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+
+        .profile-placeholder {
+            font-size: 7px;
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            line-height: 1.2;
+            padding: 2px;
         }
 
         /* Department styling */
@@ -190,7 +220,7 @@
             padding: 15px;
             margin: 20px 0;
             text-align: center;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         }
 
         .summary-box h3 {
@@ -255,6 +285,7 @@
             .applications-table {
                 font-size: 8px;
             }
+
             .applications-table th,
             .applications-table td {
                 padding: 6px 4px;
@@ -317,19 +348,47 @@
     <table class="applications-table">
         <thead>
             <tr>
-                <th style="width: 8%;">App ID</th>
-                <th style="width: 20%;">Student Name</th>
-                <th style="width: 12%;">University ID</th>
-                <th style="width: 15%;">Department</th>
-                <th style="width: 10%;">Year</th>
+                <th style="width: 6%;">Photo</th>
+                <th style="width: 7%;">App ID</th>
+                <th style="width: 18%;">Student Name</th>
+                <th style="width: 10%;">University ID</th>
+                <th style="width: 13%;">Department</th>
+                <th style="width: 8%;">Year</th>
                 <th style="width: 12%;">Application Date</th>
                 <th style="width: 12%;">Submission Date</th>
-                <th style="width: 11%;">Status</th>
+                <th style="width: 14%;">Status</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($approvedApplications as $application)
+            @foreach ($approvedApplications as $application)
                 <tr>
+                    <td style="text-align: center;">
+                        <div class="profile-picture">
+                            @if ($application->student && $application->student->profile_image)
+                                @php
+                                    $imagePath = public_path('storage/' . $application->student->profile_image);
+                                @endphp
+                                @if (file_exists($imagePath))
+                                    @php
+                                        $imageData = file_get_contents($imagePath);
+                                        $imageBase64 = base64_encode($imageData);
+                                        $imageMimeType = mime_content_type($imagePath);
+                                    @endphp
+                                    <img src="data:{{ $imageMimeType }};base64,{{ $imageBase64 }}" alt="Student Photo">
+                                @else
+                                    <div class="profile-placeholder">
+                                        <div style="font-weight: bold;">PHOTO</div>
+                                        <div>Not Found</div>
+                                    </div>
+                                @endif
+                            @else
+                                <div class="profile-placeholder">
+                                    <div style="font-weight: bold;">PHOTO</div>
+                                    <div>Not Available</div>
+                                </div>
+                            @endif
+                        </div>
+                    </td>
                     <td style="text-align: center; font-weight: bold;">#{{ $application->application_id }}</td>
                     <td style="font-weight: bold;">{{ $application->student_name }}</td>
                     <td style="text-align: center;">{{ $application->student->university_id ?? 'N/A' }}</td>
@@ -347,7 +406,7 @@
                                 'Mathematics' => 'MATH',
                                 'Physics' => 'PHY',
                                 'Chemistry' => 'CHEM',
-                                'English' => 'ENG'
+                                'English' => 'ENG',
                             ];
                             $words = explode(' ', $dept);
                             if (count($words) > 3) {
@@ -370,7 +429,7 @@
         </tbody>
     </table>
 
-    @if($approvedApplications->isEmpty())
+    @if ($approvedApplications->isEmpty())
         <div style="text-align: center; padding: 40px; color: #7f8c8d; font-style: italic;">
             <h3>No Approved Applications Found</h3>
             <p>There are currently no approved applications to display in this report.</p>
@@ -380,7 +439,8 @@
     <!-- Footer -->
     <div class="footer">
         <strong>CONFIDENTIAL DOCUMENT - FOR ADMINISTRATIVE USE ONLY</strong><br>
-        This report contains {{ $approvedApplications->count() }} approved applications | Generated: {{ now()->format('d M Y, H:i') }}<br>
+        This report contains {{ $approvedApplications->count() }} approved applications | Generated:
+        {{ now()->format('d M Y, H:i') }}<br>
         <em>Note: CGPA information has been excluded from this report as per administrative policy</em>
     </div>
 </body>
