@@ -297,6 +297,102 @@
                     </div>
                 </div>
 
+                <!-- University ID Card Section -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-8">
+                    <div class="bg-gray-700 px-8 py-6">
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zM8 6a2 2 0 114 0v1H8V6z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            University ID Card
+                        </h3>
+                        <p class="text-gray-300 mt-2">Student's University ID card images (front and back)</p>
+                    </div>
+                    <div class="p-8">
+                        @if ($application->student)
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <!-- Front Side -->
+                                <div class="text-center">
+                                    <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center justify-center">
+                                        <svg class="w-5 h-5 mr-2 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
+                                        </svg>
+                                        Front Side
+                                    </h4>
+                                    @if ($application->student->id_card_front)
+                                        <div class="border-2 border-gray-200 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                            <img src="{{ asset('storage/' . $application->student->id_card_front) }}"
+                                                alt="University ID Card - Front"
+                                                class="w-full h-64 object-contain bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                                                onclick="openImageModal('{{ asset('storage/' . $application->student->id_card_front) }}', 'University ID Card - Front')">
+                                        </div>
+                                        <p class="text-sm text-green-600 font-medium mt-3 flex items-center justify-center">
+                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                            </svg>
+                                            Uploaded
+                                        </p>
+                                    @else
+                                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 bg-gray-50">
+                                            <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-lg mb-4 mx-auto">
+                                                <svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
+                                            <p class="text-gray-500 font-medium">Not Uploaded</p>
+                                            <p class="text-xs text-gray-400 mt-1">Front side image not available</p>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <!-- Back Side -->
+                                <div class="text-center">
+                                    <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center justify-center">
+                                        <svg class="w-5 h-5 mr-2 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
+                                        </svg>
+                                        Back Side
+                                    </h4>
+                                    @if ($application->student->id_card_back)
+                                        <div class="border-2 border-gray-200 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                            <img src="{{ asset('storage/' . $application->student->id_card_back) }}"
+                                                alt="University ID Card - Back"
+                                                class="w-full h-64 object-contain bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                                                onclick="openImageModal('{{ asset('storage/' . $application->student->id_card_back) }}', 'University ID Card - Back')">
+                                        </div>
+                                        <p class="text-sm text-green-600 font-medium mt-3 flex items-center justify-center">
+                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                            </svg>
+                                            Uploaded
+                                        </p>
+                                    @else
+                                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 bg-gray-50">
+                                            <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-lg mb-4 mx-auto">
+                                                <svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
+                                            <p class="text-gray-500 font-medium">Not Uploaded</p>
+                                            <p class="text-xs text-gray-400 mt-1">Back side image not available</p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @else
+                            <div class="text-center py-12">
+                                <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                                <p class="text-xl text-gray-500 font-semibold mb-2">Student Information Not Available</p>
+                                <p class="text-gray-400">Unable to display ID card images</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
                 <!-- Documents Section -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-8">
                     <div class="bg-gray-700 px-8 py-6">
@@ -650,4 +746,75 @@
         });
     </script>
     @endif
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 overflow-y-auto h-full w-full z-50 hidden">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-4xl shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="modalTitle" class="text-lg leading-6 font-medium text-gray-900"></h3>
+                    <button id="closeImageModal" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="text-center">
+                    <img id="modalImage" src="" alt="" class="max-w-full max-h-96 mx-auto rounded-lg shadow-lg">
+                </div>
+                <div class="flex justify-center mt-6">
+                    <button id="closeImageModalBtn" class="px-6 py-2 bg-gray-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors duration-200">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Image Modal Functions
+        function openImageModal(imageSrc, title) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            modalImage.src = imageSrc;
+            modalImage.alt = title;
+            modalTitle.textContent = title;
+            modal.classList.remove('hidden');
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.add('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('imageModal');
+            const closeBtn = document.getElementById('closeImageModal');
+            const closeBtnBottom = document.getElementById('closeImageModalBtn');
+            
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeImageModal);
+            }
+            
+            if (closeBtnBottom) {
+                closeBtnBottom.addEventListener('click', closeImageModal);
+            }
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    closeImageModal();
+                }
+            });
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeImageModal();
+                }
+            });
+        });
+    </script>
 @endsection
