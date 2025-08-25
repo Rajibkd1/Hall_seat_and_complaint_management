@@ -108,7 +108,7 @@ Route::middleware('student-auth')->group(function () {
     Route::get('/seat-application/edit/{application}', [SeatApplicationController::class, 'edit'])->name('seat-application.edit');
     Route::put('/seat-application/update/{application}', [SeatApplicationController::class, 'update'])->name('seat-application.update');
     Route::delete('/seat-application/delete/{application}', [SeatApplicationController::class, 'destroy'])->name('seat-application.destroy');
-    Route::get('/seat-application/download-pdf/{application}', [SeatApplicationController::class, 'downloadApplicationPDF'])->name('seat-application.download-pdf');
+    Route::get('/seat-application/{application}/download-pdf', [SeatApplicationController::class, 'downloadApplicationPDF'])->name('seat-application.download-pdf');
 });
 
 // Super Admin Protected Routes

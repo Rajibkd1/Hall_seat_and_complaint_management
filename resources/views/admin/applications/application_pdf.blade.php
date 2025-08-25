@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Hall Seat Application - {{ $application->student_name }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -265,10 +266,25 @@
             display: inline-block;
         }
 
-        .status-pending { background: #fff3cd; color: #856404; }
-        .status-approved { background: #d4edda; color: #155724; }
-        .status-rejected { background: #f8d7da; color: #721c24; }
-        .status-verified { background: #d1ecf1; color: #0c5460; }
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-verified {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
 
         .declarations {
             border: 2px solid #000;
@@ -338,20 +354,22 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Letterhead -->
     <div class="letterhead">
-        <div class="university-seal">SEAL</div>
-        <div class="university">UNIVERSITY NAME</div>
+        <div class="university-seal">NSTU</div>
+        <div class="university">Noakhali Science and Technology University</div>
         <h1>Student Affairs & Residential Services</h1>
         <div class="department">Office of Hall Administration</div>
-        <div class="address">University Campus, Academic Block, City - 12345 | Phone: +1-234-567-8900 | Email: halls@university.edu</div>
+        <div class="address">University Campus, Academic Block, City - 12345 | Phone: +1-234-567-8900 | Email:
+            halls@university.edu</div>
     </div>
 
     <!-- Document Title -->
     <div class="document-title">
         <h2>Hall Seat Application Form</h2>
-        <div class="subtitle">Academic Session {{ date('Y') }}-{{ date('Y')+1 }}</div>
+        <div class="subtitle">Academic Session {{ date('Y') }}-{{ date('Y') + 1 }}</div>
     </div>
 
     <!-- Reference Information -->
@@ -375,16 +393,30 @@
         <div class="photo-section">
             <div class="student-photo">
                 @if($student->profile_image)
-                    <div class="photo-placeholder">
-                        <div style="font-weight: bold;">STUDENT PHOTO</div>
-                        <div style="margin-top: 5px;">{{ $application->student_name }}</div>
-                        <div style="margin-top: 3px;">ID: {{ $student->university_id }}</div>
-                    </div>
+                    @php
+                        $imagePath = public_path('storage/' . $student->profile_image);
+                    @endphp
+                    @if(file_exists($imagePath))
+                        @php
+                            $imageData = file_get_contents($imagePath);
+                            $imageBase64 = base64_encode($imageData);
+                            $imageMimeType = mime_content_type($imagePath);
+                        @endphp
+                        <img src="data:{{ $imageMimeType }};base64,{{ $imageBase64 }}" alt="Student Photo" style="width: 96px; height: 116px; object-fit: cover;">
+                    @else
+                        <div class="photo-placeholder">
+                            <div style="font-weight: bold; font-size: 10px;">STUDENT PHOTOGRAPH</div>
+                            <div style="margin-top: 8px; font-size: 9px; line-height: 1.2;">{{ $application->student_name }}</div>
+                            <div style="margin-top: 5px; font-size: 8px;">ID: {{ $student->university_id }}</div>
+                            <div style="margin-top: 5px; font-size: 7px; color: #999;">(Image not found)</div>
+                        </div>
+                    @endif
                 @else
                     <div class="photo-placeholder">
-                        <div style="font-weight: bold;">PHOTOGRAPH</div>
-                        <div style="margin-top: 5px;">{{ $application->student_name }}</div>
-                        <div style="margin-top: 3px;">ID: {{ $student->university_id }}</div>
+                        <div style="font-weight: bold; font-size: 10px;">STUDENT PHOTOGRAPH</div>
+                        <div style="margin-top: 8px; font-size: 9px; line-height: 1.2;">{{ $application->student_name }}</div>
+                        <div style="margin-top: 5px; font-size: 8px;">ID: {{ $student->university_id }}</div>
+                        <div style="margin-top: 5px; font-size: 7px; color: #999;">(Not Provided)</div>
                     </div>
                 @endif
             </div>
@@ -533,24 +565,24 @@
     <div class="declarations">
         <h3>Student Declarations</h3>
         <ol>
-            <li>I hereby declare that all the information provided in this application form is true, complete, and accurate to the best of my knowledge and belief.</li>
-            <li>I agree to occupy any type of seat (single/double/triple occupancy) that may be allocated to me by the Hall Administration.</li>
-            <li>I understand and agree to abide by all the rules, regulations, and policies of the residential hall as prescribed by the University.</li>
-            <li>I acknowledge that my application will be automatically cancelled if I fail to occupy the allocated seat within seven (7) days of the allocation notification.</li>
-            <li>I understand that providing false or misleading information may result in the rejection of my application and/or disciplinary action.</li>
+            <li>I hereby declare that all the information provided in this application form is true, complete, and
+                accurate to the best of my knowledge and belief.</li>
+            <li>I agree to occupy any type of seat (single/double/triple occupancy) that may be allocated to me by the
+                Hall Administration.</li>
+            <li>I understand and agree to abide by all the rules, regulations, and policies of the residential hall as
+                prescribed by the University.</li>
+            <li>I acknowledge that my application will be automatically cancelled if I fail to occupy the allocated seat
+                within seven (7) days of the allocation notification.</li>
+            <li>I understand that providing false or misleading information may result in the rejection of my
+                application and/or disciplinary action.</li>
         </ol>
     </div>
 
     <!-- Signature Section -->
     <div class="signature-section">
-        <div class="signature-box">
+        <div class="signature-box" style="width: 100%; text-align: center;">
             <div class="signature-line"></div>
             <div class="signature-label">Student's Signature</div>
-            <div style="margin-top: 5px; font-size: 10px;">Date: _______________</div>
-        </div>
-        <div class="signature-box">
-            <div class="signature-line"></div>
-            <div class="signature-label">Guardian's Signature</div>
             <div style="margin-top: 5px; font-size: 10px;">Date: _______________</div>
         </div>
     </div>
@@ -559,7 +591,9 @@
     <div class="footer">
         <strong>FOR OFFICE USE ONLY</strong><br>
         Application received on: ________________ | Processed by: ________________ | Remarks: ________________<br><br>
-        This is a computer-generated document. Application Reference: #{{ $application->application_id }} | Generated: {{ now()->format('d M Y, H:i') }}
+        This is a computer-generated document. Application Reference: #{{ $application->application_id }} | Generated:
+        {{ now()->format('d M Y, H:i') }}
     </div>
 </body>
+
 </html>
