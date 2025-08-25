@@ -105,6 +105,9 @@ Route::middleware('student-auth')->group(function () {
     Route::get('/seat-application', [SeatApplicationController::class, 'showForm'])->name('student.seat_application');
     Route::post('/seat-application/submit', [SeatApplicationController::class, 'store'])
         ->name('seat-application.submit');
+    Route::get('/seat-application/edit/{application}', [SeatApplicationController::class, 'edit'])->name('seat-application.edit');
+    Route::put('/seat-application/update/{application}', [SeatApplicationController::class, 'update'])->name('seat-application.update');
+    Route::delete('/seat-application/delete/{application}', [SeatApplicationController::class, 'destroy'])->name('seat-application.destroy');
 });
 
 // Super Admin Protected Routes

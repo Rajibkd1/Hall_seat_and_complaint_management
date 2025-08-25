@@ -58,10 +58,17 @@ class SeatApplication extends Model
         'notes',
     ];
 
-    protected $dates = ['application_date'];
+    protected $dates = ['application_date', 'submission_date'];
     protected $casts = [
         'application_date' => 'datetime',
+        'submission_date' => 'datetime',
     ];
+    public function canBeEdited(): bool
+    {
+        // Check if the application can be edited (within 3 days of submission)
+        return $this->submission_date->diffInDays(now()) <= 3;
+    }
+
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id');

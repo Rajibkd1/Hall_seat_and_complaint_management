@@ -25,7 +25,7 @@ class SeatApplicationController extends Controller
 
         // Check if student profile is complete before allowing seat application
         $missingFields = $this->checkProfileCompleteness($student);
-        
+
         if (!empty($missingFields)) {
             session(['active_nav' => 'seat_application']);
             return view('student.seat_application', compact('student', 'existingApplication', 'missingFields'));
@@ -34,6 +34,185 @@ class SeatApplicationController extends Controller
         session(['active_nav' => 'seat_application']);
 
         return view('student.seat_application', compact('student', 'existingApplication'));
+    }
+
+    /**
+     * Show the form for editing the specified seat application.
+     */
+    public function edit(SeatApplication $application)
+    {
+        // Check if the application belongs to the authenticated student
+        $student = Auth::guard('student')->user();
+        if ($application->student_id !== $student->student_id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Check if the application can be edited (within 3 days)
+        if (!$application->canBeEdited()) {
+            return redirect()->route('student.seat_application')
+                ->with('error', 'The application can no longer be edited or deleted.');
+        }
+
+        return view('student.edit_application', compact('application', 'student'));
+    }
+
+    /**
+     * Update the specified seat application in storage.
+     */
+    public function update(Request $request, SeatApplication $application)
+    {
+        // Check if the application belongs to the authenticated student
+        $student = Auth::guard('student')->user();
+        if ($application->student_id !== $student->student_id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Check if the application can be edited (within 3 days)
+        if (!$application->canBeEdited()) {
+            return redirect()->route('student.seat_application')
+                ->with('error', 'The application can no longer be edited or deleted.');
+        }
+
+        $validated = $request->validate([
+            'student_name' => 'required|string|max:255',
+            'department' => 'required|string|max:255',
+            'university_id' => 'required|string|max:50',
+            'academic_year' => 'required|string|max:50',
+            'guardian_name' => 'required|string|max:255',
+            'guardian_mobile' => 'required|string|max:20',
+            'guardian_relationship' => 'required|string|max:100',
+
+            'program' => 'required|string',
+            'semester_year' => 'nullable|integer',
+            'semester_term' => 'nullable|integer',
+            'cgpa' => 'required|numeric|min:0|max:4',
+
+            'physical_condition' => 'required|string',
+            'family_status' => 'required|string',
+
+            'permanent_address' => 'nullable|string',
+            'current_address' => 'nullable|string',
+
+            'activities' => 'nullable|array',
+            'activities.*' => 'string|in:bncc,rover',
+            'other_info' => 'nullable|array',
+            'other_info.*' => 'string|in:ethnic,foreign',
+
+            'declaration_info_correct' => 'accepted',
+            'declaration_will_stay' => 'accepted',
+            'declaration_seven_days' => 'accepted',
+            'application_date' => 'required|date',
+
+            'university_id_doc' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'marksheet' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'birthCertificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'financialCertificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'deathCertificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'medicalCertificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'activityCertificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'signature' => 'nullable|file|mimes:jpg,jpeg,png',
+        ]);
+
+        $universityId = $request->input('university_id');
+        $uploadFields = [
+            'university_id_doc' => 'university_id_doc',
+            'marksheet' => 'marksheet_doc',
+            'birthCertificate' => 'birth_certificate_doc',
+            'financialCertificate' => 'financial_certificate_doc',
+            'deathCertificate' => 'death_certificate_doc',
+            'medicalCertificate' => 'medical_certificate_doc',
+            'activityCertificate' => 'activity_certificate_doc',
+            'signature' => 'signature_doc',
+        ];
+
+        $filePaths = [];
+
+        foreach ($uploadFields as $input => $column) {
+            if ($request->hasFile($input)) {
+                $file = $request->file($input);
+                $filename = $universityId . '_' . $input . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs("applications/{$universityId}", $filename, 'public');
+                $filePaths[$column] = $path;
+            }
+        }
+
+        // Update application record
+        $application->update([
+            'student_name' => $request->input('student_name'),
+            'department' => $request->input('department'),
+            'academic_year' => $request->input('academic_year'),
+            'guardian_name' => $request->input('guardian_name'),
+            'guardian_mobile' => $request->input('guardian_mobile'),
+            'guardian_relationship' => $request->input('guardian_relationship'),
+
+            'program' => $request->input('program'),
+            'semester_year' => $request->input('semester_year'),
+            'semester_term' => $request->input('semester_term'),
+            'cgpa' => $request->input('cgpa'),
+
+            'physical_condition' => $request->input('physical_condition'),
+            'family_status' => $request->input('family_status'),
+
+            'permanent_address' => $request->input('permanent_address'),
+            'current_address' => $request->input('current_address'),
+
+            'activities' => json_encode($request->input('activities', [])),
+            'other_info' => json_encode($request->input('other_info', [])),
+
+            'declaration_info_correct' => true,
+            'declaration_will_stay' => true,
+            'declaration_seven_days' => true,
+            'application_date' => $request->input('application_date'),
+        ]);
+
+        // Update uploaded file paths
+        foreach ($filePaths as $column => $path) {
+            $application->{$column} = $path;
+        }
+
+        $application->save();
+
+        return redirect()->route('student.seat_application')->with('success', 'Seat application updated successfully.');
+    }
+
+    /**
+     * Remove the specified seat application from storage.
+     */
+    public function destroy(SeatApplication $application)
+    {
+        // Check if the application belongs to the authenticated student
+        $student = Auth::guard('student')->user();
+        if ($application->student_id !== $student->student_id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Check if the application can be deleted (within 3 days)
+        if (!$application->canBeEdited()) {
+            return redirect()->route('student.seat_application')
+                ->with('error', 'The application can no longer be edited or deleted.');
+        }
+
+        // Delete associated files
+        $fileFields = [
+            'university_id_doc',
+            'marksheet_doc',
+            'birth_certificate_doc',
+            'financial_certificate_doc',
+            'death_certificate_doc',
+            'medical_certificate_doc',
+            'activity_certificate_doc',
+            'signature_doc',
+        ];
+
+        foreach ($fileFields as $field) {
+            if ($application->{$field}) {
+                Storage::disk('public')->delete($application->{$field});
+            }
+        }
+
+        $application->delete();
+
+        return redirect()->route('student.seat_application')->with('success', 'Seat application deleted successfully.');
     }
 
     /**
@@ -66,6 +245,7 @@ class SeatApplicationController extends Controller
 
         return $missingFields;
     }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -398,7 +578,7 @@ class SeatApplicationController extends Controller
     {
         // Set active menu for navigation
         session(['active_admin_menu' => 'allocated_students']);
-        
+
         $allocatedStudents = \App\Models\SeatAllotment::with([
             'student',
             'seat',
@@ -417,7 +597,7 @@ class SeatApplicationController extends Controller
     {
         // Set active menu for navigation
         session(['active_admin_menu' => 'allocated_students']);
-        
+
         // Ensure the allotment is active
         if ($allotment->status !== 'active') {
             return redirect()->route('admin.applications.allocated')
