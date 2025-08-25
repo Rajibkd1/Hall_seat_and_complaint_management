@@ -45,6 +45,13 @@
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
             color: #2c3e50;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .university-seal img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
         }
 
         .letterhead h1 {
@@ -442,12 +449,25 @@
 <body>
     <!-- Letterhead -->
     <div class="letterhead">
-        <div class="university-seal">NSTU</div>
+        <div class="university-seal" @if(file_exists(storage_path('app/public/nstu_logo.png'))) style="border: none; background: transparent; box-shadow: none;" @endif>
+            @php
+                $logoPath = storage_path('app/public/nstu_logo.png');
+            @endphp
+            @if (file_exists($logoPath))
+                @php
+                    $logoData = file_get_contents($logoPath);
+                    $logoBase64 = base64_encode($logoData);
+                @endphp
+                <img src="data:image/png;base64,{{ $logoBase64 }}" alt="NSTU Logo">
+            @else
+                <div style="font-weight: bold; font-size: 16px; color: #2c3e50;">NSTU</div>
+            @endif
+        </div>
         <div class="university">Noakhali Science and Technology University</div>
         <h1>Student Affairs & Residential Services</h1>
         <div class="department">Office of Hall Administration</div>
-        <div class="address">University Campus, Academic Block, City - 12345 | Phone: +1-234-567-8900 | Email:
-            halls@university.edu</div>
+        <div class="address">University Campus, Sonapur, Noakhali-3814, Bangladesh | Phone: +880-321-49101 | Email:
+            halls@nstu.edu.bd</div>
     </div>
 
     <!-- Document Title -->
