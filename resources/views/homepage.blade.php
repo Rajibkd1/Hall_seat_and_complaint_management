@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Institutional Hall Management System - Professional Student Housing Administration</title>
+    <title>NSTU Hall Management - Official Student Housing Administration</title>
     <meta name="description"
-        content="Official institutional platform for hall seat allocation and complaint management. Secure, reliable, and compliant student housing administration system.">
+        content="Official NSTU platform for hall seat allocation and complaint management. Secure, reliable, and compliant student housing administration system for Noakhali Science and Technology University.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
@@ -15,31 +15,50 @@
 </head>
 
 <body class="min-h-screen bg-gray-50">
-    <!-- Professional Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
-        <nav class="max-w-7xl mx-auto px-4 py-4 sm:px-6">
+    <!-- Enhanced Professional Header -->
+    <header class="bg-white shadow-lg sticky top-0 z-50 border-b-2 border-gradient-to-r from-nstu-blue to-nstu-green">
+        <nav class="max-w-7xl mx-auto px-4 py-3 sm:px-6">
             <div class="flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-university text-white text-lg"></i>
+                <!-- Enhanced Logo Section -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <div class="w-14 h-14 bg-gradient-to-br from-nstu-blue via-blue-600 to-nstu-green rounded-xl flex items-center justify-center p-2 shadow-lg transform hover:scale-105 transition-all duration-300">
+                            <img src="{{ asset('images/nstu_logo.png') }}" alt="NSTU Logo" class="w-10 h-10 object-contain filter brightness-0 invert">
+                        </div>
+                        <div class="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-pulse"></div>
                     </div>
-                    <div>
-                        <div class="text-lg font-semibold text-gray-900">Institutional Housing</div>
-                        <div class="text-xs text-gray-500 uppercase tracking-wide">Management System</div>
+                    <div class="hidden sm:block">
+                        <div class="text-xl font-bold bg-gradient-to-r from-nstu-blue to-nstu-green bg-clip-text text-transparent">
+                            NSTU Hall Management
+                        </div>
+                        <div class="text-xs text-gray-600 uppercase tracking-wider font-semibold">
+                            Noakhali Science & Technology University
+                        </div>
                     </div>
                 </div>
 
-                <!-- Navigation Menu -->
-                <div class="hidden lg:flex items-center space-x-8">
+                <!-- Enhanced Navigation Menu -->
+                <div class="hidden lg:flex items-center space-x-1">
                     <a href="#services"
-                        class="text-gray-600 hover:text-gray-900 font-medium transition-colors">Services</a>
+                        class="nav-link px-4 py-2 text-gray-700 hover:text-nstu-blue font-medium transition-all duration-300 rounded-lg hover:bg-blue-50 relative group">
+                        <span>Services</span>
+                        <div class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-nstu-blue to-nstu-green transition-all duration-300 group-hover:w-full group-hover:left-0"></div>
+                    </a>
                     <a href="#process"
-                        class="text-gray-600 hover:text-gray-900 font-medium transition-colors">Process</a>
+                        class="nav-link px-4 py-2 text-gray-700 hover:text-nstu-blue font-medium transition-all duration-300 rounded-lg hover:bg-blue-50 relative group">
+                        <span>Process</span>
+                        <div class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-nstu-blue to-nstu-green transition-all duration-300 group-hover:w-full group-hover:left-0"></div>
+                    </a>
                     <a href="#support"
-                        class="text-gray-600 hover:text-gray-900 font-medium transition-colors">Support</a>
+                        class="nav-link px-4 py-2 text-gray-700 hover:text-nstu-blue font-medium transition-all duration-300 rounded-lg hover:bg-blue-50 relative group">
+                        <span>Support</span>
+                        <div class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-nstu-blue to-nstu-green transition-all duration-300 group-hover:w-full group-hover:left-0"></div>
+                    </a>
                     <a href="#contact"
-                        class="text-gray-600 hover:text-gray-900 font-medium transition-colors">Contact</a>
+                        class="nav-link px-4 py-2 text-gray-700 hover:text-nstu-blue font-medium transition-all duration-300 rounded-lg hover:bg-blue-50 relative group">
+                        <span>Contact</span>
+                        <div class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-nstu-blue to-nstu-green transition-all duration-300 group-hover:w-full group-hover:left-0"></div>
+                    </a>
                 </div>
 
                 <!-- Mobile Menu Button -->
@@ -51,15 +70,15 @@
                     </svg>
                 </button>
 
-                <!-- Auth Buttons -->
+                <!-- Enhanced Auth Buttons -->
                 <div class="hidden lg:flex items-center space-x-3">
                     <a href="{{ route('student.auth', ['form_type' => 'login']) }}"
-                        class="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium transition-colors">
-                        Login
+                        class="px-5 py-2.5 text-gray-700 hover:text-nstu-blue font-semibold transition-all duration-300 rounded-lg hover:bg-gray-50 border border-transparent hover:border-gray-200">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
                     </a>
                     <a href="{{ route('student.auth', ['form_type' => 'register']) }}"
-                        class="px-6 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 font-medium transition-colors">
-                        Sign Up
+                        class="px-6 py-2.5 bg-gradient-to-r from-nstu-blue to-nstu-green text-white rounded-lg hover:from-blue-700 hover:to-green-700 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        <i class="fas fa-user-plus mr-2"></i>Sign Up
                     </a>
                 </div>
             </div>
@@ -69,11 +88,14 @@
         <div class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40 hidden" id="mobileMenuOverlay">
             <div class="fixed inset-y-0 right-0 max-w-xs w-full bg-white shadow-xl">
                 <div class="flex items-center justify-between p-4 border-b border-gray-200">
-                    <div class="flex items-center space-x-2">
-                        <div class="w-8 h-8 bg-gray-900 rounded-md flex items-center justify-center">
-                            <i class="fas fa-university text-white text-sm"></i>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-nstu-blue to-nstu-green rounded-lg flex items-center justify-center p-1.5">
+                            <img src="{{ asset('images/nstu_logo.png') }}" alt="NSTU Logo" class="w-6 h-6 object-contain filter brightness-0 invert">
                         </div>
-                        <span class="font-semibold text-gray-900">Hall Management</span>
+                        <div>
+                            <div class="font-bold text-gray-900">NSTU Hall Management</div>
+                            <div class="text-xs text-gray-600">NSTU</div>
+                        </div>
                     </div>
                     <button class="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                         id="mobileMenuClose">
@@ -107,12 +129,12 @@
     <section class="bg-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">
-                    Official Announcements
+                <h2 class="text-3xl font-bold text-nstu-blue mb-4">
+                    Official NSTU Hall Announcements
                 </h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto">
                     Stay informed with official notices, policy updates, and important communications from the
-                    institutional housing administration
+                    NSTU Hall Management Administration
                 </p>
             </div>
 
@@ -334,13 +356,20 @@
     <section class="bg-gray-50 py-20 lg:py-32">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center">
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
-                    Official Institutional Housing Platform
+                <div class="flex justify-center mb-8">
+                    <div class="relative">
+                        <div class="w-28 h-28 bg-gradient-to-br from-nstu-blue via-blue-600 to-nstu-green rounded-full flex items-center justify-center p-4 shadow-2xl transform hover:scale-105 transition-all duration-300">
+                            <img src="{{ asset('images/nstu_logo.png') }}" alt="NSTU Logo" class="w-20 h-20 object-contain filter brightness-0 invert">
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-pulse"></div>
+                    </div>
+                </div>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-nstu-blue mb-6">
+                    NSTU Hall Management System
                 </h1>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-10 leading-relaxed">
-                    Secure, compliant, and efficient student housing administration system.
-                    Manage accommodations, track applications, and resolve concerns through our official institutional
-                    platform.
+                    Official platform for Noakhali Science and Technology University student housing administration.
+                    Secure, compliant, and efficient hall seat allocation and complaint management system.
                 </p>
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
                     <a href="{{ route('student.auth', ['form_type' => 'register']) }}"
@@ -384,11 +413,11 @@
     <section id="services" class="bg-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">
-                    Institutional Housing Services
+                <h2 class="text-3xl font-bold text-nstu-blue mb-4">
+                    NSTU Hall Management Services
                 </h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                    Comprehensive student accommodation management with institutional standards and compliance
+                    Comprehensive student accommodation management with NSTU standards and institutional compliance
                 </p>
             </div>
 
@@ -399,13 +428,13 @@
                     </div>
                     <h3 class="feature-title">Accommodation Management</h3>
                     <p class="feature-description">
-                        Official institutional housing allocation system with standardized procedures, fair distribution
-                        policies, and compliance with institutional regulations.
+                        Official NSTU hall allocation system with standardized procedures, fair distribution
+                        policies, and compliance with university regulations.
                     </p>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i> Policy-compliant allocation</li>
+                        <li><i class="fas fa-check-circle"></i> NSTU policy-compliant allocation</li>
                         <li><i class="fas fa-check-circle"></i> Fair distribution system</li>
-                        <li><i class="fas fa-check-circle"></i> Institutional standards</li>
+                        <li><i class="fas fa-check-circle"></i> University standards</li>
                     </ul>
                 </div>
 
@@ -415,12 +444,12 @@
                     </div>
                     <h3 class="feature-title">Application Processing</h3>
                     <p class="feature-description">
-                        Transparent application review process with institutional oversight, documented procedures, and
+                        Transparent application review process with NSTU oversight, documented procedures, and
                         regular status updates for all applicants.
                     </p>
                     <ul class="feature-list">
                         <li><i class="fas fa-check-circle"></i> Transparent process</li>
-                        <li><i class="fas fa-check-circle"></i> Institutional oversight</li>
+                        <li><i class="fas fa-check-circle"></i> NSTU oversight</li>
                         <li><i class="fas fa-check-circle"></i> Regular updates</li>
                     </ul>
                 </div>
@@ -431,12 +460,12 @@
                     </div>
                     <h3 class="feature-title">Grievance Resolution</h3>
                     <p class="feature-description">
-                        Formal complaint handling system with institutional protocols, escalation procedures, and
+                        Formal complaint handling system with NSTU protocols, escalation procedures, and
                         documented resolution processes for student concerns.
                     </p>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i> Formal procedures</li>
-                        <li><i class="fas fa-check-circle"></i> Escalation protocols</li>
+                        <li><i class="fas fa-check-circle"></i> NSTU formal procedures</li>
+                        <li><i class="fas fa-check-circle"></i> University escalation protocols</li>
                         <li><i class="fas fa-check-circle"></i> Documented outcomes</li>
                     </ul>
                 </div>
@@ -447,13 +476,13 @@
                     </div>
                     <h3 class="feature-title">Compliance & Security</h3>
                     <p class="feature-description">
-                        Institutional-grade security protocols, data protection compliance, and adherence to educational
-                        institution standards and regulations.
+                        University-grade security protocols, data protection compliance, and adherence to NSTU
+                        standards and educational regulations.
                     </p>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i> Regulatory compliance</li>
+                        <li><i class="fas fa-check-circle"></i> NSTU regulatory compliance</li>
                         <li><i class="fas fa-check-circle"></i> Data protection</li>
-                        <li><i class="fas fa-check-circle"></i> Institutional standards</li>
+                        <li><i class="fas fa-check-circle"></i> University standards</li>
                     </ul>
                 </div>
             </div>
@@ -464,11 +493,11 @@
     <section id="process" class="bg-gray-50 py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">
-                    Institutional Process
+                <h2 class="text-3xl font-bold text-nstu-blue mb-4">
+                    NSTU Hall Application Process
                 </h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                    Official procedures for student housing application and management
+                    Official procedures for NSTU student hall application and management
                 </p>
             </div>
 
@@ -476,11 +505,11 @@
                 <div class="process-step">
                     <div class="step-number">1</div>
                     <div class="step-content">
-                        <h3 class="step-title">Student Registration</h3>
-                        <p class="step-description">Complete official registration using institutional credentials and
+                        <h3 class="step-title">NSTU Student Registration</h3>
+                        <p class="step-description">Complete official registration using NSTU student credentials and
                             provide required academic documentation for verification.</p>
                         <div class="step-features">
-                            <span class="step-tag">Official Registration</span>
+                            <span class="step-tag">NSTU Registration</span>
                             <span class="step-tag">Document Verification</span>
                         </div>
                     </div>
@@ -489,12 +518,12 @@
                 <div class="process-step">
                     <div class="step-number">2</div>
                     <div class="step-content">
-                        <h3 class="step-title">Formal Application</h3>
-                        <p class="step-description">Submit official housing application with required documentation,
-                            following institutional guidelines and procedures.</p>
+                        <h3 class="step-title">Hall Application Submission</h3>
+                        <p class="step-description">Submit official hall application with required documentation,
+                            following NSTU guidelines and procedures.</p>
                         <div class="step-features">
                             <span class="step-tag">Official Documentation</span>
-                            <span class="step-tag">Institutional Guidelines</span>
+                            <span class="step-tag">NSTU Guidelines</span>
                         </div>
                     </div>
                 </div>
@@ -502,11 +531,11 @@
                 <div class="process-step">
                     <div class="step-number">3</div>
                     <div class="step-content">
-                        <h3 class="step-title">Review Process</h3>
-                        <p class="step-description">Application undergoes institutional review with transparent
+                        <h3 class="step-title">NSTU Review Process</h3>
+                        <p class="step-description">Application undergoes NSTU hall administration review with transparent
                             evaluation criteria and regular status communications.</p>
                         <div class="step-features">
-                            <span class="step-tag">Institutional Review</span>
+                            <span class="step-tag">NSTU Review</span>
                             <span class="step-tag">Status Updates</span>
                         </div>
                     </div>
@@ -515,9 +544,9 @@
                 <div class="process-step">
                     <div class="step-number">4</div>
                     <div class="step-content">
-                        <h3 class="step-title">Official Allocation</h3>
-                        <p class="step-description">Receive official housing allocation notification with detailed
-                            accommodation information and institutional procedures.</p>
+                        <h3 class="step-title">Hall Seat Allocation</h3>
+                        <p class="step-description">Receive official hall seat allocation notification with detailed
+                            accommodation information and NSTU procedures.</p>
                         <div class="step-features">
                             <span class="step-tag">Official Notification</span>
                             <span class="step-tag">Detailed Information</span>
@@ -534,46 +563,46 @@
     <section id="support" class="bg-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">
-                    Student Support & Information
+                <h2 class="text-3xl font-bold text-nstu-blue mb-4">
+                    NSTU Student Support & Information
                 </h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                    Essential information and answers to common inquiries about institutional housing services
+                    Essential information and answers to common inquiries about NSTU hall management services
                 </p>
             </div>
 
             <div class="max-w-4xl mx-auto space-y-4">
                 <div class="faq-item">
                     <button class="faq-question">
-                        <span>What are the eligibility requirements for institutional housing?</span>
+                        <span>What are the eligibility requirements for NSTU hall accommodation?</span>
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>Students must be officially enrolled at the institution with valid student credentials.
+                        <p>Students must be officially enrolled at NSTU with valid student credentials.
                             Complete your official registration, provide required academic documentation, and follow
-                            institutional housing application procedures.</p>
+                            NSTU hall application procedures.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <button class="faq-question">
-                        <span>What official documentation is required for housing applications?</span>
+                        <span>What official documentation is required for NSTU hall applications?</span>
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>Required documents include official student ID, academic transcripts, medical certificates
+                        <p>Required documents include official NSTU student ID, academic transcripts, medical certificates
                             (if applicable), and any special accommodation documentation. All documents must be
-                            officially verified and comply with institutional standards.</p>
+                            officially verified and comply with NSTU standards.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <button class="faq-question">
-                        <span>What is the official processing timeline for housing applications?</span>
+                        <span>What is the official processing timeline for NSTU hall applications?</span>
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>Applications undergo institutional review within 5-7 business days following official
+                        <p>Applications undergo NSTU hall administration review within 5-7 business days following official
                             submission. Status updates are provided through official channels including email
                             notifications and the student portal dashboard.</p>
                     </div>
@@ -581,13 +610,13 @@
 
                 <div class="faq-item">
                     <button class="faq-question">
-                        <span>How does the institutional grievance process work?</span>
+                        <span>How does the NSTU hall grievance process work?</span>
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>Our formal grievance system follows institutional protocols with documented procedures,
+                        <p>Our formal grievance system follows NSTU protocols with documented procedures,
                             assigned case officers, and transparent resolution timelines. All complaints are handled
-                            according to institutional standards and policies.</p>
+                            according to NSTU standards and policies.</p>
                     </div>
                 </div>
 
@@ -597,9 +626,9 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>We maintain institutional-grade security protocols with encrypted data storage, secure
+                        <p>We maintain university-grade security protocols with encrypted data storage, secure
                             authentication systems, and full compliance with educational privacy regulations. Student
-                            information is protected according to institutional data governance policies.</p>
+                            information is protected according to NSTU data governance policies.</p>
                     </div>
                 </div>
 
@@ -609,9 +638,9 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>The institution provides comprehensive support for students with medical, accessibility, or
+                        <p>NSTU provides comprehensive support for students with medical, accessibility, or
                             dietary requirements. Special accommodation requests are processed through official channels
-                            with appropriate documentation and institutional approval procedures.</p>
+                            with appropriate documentation and NSTU approval procedures.</p>
                     </div>
                 </div>
             </div>
@@ -622,18 +651,18 @@
     <section id="contact" class="bg-gray-50 py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">
-                    Official Contact Information
+                <h2 class="text-3xl font-bold text-nstu-blue mb-4">
+                    Official NSTU Contact Information
                 </h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                    Connect with institutional housing administration for official inquiries and support
+                    Connect with NSTU Hall Management Administration for official inquiries and support
                 </p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <div class="contact-info">
-                    <h3 class="contact-title">Institutional Housing Office</h3>
-                    <p class="contact-description">Official contact channels for institutional housing services,
+                    <h3 class="contact-title">NSTU Hall Management Office</h3>
+                    <p class="contact-description">Official contact channels for NSTU hall management services,
                         applications, and student support inquiries.
                     </p>
 
@@ -642,7 +671,7 @@
                             <i class="fas fa-envelope text-gray-600"></i>
                             <div>
                                 <div class="method-label">Official Email</div>
-                                <div class="method-value">housing@institution.edu</div>
+                                <div class="method-value">hallmanagement@nstu.edu.bd</div>
                             </div>
                         </div>
 
@@ -650,7 +679,7 @@
                             <i class="fas fa-phone text-gray-600"></i>
                             <div>
                                 <div class="method-label">Administrative Office</div>
-                                <div class="method-value">+1 (555) 123-4567</div>
+                                <div class="method-value">+880-321-61051</div>
                             </div>
                         </div>
 
@@ -666,7 +695,7 @@
                             <i class="fas fa-map-marker-alt text-gray-600"></i>
                             <div>
                                 <div class="method-label">Physical Address</div>
-                                <div class="method-value">Student Housing Administration, Building A, Room 205</div>
+                                <div class="method-value">NSTU Hall Management Office, Administrative Building, Noakhali-3814</div>
                             </div>
                         </div>
                     </div>
@@ -676,12 +705,12 @@
                     <h3 class="contact-title">Official Inquiry Form</h3>
                     <form class="contact-form-container">
                         <div class="form-group">
-                            <label for="name">Full Name (as per institutional records)</label>
+                            <label for="name">Full Name (as per NSTU records)</label>
                             <input type="text" id="name" name="name" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Institutional Email Address</label>
+                            <label for="email">NSTU Email Address</label>
                             <input type="email" id="email" name="email" required>
                         </div>
 
@@ -689,11 +718,11 @@
                             <label for="subject">Inquiry Category</label>
                             <select id="subject" name="subject" required>
                                 <option value="">Select inquiry type</option>
-                                <option value="housing-application">Housing Application</option>
+                                <option value="hall-application">Hall Application</option>
                                 <option value="grievance">Formal Grievance</option>
                                 <option value="accommodation">Special Accommodation</option>
                                 <option value="administrative">Administrative Inquiry</option>
-                                <option value="policy">Policy Information</option>
+                                <option value="policy">NSTU Policy Information</option>
                             </select>
                         </div>
 
@@ -717,11 +746,11 @@
     <section class="bg-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">
-                    Access Institutional Services
+                <h2 class="text-3xl font-bold text-nstu-blue mb-4">
+                    Access NSTU Hall Services
                 </h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                    Official student housing services and administrative support
+                    Official NSTU hall management services and administrative support
                 </p>
             </div>
 
@@ -730,8 +759,8 @@
                     <div class="quick-access-icon">
                         <i class="fas fa-university text-gray-600"></i>
                     </div>
-                    <h4 class="quick-access-title">Housing Application</h4>
-                    <p class="quick-access-description">Submit official housing application with required institutional
+                    <h4 class="quick-access-title">Hall Application</h4>
+                    <p class="quick-access-description">Submit official hall application with required NSTU
                         documentation and track review progress.</p>
                     <a href="{{ route('student.auth', ['form_type' => 'register']) }}" class="btn-primary">
                         Begin Application
@@ -743,7 +772,7 @@
                         <i class="fas fa-clipboard-check text-gray-600"></i>
                     </div>
                     <h4 class="quick-access-title">Application Status</h4>
-                    <p class="quick-access-description">Monitor official application status and receive institutional
+                    <p class="quick-access-description">Monitor official application status and receive NSTU
                         updates through the student portal.</p>
                     <a href="{{ route('student.auth', ['form_type' => 'login']) }}" class="btn-primary">
                         Check Status
@@ -755,7 +784,7 @@
                         <i class="fas fa-info-circle text-gray-600"></i>
                     </div>
                     <h4 class="quick-access-title">Administrative Support</h4>
-                    <p class="quick-access-description">Access institutional housing administration for official
+                    <p class="quick-access-description">Access NSTU hall administration for official
                         inquiries and support services.</p>
                     <a href="#contact" class="btn-primary">
                         Contact Administration
@@ -771,21 +800,23 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div class="footer-brand">
                     <div class="footer-logo">
-                        <i class="fas fa-university text-2xl text-gray-300"></i>
+                        <div class="w-12 h-12 bg-gradient-to-br from-nstu-blue to-nstu-green rounded-lg flex items-center justify-center p-2 mr-3">
+                            <img src="{{ asset('images/nstu_logo.png') }}" alt="NSTU Logo" class="w-8 h-8 object-contain filter brightness-0 invert">
+                        </div>
                         <div>
-                            <div class="footer-logo-text">Institutional Housing</div>
-                            <div class="footer-logo-subtitle">Official Student Administration</div>
+                            <div class="footer-logo-text">NSTU Hall Management</div>
+                            <div class="footer-logo-subtitle">Noakhali Science & Technology University</div>
                         </div>
                     </div>
                     <p class="footer-description">
-                        Official institutional platform for student housing administration, providing secure, compliant,
+                        Official NSTU platform for student hall administration, providing secure, compliant,
                         and transparent accommodation management services.
                     </p>
                 </div>
 
                 <div class="footer-column">
                     <h4 class="footer-heading">Services</h4>
-                    <a href="#services" class="footer-link">Housing Services</a>
+                    <a href="#services" class="footer-link">Hall Management Services</a>
                     <a href="#process" class="footer-link">Application Process</a>
                     <a href="#support" class="footer-link">Student Support</a>
                 </div>
@@ -793,14 +824,14 @@
                 <div class="footer-column">
                     <h4 class="footer-heading">Administration</h4>
                     <a href="#contact" class="footer-link">Contact Administration</a>
-                    <a href="#" class="footer-link">Policies & Procedures</a>
+                    <a href="#" class="footer-link">NSTU Policies & Procedures</a>
                     <a href="#" class="footer-link">Privacy Policy</a>
                     <a href="#" class="footer-link">Terms of Service</a>
                 </div>
 
                 <div class="footer-column">
-                    <h4 class="footer-heading">Institution</h4>
-                    <a href="#" class="footer-link">About Institution</a>
+                    <h4 class="footer-heading">NSTU</h4>
+                    <a href="https://www.nstu.edu.bd" class="footer-link">About NSTU</a>
                     <a href="#" class="footer-link">Academic Calendar</a>
                     <a href="#" class="footer-link">Student Resources</a>
                     <a href="#" class="footer-link">Campus Directory</a>
@@ -809,8 +840,8 @@
 
             <div class="footer-bottom">
                 <div class="footer-bottom-content">
-                    <p>&copy; 2025 Institutional Housing Administration. All rights reserved.</p>
-                    <p>Official platform for secure, compliant, and transparent student housing management.</p>
+                    <p>&copy; 2025 NSTU Hall Management Administration. All rights reserved.</p>
+                    <p>Official platform for secure, compliant, and transparent student hall management at Noakhali Science & Technology University.</p>
                 </div>
             </div>
         </div>
