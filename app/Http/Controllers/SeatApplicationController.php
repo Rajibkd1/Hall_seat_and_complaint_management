@@ -373,7 +373,28 @@ class SeatApplicationController extends Controller
 
         return redirect()->back()->with('success', 'Seat application submitted successfully.');
     }
-    // List all applications for admin
+    // Generate PDF for a specific application
+    public function downloadApplicationPDF($applicationId)
+    {
+        $application = SeatApplication::find($applicationId);
+        
+        if (!$application) {
+            return redirect()->route('student.seat_application')->with('error', 'Application not found.');
+        }
+
+        // Check if the current user is authorized to view this application
+        $user = Auth::user();
+        $guard = Auth::getDefaultDriver();
+        
+        // If user is a student, check if they own this application
+        if ($guard === 'student' && $application->student_id !== $user->student_id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $student = $application->student; // Get the associated student
+        $pdf = Pdf::loadView('admin.applications.application_pdf', compact('application', 'student'));
+        return $pdf->download('application_' . $application->application_id . '.pdf');
+    }
     public function adminIndex()
     {
         $applications = SeatApplication::with('student')->orderBy('application_date', 'desc')->get();

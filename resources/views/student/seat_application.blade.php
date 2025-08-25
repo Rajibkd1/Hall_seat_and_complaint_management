@@ -73,7 +73,7 @@
                 </div>
             @endif
 
-            @if ($existingApplication)
+                @if ($existingApplication && $existingApplication->canBeEdited())
                 <div class="mb-6 p-4 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg">
                     <div class="flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -93,7 +93,8 @@
                         </div>
                     @else
                         <div class="mb-4 p-2 bg-red-100 border border-red-300 text-red-800 rounded-lg">
-                            <p class="text-sm">You can no longer edit or delete your application as it has been more than 3 days since submission.</p>
+                            <p class="text-sm">You can no longer edit or delete your application as it has been more than 3
+                                days since submission.</p>
                         </div>
                     @endif
                     <div class="flex items-center justify-between mb-6">
@@ -117,10 +118,34 @@
                                         Delete Application
                                     </button>
                                 </form>
+
+                                <!-- Download PDF Button -->
+                                <a href="{{ route('seat-application.download-pdf', $existingApplication) }}"
+                                    class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center">
+                                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    Download PDF
+                                </a>
                             </div>
                         @else
-                            <div class="bg-amber-100 border border-amber-300 text-amber-800 px-4 py-2 rounded-lg">
-                                <p class="text-sm font-medium">The application can no longer be edited or deleted.</p>
+                            <div class="flex space-x-3">
+                                <div class="bg-amber-100 border border-amber-300 text-amber-800 px-4 py-2 rounded-lg">
+                                    <p class="text-sm font-medium">The application can no longer be edited or deleted.</p>
+                                </div>
+
+                                <!-- Download PDF Button -->
+                                <a href="{{ route('seat-application.download-pdf', $existingApplication) }}"
+                                    class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center">
+                                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    Download PDF
+                                </a>
                             </div>
                         @endif
                     </div>
