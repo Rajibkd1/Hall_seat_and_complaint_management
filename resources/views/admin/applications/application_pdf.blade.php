@@ -6,92 +6,112 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
         @page {
-            margin: 15mm;
+            margin: 12mm;
             size: A4;
         }
 
         body {
-            font-family: 'Times New Roman', serif;
+            font-family: 'Georgia', 'Times New Roman', serif;
             margin: 0;
             padding: 0;
-            color: #000;
-            line-height: 1.4;
-            font-size: 12px;
+            color: #1a1a1a;
+            line-height: 1.5;
+            font-size: 11px;
+            background: #ffffff;
         }
 
+        /* Professional Letterhead */
         .letterhead {
             text-align: center;
-            border-bottom: 3px double #000;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            border-bottom: 4px solid #2c3e50;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
         }
 
         .university-seal {
-            width: 80px;
-            height: 80px;
-            border: 3px solid #000;
+            width: 90px;
+            height: 90px;
+            border: 4px solid #2c3e50;
             border-radius: 50%;
-            margin: 0 auto 10px;
+            margin: 0 auto 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 16px;
-            background: #fff;
+            font-size: 18px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            color: #2c3e50;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .letterhead h1 {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
-            margin: 5px 0;
+            margin: 8px 0;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            color: #2c3e50;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         .letterhead .university {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
-            margin: 5px 0;
+            margin: 8px 0;
+            color: #34495e;
         }
 
         .letterhead .department {
-            font-size: 14px;
-            margin: 3px 0;
+            font-size: 15px;
+            margin: 5px 0;
             font-style: italic;
+            color: #5d6d7e;
         }
 
         .letterhead .address {
-            font-size: 11px;
-            margin: 8px 0 5px 0;
+            font-size: 10px;
+            margin: 12px 0 8px 0;
+            color: #7f8c8d;
+            line-height: 1.4;
         }
 
+        /* Enhanced Document Title */
         .document-title {
             text-align: center;
-            margin: 25px 0;
-            padding: 15px;
-            border: 2px solid #000;
-            background: #f8f8f8;
+            margin: 30px 0;
+            padding: 20px;
+            border: 3px solid #2c3e50;
+            background: linear-gradient(135deg, #ecf0f1 0%, #bdc3c7 100%);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .document-title h2 {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
             margin: 0;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            color: #2c3e50;
         }
 
         .document-title .subtitle {
             font-size: 14px;
-            margin: 5px 0 0 0;
+            margin: 8px 0 0 0;
             font-weight: normal;
+            color: #34495e;
         }
 
+        /* Professional Reference Info */
         .reference-info {
             display: table;
             width: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             border-collapse: collapse;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .reference-info .left,
@@ -99,69 +119,83 @@
             display: table-cell;
             width: 50%;
             vertical-align: top;
-            padding: 8px;
-            border: 1px solid #000;
+            padding: 12px;
+            border: 2px solid #34495e;
             font-size: 11px;
+            background: #f8f9fa;
         }
 
         .reference-info .label {
             font-weight: bold;
-            margin-bottom: 3px;
+            margin-bottom: 5px;
+            color: #2c3e50;
         }
 
+        /* Enhanced Student Header */
         .student-header {
             display: table;
             width: 100%;
-            margin-bottom: 20px;
-            border: 2px solid #000;
+            margin-bottom: 25px;
+            border: 3px solid #2c3e50;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .photo-section {
             display: table-cell;
-            width: 120px;
-            padding: 15px;
+            width: 130px;
+            padding: 20px;
             text-align: center;
             vertical-align: top;
-            border-right: 1px solid #000;
+            border-right: 2px solid #34495e;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         }
 
         .student-photo {
-            width: 100px;
-            height: 120px;
-            border: 2px solid #000;
-            margin: 0 auto 8px;
+            width: 110px;
+            height: 130px;
+            border: 3px solid #2c3e50;
+            margin: 0 auto 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .student-photo img {
-            width: 96px;
-            height: 116px;
+            width: 104px;
+            height: 124px;
             object-fit: cover;
+            border-radius: 2px;
         }
 
         .photo-placeholder {
-            font-size: 10px;
+            font-size: 9px;
             text-align: center;
-            color: #666;
+            color: #7f8c8d;
             font-style: italic;
+            line-height: 1.3;
         }
 
         .student-details {
             display: table-cell;
-            padding: 15px;
+            padding: 20px;
             vertical-align: top;
+            background: #ffffff;
         }
 
         .student-name {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             text-transform: uppercase;
-            border-bottom: 1px solid #000;
-            padding-bottom: 5px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 8px;
+            color: #2c3e50;
+            letter-spacing: 1px;
         }
 
         .basic-info {
@@ -177,57 +211,72 @@
         .basic-info .label,
         .basic-info .value {
             display: table-cell;
-            padding: 4px 8px;
-            border: 1px solid #ccc;
+            padding: 8px 12px;
+            border: 1px solid #bdc3c7;
             font-size: 11px;
         }
 
         .basic-info .label {
-            width: 35%;
+            width: 40%;
             font-weight: bold;
-            background: #f5f5f5;
+            background: linear-gradient(135deg, #ecf0f1 0%, #d5dbdb 100%);
+            color: #2c3e50;
         }
 
+        .basic-info .value {
+            background: #ffffff;
+            color: #34495e;
+        }
+
+        /* Professional Sections */
         .section {
-            margin-bottom: 20px;
-            border: 1px solid #000;
+            margin-bottom: 25px;
+            border: 2px solid #34495e;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         }
 
         .section-header {
-            background: #000;
-            color: #fff;
-            padding: 8px 12px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: #ffffff;
+            padding: 12px 16px;
             font-weight: bold;
             font-size: 13px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .section-content {
-            padding: 12px;
+            padding: 16px;
+            background: #ffffff;
         }
 
         .info-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .info-table td {
-            padding: 6px 8px;
-            border: 1px solid #ddd;
+            padding: 10px 12px;
+            border: 1px solid #bdc3c7;
             font-size: 11px;
             vertical-align: top;
         }
 
         .info-table .field-label {
-            width: 30%;
+            width: 35%;
             font-weight: bold;
-            background: #f9f9f9;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #2c3e50;
         }
 
         .info-table .field-value {
-            width: 70%;
+            width: 65%;
+            background: #ffffff;
+            color: #34495e;
         }
 
         .two-column {
@@ -239,109 +288,135 @@
         .two-column .col {
             display: table-cell;
             width: 50%;
-            padding: 0 5px;
+            padding: 0 8px;
             vertical-align: top;
         }
 
+        /* Enhanced Status Box */
         .status-box {
             text-align: center;
-            padding: 8px;
-            border: 2px solid #000;
-            margin: 15px 0;
-            background: #f8f8f8;
+            padding: 15px;
+            border: 3px solid #2c3e50;
+            margin: 20px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .status-label {
             font-weight: bold;
-            font-size: 12px;
-            margin-bottom: 5px;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #2c3e50;
         }
 
         .status-value {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
             text-transform: uppercase;
-            padding: 5px 10px;
-            border: 1px solid #000;
+            padding: 8px 16px;
+            border: 2px solid #2c3e50;
             display: inline-block;
+            border-radius: 5px;
+            letter-spacing: 1px;
         }
 
         .status-pending {
             background: #fff3cd;
             color: #856404;
+            border-color: #856404;
         }
 
         .status-approved {
             background: #d4edda;
             color: #155724;
+            border-color: #155724;
         }
 
         .status-rejected {
             background: #f8d7da;
             color: #721c24;
+            border-color: #721c24;
         }
 
         .status-verified {
             background: #d1ecf1;
             color: #0c5460;
+            border-color: #0c5460;
         }
 
+        /* Professional Declarations */
         .declarations {
-            border: 2px solid #000;
-            padding: 15px;
-            margin: 20px 0;
+            border: 3px solid #2c3e50;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .declarations h3 {
             text-align: center;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: bold;
-            margin: 0 0 15px 0;
+            margin: 0 0 20px 0;
             text-transform: uppercase;
+            color: #2c3e50;
+            letter-spacing: 1px;
         }
 
         .declarations ol {
             margin: 0;
-            padding-left: 20px;
+            padding-left: 25px;
         }
 
         .declarations li {
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             font-size: 11px;
-            line-height: 1.4;
+            line-height: 1.6;
+            color: #34495e;
         }
 
+        /* Enhanced Signature Section */
         .signature-section {
-            margin-top: 30px;
+            margin-top: 35px;
             display: table;
             width: 100%;
         }
 
         .signature-box {
             display: table-cell;
-            width: 50%;
-            padding: 20px;
+            width: 100%;
+            padding: 25px;
             text-align: center;
-            border: 1px solid #000;
+            border: 2px solid #2c3e50;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px;
         }
 
         .signature-line {
-            border-bottom: 1px solid #000;
-            height: 40px;
-            margin-bottom: 8px;
+            border-bottom: 2px solid #2c3e50;
+            height: 50px;
+            margin-bottom: 12px;
         }
 
         .signature-label {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: bold;
+            color: #2c3e50;
         }
 
+        /* Professional Footer */
         .footer {
-            margin-top: 30px;
-            padding-top: 15px;
-            border-top: 1px solid #000;
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 2px solid #2c3e50;
             text-align: center;
-            font-size: 10px;
+            font-size: 9px;
+            color: #7f8c8d;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 15px;
+            border-radius: 8px;
         }
 
         .page-break {
@@ -349,8 +424,14 @@
         }
 
         .empty-value {
-            color: #999;
+            color: #95a5a6;
             font-style: italic;
+        }
+
+        /* Department name shortening */
+        .department-short {
+            font-weight: bold;
+            color: #2c3e50;
         }
     </style>
 </head>
@@ -392,21 +473,23 @@
     <div class="student-header">
         <div class="photo-section">
             <div class="student-photo">
-                @if($student->profile_image)
+                @if ($student->profile_image)
                     @php
                         $imagePath = public_path('storage/' . $student->profile_image);
                     @endphp
-                    @if(file_exists($imagePath))
+                    @if (file_exists($imagePath))
                         @php
                             $imageData = file_get_contents($imagePath);
                             $imageBase64 = base64_encode($imageData);
                             $imageMimeType = mime_content_type($imagePath);
                         @endphp
-                        <img src="data:{{ $imageMimeType }};base64,{{ $imageBase64 }}" alt="Student Photo" style="width: 96px; height: 116px; object-fit: cover;">
+                        <img src="data:{{ $imageMimeType }};base64,{{ $imageBase64 }}" alt="Student Photo"
+                            style="width: 96px; height: 116px; object-fit: cover;">
                     @else
                         <div class="photo-placeholder">
                             <div style="font-weight: bold; font-size: 10px;">STUDENT PHOTOGRAPH</div>
-                            <div style="margin-top: 8px; font-size: 9px; line-height: 1.2;">{{ $application->student_name }}</div>
+                            <div style="margin-top: 8px; font-size: 9px; line-height: 1.2;">
+                                {{ $application->student_name }}</div>
                             <div style="margin-top: 5px; font-size: 8px;">ID: {{ $student->university_id }}</div>
                             <div style="margin-top: 5px; font-size: 7px; color: #999;">(Image not found)</div>
                         </div>
@@ -414,7 +497,8 @@
                 @else
                     <div class="photo-placeholder">
                         <div style="font-weight: bold; font-size: 10px;">STUDENT PHOTOGRAPH</div>
-                        <div style="margin-top: 8px; font-size: 9px; line-height: 1.2;">{{ $application->student_name }}</div>
+                        <div style="margin-top: 8px; font-size: 9px; line-height: 1.2;">
+                            {{ $application->student_name }}</div>
                         <div style="margin-top: 5px; font-size: 8px;">ID: {{ $student->university_id }}</div>
                         <div style="margin-top: 5px; font-size: 7px; color: #999;">(Not Provided)</div>
                     </div>
@@ -431,7 +515,33 @@
                 </div>
                 <div class="row">
                     <div class="label">Department:</div>
-                    <div class="value">{{ $application->department }}</div>
+                    <div class="value">
+                        @php
+                            // Shorten department name to first 3 words or create abbreviation
+                            $dept = $application->department;
+                            $words = explode(' ', $dept);
+                            if (count($words) > 3) {
+                                $shortDept = implode(' ', array_slice($words, 0, 3));
+                            } else {
+                                $shortDept = $dept;
+                            }
+                            // Common department abbreviations
+                            $abbreviations = [
+                                'Computer Science and Engineering' => 'CSE',
+                                'Electrical and Electronic Engineering' => 'EEE',
+                                'Civil Engineering' => 'CE',
+                                'Mechanical Engineering' => 'ME',
+                                'Business Administration' => 'BBA',
+                                'Economics' => 'ECON',
+                                'Mathematics' => 'MATH',
+                                'Physics' => 'PHY',
+                                'Chemistry' => 'CHEM',
+                                'English' => 'ENG',
+                            ];
+                            $displayDept = $abbreviations[$dept] ?? $shortDept;
+                        @endphp
+                        <span class="department-short">{{ $displayDept }}</span>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="label">Academic Year:</div>
@@ -480,32 +590,20 @@
     <div class="section">
         <div class="section-header">Academic Information</div>
         <div class="section-content">
-            <div class="two-column">
-                <div class="col">
-                    <table class="info-table">
-                        <tr>
-                            <td class="field-label">Program:</td>
-                            <td class="field-value">{{ ucfirst($application->program) }}</td>
-                        </tr>
-                        <tr>
-                            <td class="field-label">Current Year:</td>
-                            <td class="field-value">{{ $application->semester_year ?? 'Not Specified' }}</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="col">
-                    <table class="info-table">
-                        <tr>
-                            <td class="field-label">Term:</td>
-                            <td class="field-value">{{ $application->semester_term ?? 'Not Specified' }}</td>
-                        </tr>
-                        <tr>
-                            <td class="field-label">CGPA:</td>
-                            <td class="field-value">{{ $application->cgpa }}</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+            <table class="info-table">
+                <tr>
+                    <td class="field-label">Program:</td>
+                    <td class="field-value">{{ ucfirst($application->program) }}</td>
+                </tr>
+                <tr>
+                    <td class="field-label">Current Year:</td>
+                    <td class="field-value">{{ $application->semester_year ?? 'Not Specified' }}</td>
+                </tr>
+                <tr>
+                    <td class="field-label">Term:</td>
+                    <td class="field-value">{{ $application->semester_term ?? 'Not Specified' }}</td>
+                </tr>
+            </table>
         </div>
     </div>
 
