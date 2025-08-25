@@ -751,13 +751,18 @@ header {
 }
 
 .nav-link::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(30, 64, 175, 0.1), transparent);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(30, 64, 175, 0.1),
+        transparent
+    );
     transition: left 0.5s;
 }
 
@@ -767,8 +772,13 @@ header {
 
 /* Logo Animation */
 @keyframes logoGlow {
-    0%, 100% { box-shadow: 0 0 20px rgba(30, 64, 175, 0.3); }
-    50% { box-shadow: 0 0 30px rgba(5, 150, 105, 0.4); }
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(30, 64, 175, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(5, 150, 105, 0.4);
+    }
 }
 
 .logo-container {
@@ -777,7 +787,11 @@ header {
 
 /* Enhanced Button Styles */
 .btn-primary {
-    background: linear-gradient(135deg, var(--nstu-blue) 0%, var(--nstu-green) 100%);
+    background: linear-gradient(
+        135deg,
+        var(--nstu-blue) 0%,
+        var(--nstu-green) 100%
+    );
     border: none;
     color: white;
     padding: 0.75rem 1.5rem;
@@ -797,7 +811,11 @@ header {
 
 /* Gradient Text */
 .gradient-text {
-    background: linear-gradient(135deg, var(--nstu-blue) 0%, var(--nstu-green) 100%);
+    background: linear-gradient(
+        135deg,
+        var(--nstu-blue) 0%,
+        var(--nstu-green) 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -822,4 +840,57 @@ header {
 
 .animate-slide-in {
     animation: slideInFromTop 0.5s ease-out;
+}
+
+/* Fix for Signup Button Visibility Issue */
+.auth-buttons a[href*="register"] {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: linear-gradient(
+        135deg,
+        var(--nstu-blue) 0%,
+        var(--nstu-green) 100%
+    ) !important;
+    color: white !important;
+    padding: 0.625rem 1.5rem !important;
+    border-radius: 0.5rem !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease-in-out !important;
+    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3) !important;
+    transform: none !important;
+}
+
+.auth-buttons a[href*="register"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(30, 64, 175, 0.4) !important;
+    background: linear-gradient(
+        135deg,
+        var(--nstu-blue-dark) 0%,
+        var(--nstu-green-dark) 100%
+    ) !important;
+}
+
+/* Ensure navbar auth buttons are always visible */
+nav .auth-buttons,
+header .auth-buttons {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+}
+
+nav .auth-buttons a,
+header .auth-buttons a {
+    display: inline-flex !important;
+    align-items: center !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Additional fix for Tailwind classes */
+.bg-gradient-to-r {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }

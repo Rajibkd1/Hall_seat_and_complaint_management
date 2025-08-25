@@ -22,13 +22,17 @@
                 <!-- Enhanced Logo Section -->
                 <div class="flex items-center space-x-4">
                     <div class="relative">
-                        <div class="w-14 h-14 bg-gradient-to-br from-nstu-blue via-blue-600 to-nstu-green rounded-xl flex items-center justify-center p-2 shadow-lg transform hover:scale-105 transition-all duration-300">
-                            <img src="{{ asset('images/nstu_logo.png') }}" alt="NSTU Logo" class="w-10 h-10 object-contain filter brightness-0 invert">
+                        <div
+                            class="w-14 h-14 bg-white rounded-xl flex items-center justify-center p-2 shadow-lg transform hover:scale-105 transition-all duration-300 border-2 border-nstu-blue">
+                            <img src="{{ asset('images/nstu_logo.png') }}" alt="NSTU Logo"
+                                class="w-10 h-10 object-contain">
                         </div>
-                        <div class="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-pulse"></div>
+                        <div
+                            class="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-pulse">
+                        </div>
                     </div>
                     <div class="hidden sm:block">
-                        <div class="text-xl font-bold bg-gradient-to-r from-nstu-blue to-nstu-green bg-clip-text text-transparent">
+                        <div class="text-xl font-bold text-nstu-blue">
                             NSTU Hall Management
                         </div>
                         <div class="text-xs text-gray-600 uppercase tracking-wider font-semibold">
@@ -42,27 +46,35 @@
                     <a href="#services"
                         class="nav-link px-4 py-2 text-gray-700 hover:text-nstu-blue font-medium transition-all duration-300 rounded-lg hover:bg-blue-50 relative group">
                         <span>Services</span>
-                        <div class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-nstu-blue to-nstu-green transition-all duration-300 group-hover:w-full group-hover:left-0"></div>
+                        <div
+                            class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-nstu-blue to-nstu-green transition-all duration-300 group-hover:w-full group-hover:left-0">
+                        </div>
                     </a>
                     <a href="#process"
                         class="nav-link px-4 py-2 text-gray-700 hover:text-nstu-blue font-medium transition-all duration-300 rounded-lg hover:bg-blue-50 relative group">
                         <span>Process</span>
-                        <div class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-nstu-blue to-nstu-green transition-all duration-300 group-hover:w-full group-hover:left-0"></div>
+                        <div
+                            class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-nstu-blue to-nstu-green transition-all duration-300 group-hover:w-full group-hover:left-0">
+                        </div>
                     </a>
                     <a href="#support"
                         class="nav-link px-4 py-2 text-gray-700 hover:text-nstu-blue font-medium transition-all duration-300 rounded-lg hover:bg-blue-50 relative group">
                         <span>Support</span>
-                        <div class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-nstu-blue to-nstu-green transition-all duration-300 group-hover:w-full group-hover:left-0"></div>
+                        <div
+                            class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-nstu-blue to-nstu-green transition-all duration-300 group-hover:w-full group-hover:left-0">
+                        </div>
                     </a>
                     <a href="#contact"
                         class="nav-link px-4 py-2 text-gray-700 hover:text-nstu-blue font-medium transition-all duration-300 rounded-lg hover:bg-blue-50 relative group">
                         <span>Contact</span>
-                        <div class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-nstu-blue to-nstu-green transition-all duration-300 group-hover:w-full group-hover:left-0"></div>
+                        <div
+                            class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-nstu-blue to-nstu-green transition-all duration-300 group-hover:w-full group-hover:left-0">
+                        </div>
                     </a>
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <button class="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                <button class="hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                     id="mobileMenuBtn">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -71,13 +83,13 @@
                 </button>
 
                 <!-- Enhanced Auth Buttons -->
-                <div class="hidden lg:flex items-center space-x-3">
+                <div class="flex items-center space-x-3">
                     <a href="{{ route('student.auth', ['form_type' => 'login']) }}"
                         class="px-5 py-2.5 text-gray-700 hover:text-nstu-blue font-semibold transition-all duration-300 rounded-lg hover:bg-gray-50 border border-transparent hover:border-gray-200">
                         <i class="fas fa-sign-in-alt mr-2"></i>Login
                     </a>
                     <a href="{{ route('student.auth', ['form_type' => 'register']) }}"
-                        class="px-6 py-2.5 bg-gradient-to-r from-nstu-blue to-nstu-green text-white rounded-lg hover:from-blue-700 hover:to-green-700 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        class="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-green-600 text-white font-semibold transition-all duration-300 rounded-lg hover:from-blue-700 hover:to-green-700 transform hover:scale-105 hover:shadow-lg shadow-md">
                         <i class="fas fa-user-plus mr-2"></i>Sign Up
                     </a>
                 </div>
@@ -85,12 +97,14 @@
         </nav>
 
         <!-- Mobile Menu Overlay -->
-        <div class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40 hidden" id="mobileMenuOverlay">
+        <div class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" id="mobileMenuOverlay">
             <div class="fixed inset-y-0 right-0 max-w-xs w-full bg-white shadow-xl">
                 <div class="flex items-center justify-between p-4 border-b border-gray-200">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-gradient-to-br from-nstu-blue to-nstu-green rounded-lg flex items-center justify-center p-1.5">
-                            <img src="{{ asset('images/nstu_logo.png') }}" alt="NSTU Logo" class="w-6 h-6 object-contain filter brightness-0 invert">
+                        <div
+                            class="w-10 h-10 bg-white rounded-lg flex items-center justify-center p-1.5 border border-nstu-blue">
+                            <img src="{{ asset('images/nstu_logo.png') }}" alt="NSTU Logo"
+                                class="w-6 h-6 object-contain">
                         </div>
                         <div>
                             <div class="font-bold text-gray-900">NSTU Hall Management</div>
@@ -114,11 +128,11 @@
                 <div class="p-4 border-t border-gray-200 space-y-3">
                     <a href="{{ route('student.auth', ['form_type' => 'login']) }}"
                         class="block w-full py-2 px-4 text-center text-gray-700 hover:text-gray-900 font-medium border border-gray-300 rounded-md hover:bg-gray-50">
-                        Login
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
                     </a>
                     <a href="{{ route('student.auth', ['form_type' => 'register']) }}"
-                        class="block w-full py-2 px-4 text-center bg-gray-900 text-white rounded-md hover:bg-gray-800 font-medium">
-                        Sign Up
+                        class="block w-full py-2 px-4 text-center bg-gradient-to-r from-blue-600 to-green-600 text-white font-semibold rounded-md hover:from-blue-700 hover:to-green-700 transition-all duration-300 shadow-md">
+                        <i class="fas fa-user-plus mr-2"></i>Sign Up
                     </a>
                 </div>
             </div>
@@ -358,10 +372,14 @@
             <div class="text-center">
                 <div class="flex justify-center mb-8">
                     <div class="relative">
-                        <div class="w-28 h-28 bg-gradient-to-br from-nstu-blue via-blue-600 to-nstu-green rounded-full flex items-center justify-center p-4 shadow-2xl transform hover:scale-105 transition-all duration-300">
-                            <img src="{{ asset('images/nstu_logo.png') }}" alt="NSTU Logo" class="w-20 h-20 object-contain filter brightness-0 invert">
+                        <div
+                            class="w-28 h-28 bg-white rounded-full flex items-center justify-center p-4 shadow-2xl transform hover:scale-105 transition-all duration-300 border-4 border-nstu-blue">
+                            <img src="{{ asset('images/nstu_logo.png') }}" alt="NSTU Logo"
+                                class="w-20 h-20 object-contain">
                         </div>
-                        <div class="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-pulse"></div>
+                        <div
+                            class="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-pulse">
+                        </div>
                     </div>
                 </div>
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-nstu-blue mb-6">
@@ -532,7 +550,8 @@
                     <div class="step-number">3</div>
                     <div class="step-content">
                         <h3 class="step-title">NSTU Review Process</h3>
-                        <p class="step-description">Application undergoes NSTU hall administration review with transparent
+                        <p class="step-description">Application undergoes NSTU hall administration review with
+                            transparent
                             evaluation criteria and regular status communications.</p>
                         <div class="step-features">
                             <span class="step-tag">NSTU Review</span>
@@ -590,7 +609,8 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>Required documents include official NSTU student ID, academic transcripts, medical certificates
+                        <p>Required documents include official NSTU student ID, academic transcripts, medical
+                            certificates
                             (if applicable), and any special accommodation documentation. All documents must be
                             officially verified and comply with NSTU standards.</p>
                     </div>
@@ -602,7 +622,8 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>Applications undergo NSTU hall administration review within 5-7 business days following official
+                        <p>Applications undergo NSTU hall administration review within 5-7 business days following
+                            official
                             submission. Status updates are provided through official channels including email
                             notifications and the student portal dashboard.</p>
                     </div>
@@ -695,7 +716,8 @@
                             <i class="fas fa-map-marker-alt text-gray-600"></i>
                             <div>
                                 <div class="method-label">Physical Address</div>
-                                <div class="method-value">NSTU Hall Management Office, Administrative Building, Noakhali-3814</div>
+                                <div class="method-value">NSTU Hall Management Office, Administrative Building,
+                                    Noakhali-3814</div>
                             </div>
                         </div>
                     </div>
@@ -800,8 +822,10 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div class="footer-brand">
                     <div class="footer-logo">
-                        <div class="w-12 h-12 bg-gradient-to-br from-nstu-blue to-nstu-green rounded-lg flex items-center justify-center p-2 mr-3">
-                            <img src="{{ asset('images/nstu_logo.png') }}" alt="NSTU Logo" class="w-8 h-8 object-contain filter brightness-0 invert">
+                        <div
+                            class="w-12 h-12 bg-white rounded-lg flex items-center justify-center p-2 mr-3 border border-nstu-blue">
+                            <img src="{{ asset('images/nstu_logo.png') }}" alt="NSTU Logo"
+                                class="w-8 h-8 object-contain">
                         </div>
                         <div>
                             <div class="footer-logo-text">NSTU Hall Management</div>
@@ -841,7 +865,8 @@
             <div class="footer-bottom">
                 <div class="footer-bottom-content">
                     <p>&copy; 2025 NSTU Hall Management Administration. All rights reserved.</p>
-                    <p>Official platform for secure, compliant, and transparent student hall management at Noakhali Science & Technology University.</p>
+                    <p>Official platform for secure, compliant, and transparent student hall management at Noakhali
+                        Science & Technology University.</p>
                 </div>
             </div>
         </div>
