@@ -73,7 +73,7 @@
                 </div>
             @endif
 
-                @if ($existingApplication && $existingApplication->canBeEdited())
+            @if ($existingApplication && $existingApplication->canBeEdited())
                 <div class="mb-6 p-4 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg">
                     <div class="flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -488,18 +488,63 @@
                         </div>
 
                         <!-- Addresses -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div>
-                                <label for="permanent_address"
-                                    class="block text-sm font-medium text-gray-700 mb-2">Permanent Address</label>
-                                <textarea name="permanent_address" id="permanent_address" rows="3"
-                                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">{{ old('permanent_address') }}</textarea>
+                        <div class="mb-6">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">Address Information</h4>
+
+                            <!-- Division and District -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label for="division" class="block text-sm font-medium text-gray-700 mb-2">Division
+                                        <span class="text-red-500">*</span></label>
+                                    <select name="division" id="division" required
+                                        class="w-full border border-gray-300 rounded-lg px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                                        <option value="" disabled {{ old('division') ? '' : 'selected' }}>Select
+                                            Division</option>
+                                        <option value="dhaka" {{ old('division') == 'dhaka' ? 'selected' : '' }}>Dhaka
+                                        </option>
+                                        <option value="chittagong"
+                                            {{ old('division') == 'chittagong' ? 'selected' : '' }}>Chittagong</option>
+                                        <option value="rajshahi" {{ old('division') == 'rajshahi' ? 'selected' : '' }}>
+                                            Rajshahi</option>
+                                        <option value="khulna" {{ old('division') == 'khulna' ? 'selected' : '' }}>Khulna
+                                        </option>
+                                        <option value="barisal" {{ old('division') == 'barisal' ? 'selected' : '' }}>
+                                            Barisal</option>
+                                        <option value="sylhet" {{ old('division') == 'sylhet' ? 'selected' : '' }}>Sylhet
+                                        </option>
+                                        <option value="rangpur" {{ old('division') == 'rangpur' ? 'selected' : '' }}>
+                                            Rangpur</option>
+                                        <option value="mymensingh"
+                                            {{ old('division') == 'mymensingh' ? 'selected' : '' }}>Mymensingh</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="district" class="block text-sm font-medium text-gray-700 mb-2">District
+                                        <span class="text-red-500">*</span></label>
+                                    <select name="district" id="district" required
+                                        class="w-full border border-gray-300 rounded-lg px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                                        <option value="" disabled {{ old('district') ? '' : 'selected' }}>Select
+                                            District</option>
+                                        <!-- Districts will be populated via JavaScript based on selected division -->
+                                    </select>
+                                </div>
                             </div>
-                            <div>
-                                <label for="current_address" class="block text-sm font-medium text-gray-700 mb-2">Current
-                                    Address</label>
-                                <textarea name="current_address" id="current_address" rows="3"
-                                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">{{ old('current_address') }}</textarea>
+
+                            <!-- Detailed Addresses -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="permanent_address"
+                                        class="block text-sm font-medium text-gray-700 mb-2">Permanent Address</label>
+                                    <textarea name="permanent_address" id="permanent_address" rows="3"
+                                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">{{ old('permanent_address') }}</textarea>
+                                </div>
+                                <div>
+                                    <label for="current_address"
+                                        class="block text-sm font-medium text-gray-700 mb-2">Current
+                                        Address</label>
+                                    <textarea name="current_address" id="current_address" rows="3"
+                                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">{{ old('current_address') }}</textarea>
+                                </div>
                             </div>
                         </div>
 
@@ -694,4 +739,7 @@
                 }
             });
         </script>
+
+        <!-- Include seat application JavaScript -->
+        <script src="{{ asset('js/seat_application.js') }}"></script>
     @endsection

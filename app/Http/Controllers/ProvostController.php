@@ -99,14 +99,14 @@ class ProvostController extends Controller
         return redirect()->back()->with('success', 'Notice rejected successfully.');
     }
 
-    public function applications()
+    public function applications(Request $request)
     {
-        return app(\App\Http\Controllers\SeatApplicationController::class)->adminIndex();
+        return app(\App\Http\Controllers\SeatApplicationController::class)->adminIndex($request);
     }
 
-    public function applicationsIndex()
+    public function applicationsIndex(Request $request)
     {
-        return app(\App\Http\Controllers\SeatApplicationController::class)->adminIndex();
+        return app(\App\Http\Controllers\SeatApplicationController::class)->adminIndex($request);
     }
 
     public function viewApplication($application)

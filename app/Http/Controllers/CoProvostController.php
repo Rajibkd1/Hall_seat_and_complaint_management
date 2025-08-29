@@ -75,9 +75,9 @@ class CoProvostController extends Controller
         return $this->adminController->destroyNotice($id);
     }
 
-    public function applications()
+    public function applications(Request $request)
     {
-        return app(\App\Http\Controllers\SeatApplicationController::class)->adminIndex();
+        return app(\App\Http\Controllers\SeatApplicationController::class)->adminIndex($request);
     }
 
     public function viewApplication($application)

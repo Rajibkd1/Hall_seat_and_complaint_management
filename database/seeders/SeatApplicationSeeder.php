@@ -92,13 +92,104 @@ class SeatApplicationSeeder extends Seeder
                 'guardian_contact' => '01987654325',
                 'password_hash' => bcrypt('password'),
             ],
+            [
+                'name' => 'Fatima Ahmed',
+                'email' => 'fatima.ahmed@university.edu',
+                'university_id' => 'CSE2021006',
+                'phone' => '01712345683',
+                'department' => 'Computer Science',
+                'session_year' => 2021,
+                'current_address' => 'University Area, Dhaka',
+                'permanent_address' => 'Barisal, Bangladesh',
+                'father_name' => 'Mohammed Ahmed',
+                'mother_name' => 'Aisha Ahmed',
+                'guardian_alive_status' => true,
+                'guardian_contact' => '01987654326',
+                'password_hash' => bcrypt('password'),
+            ],
+            [
+                'name' => 'David Wilson',
+                'email' => 'david.wilson@university.edu',
+                'university_id' => 'EEE2021007',
+                'phone' => '01712345684',
+                'department' => 'Electrical Engineering',
+                'session_year' => 2021,
+                'current_address' => 'University Area, Dhaka',
+                'permanent_address' => 'Rangpur, Bangladesh',
+                'father_name' => 'Robert Wilson',
+                'mother_name' => 'Jennifer Wilson',
+                'guardian_alive_status' => true,
+                'guardian_contact' => '01987654327',
+                'password_hash' => bcrypt('password'),
+            ],
+            [
+                'name' => 'Aisha Khan',
+                'email' => 'aisha.khan@university.edu',
+                'university_id' => 'ME2020008',
+                'phone' => '01712345685',
+                'department' => 'Mechanical Engineering',
+                'session_year' => 2020,
+                'current_address' => 'University Area, Dhaka',
+                'permanent_address' => 'Mymensingh, Bangladesh',
+                'father_name' => 'Ali Khan',
+                'mother_name' => 'Nadia Khan',
+                'guardian_alive_status' => true,
+                'guardian_contact' => '01987654328',
+                'password_hash' => bcrypt('password'),
+            ],
+            [
+                'name' => 'Robert Chen',
+                'email' => 'robert.chen@university.edu',
+                'university_id' => 'BBA2021009',
+                'phone' => '01712345686',
+                'department' => 'Business Administration',
+                'session_year' => 2021,
+                'current_address' => 'University Area, Dhaka',
+                'permanent_address' => 'Dhaka, Bangladesh',
+                'father_name' => 'William Chen',
+                'mother_name' => 'Grace Chen',
+                'guardian_alive_status' => true,
+                'guardian_contact' => '01987654329',
+                'password_hash' => bcrypt('password'),
+            ],
+            [
+                'name' => 'Nadia Islam',
+                'email' => 'nadia.islam@university.edu',
+                'university_id' => 'ARCH2020010',
+                'phone' => '01712345687',
+                'department' => 'Architecture',
+                'session_year' => 2020,
+                'current_address' => 'University Area, Dhaka',
+                'permanent_address' => 'Chittagong, Bangladesh',
+                'father_name' => 'Mohammed Islam',
+                'mother_name' => 'Amina Islam',
+                'guardian_alive_status' => true,
+                'guardian_contact' => '01987654330',
+                'password_hash' => bcrypt('password'),
+            ],
         ];
 
-        foreach ($students as $studentData) {
+        // Bangladesh divisions and districts for realistic data
+        $divisions = [
+            'dhaka' => ['Dhaka', 'Gazipur', 'Narayanganj', 'Tangail', 'Narsingdi'],
+            'chittagong' => ['Chittagong', 'Comilla', 'Chandpur', 'Lakshmipur', 'Noakhali'],
+            'rajshahi' => ['Rajshahi', 'Natore', 'Naogaon', 'Chapainawabganj', 'Pabna'],
+            'khulna' => ['Khulna', 'Bagerhat', 'Satkhira', 'Jessore', 'Magura'],
+            'barisal' => ['Barisal', 'Bhola', 'Pirojpur', 'Patuakhali', 'Barguna'],
+            'sylhet' => ['Sylhet', 'Moulvibazar', 'Habiganj', 'Sunamganj'],
+            'rangpur' => ['Rangpur', 'Dinajpur', 'Kurigram', 'Gaibandha', 'Nilphamari'],
+            'mymensingh' => ['Mymensingh', 'Jamalpur', 'Sherpur', 'Netrokona'],
+        ];
+
+        foreach ($students as $index => $studentData) {
             $student = Student::firstOrCreate(
                 ['university_id' => $studentData['university_id']],
                 $studentData
             );
+
+            // Select division and district for this student
+            $division = array_keys($divisions)[$index % count($divisions)];
+            $district = $divisions[$division][$index % count($divisions[$division])];
 
             // Create seat applications for each student
             $applications = [
@@ -116,7 +207,9 @@ class SeatApplicationSeeder extends Seeder
                     'cgpa' => round(rand(250, 400) / 100, 2), // Random CGPA between 2.50 and 4.00
                     'physical_condition' => 'normal',
                     'family_status' => 'both-parents',
-                    'permanent_address' => 'Dhaka, Bangladesh',
+                    'division' => $division,
+                    'district' => strtolower(str_replace(' ', '_', $district)),
+                    'permanent_address' => $district . ', ' . ucfirst($division) . ', Bangladesh',
                     'current_address' => 'University Area, Dhaka',
                     'activities' => json_encode(['bncc']),
                     'other_info' => json_encode([]),
@@ -150,6 +243,10 @@ class SeatApplicationSeeder extends Seeder
         for ($i = 0; $i < 3; $i++) {
             $randomStudent = Student::inRandomOrder()->first();
             if ($randomStudent) {
+                // Select random division and district
+                $randomDivision = array_keys($divisions)[array_rand($divisions)];
+                $randomDistrict = $divisions[$randomDivision][array_rand($divisions[$randomDivision])];
+
                 SeatApplication::create([
                     'student_id' => $randomStudent->student_id,
                     'student_name' => $randomStudent->name,
@@ -164,7 +261,9 @@ class SeatApplicationSeeder extends Seeder
                     'cgpa' => round(rand(350, 400) / 100, 2), // Higher CGPA for approved
                     'physical_condition' => 'normal',
                     'family_status' => 'both-parents',
-                    'permanent_address' => 'Chittagong, Bangladesh',
+                    'division' => $randomDivision,
+                    'district' => strtolower(str_replace(' ', '_', $randomDistrict)),
+                    'permanent_address' => $randomDistrict . ', ' . ucfirst($randomDivision) . ', Bangladesh',
                     'current_address' => 'University Area, Dhaka',
                     'activities' => json_encode(['rover']),
                     'other_info' => json_encode(['ethnic']),

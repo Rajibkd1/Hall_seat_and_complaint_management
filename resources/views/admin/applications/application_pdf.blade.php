@@ -449,7 +449,8 @@
 <body>
     <!-- Letterhead -->
     <div class="letterhead">
-        <div class="university-seal" @if(file_exists(storage_path('app/public/nstu_logo.png'))) style="border: none; background: transparent; box-shadow: none;" @endif>
+        <div class="university-seal"
+            @if (file_exists(storage_path('app/public/nstu_logo.png'))) style="border: none; background: transparent; box-shadow: none;" @endif>
             @php
                 $logoPath = storage_path('app/public/nstu_logo.png');
             @endphp
@@ -642,6 +643,15 @@
                 <tr>
                     <td class="field-label">Family Status:</td>
                     <td class="field-value">{{ str_replace('-', ' ', ucfirst($application->family_status)) }}</td>
+                </tr>
+                <tr>
+                    <td class="field-label">Division:</td>
+                    <td class="field-value">{{ ucfirst($application->division ?? 'Not Provided') }}</td>
+                </tr>
+                <tr>
+                    <td class="field-label">District:</td>
+                    <td class="field-value">
+                        {{ ucfirst(str_replace('_', ' ', $application->district ?? 'Not Provided')) }}</td>
                 </tr>
                 <tr>
                     <td class="field-label">Permanent Address:</td>

@@ -26,6 +26,8 @@ class SeatApplication extends Model
         'cgpa',
         'physical_condition',
         'family_status',
+        'division',
+        'district',
         'permanent_address',
         'current_address',
         'activities',
@@ -93,5 +95,149 @@ class SeatApplication extends Model
     public static function getStatusOptions(): array
     {
         return ['pending', 'approved', 'verified', 'rejected', 'waitlisted', 'allocated'];
+    }
+
+    /**
+     * Calculate priority score based on various criteria
+     */
+    public function calculatePriorityScore(): float
+    {
+        $score = 0;
+        $breakdown = [];
+
+        // 1. Distance from Noakhali (greater distance = higher score)
+        $distanceScore = min($this->home_distance_km / 10, 20); // Max 20 points for distance
+        $score += $distanceScore;
+        $breakdown['distance'] = round($distanceScore, 2);
+
+        // 2. Guardian deceased status (check from death certificate or family status)
+        $hasDeathCertificate = !empty($this->death_certificate_doc);
+        $familyStatus = strtolower($this->family_status ?? '');
+        $guardianDeceased = $hasDeathCertificate || str_contains($familyStatus, 'deceased') || str_contains($familyStatus, 'orphan');
+
+        if ($guardianDeceased) {
+            $score += 15; // 15 points for deceased guardian
+            $breakdown['guardian_deceased'] = 15;
+        } else {
+            $breakdown['guardian_deceased'] = 0;
+        }
+
+        // 3. Program level (PhD = higher priority)
+        $programLevel = strtolower($this->program ?? 'undergraduate');
+        if (str_contains($programLevel, 'phd') || str_contains($programLevel, 'doctorate')) {
+            $score += 20; // 20 points for PhD
+            $breakdown['program_level'] = 20;
+        } elseif (str_contains($programLevel, 'masters') || str_contains($programLevel, 'ms')) {
+            $score += 10; // 10 points for Masters
+            $breakdown['program_level'] = 10;
+        } else {
+            $breakdown['program_level'] = 0;
+        }
+
+        // 4. CGPA (higher CGPA = higher score)
+        $cgpaScore = min(($this->cgpa - 2.0) * 5, 20); // Max 20 points for CGPA
+        $score += max(0, $cgpaScore);
+        $breakdown['cgpa'] = round(max(0, $cgpaScore), 2);
+
+        // 5. Extracurricular activities (more activities = higher score)
+        $activities = $this->activities ?? [];
+        if (is_string($activities)) {
+            $activities = json_decode($activities, true) ?? [];
+        }
+        $activityCount = is_array($activities) ? count($activities) : 0;
+        $activityScore = min($activityCount * 2, 15); // Max 15 points for activities
+        $score += $activityScore;
+        $breakdown['extracurricular'] = $activityScore;
+
+        // 6. Years completed in university (estimate from semester)
+        $semesterYear = $this->semester_year ?? 1;
+        $yearsCompleted = max(0, $semesterYear - 1);
+        $yearsScore = min($yearsCompleted * 1.5, 10); // Max 10 points for years
+        $score += $yearsScore;
+        $breakdown['years_completed'] = $yearsScore;
+
+        // Convert to percentage (max score is 100)
+        $percentageScore = min(($score / 100) * 100, 100);
+
+        // Store the score in the existing score field
+        $this->score = round($percentageScore, 2);
+
+        return $percentageScore;
+    }
+
+    /**
+     * Get priority score as percentage
+     */
+    public function getPriorityScorePercentage(): float
+    {
+        if ($this->score > 0) {
+            return $this->score;
+        }
+
+        return $this->calculatePriorityScore();
+    }
+
+    /**
+     * Get score breakdown (calculated on-the-fly)
+     */
+    public function getScoreBreakdown(): array
+    {
+        // Calculate breakdown without storing it
+        $breakdown = [];
+
+        // Distance score
+        $distanceScore = min($this->home_distance_km / 10, 20);
+        $breakdown['distance'] = round($distanceScore, 2);
+
+        // Guardian deceased
+        $hasDeathCertificate = !empty($this->death_certificate_doc);
+        $familyStatus = strtolower($this->family_status ?? '');
+        $guardianDeceased = $hasDeathCertificate || str_contains($familyStatus, 'deceased') || str_contains($familyStatus, 'orphan');
+        $breakdown['guardian_deceased'] = $guardianDeceased ? 15 : 0;
+
+        // Program level
+        $programLevel = strtolower($this->program ?? 'undergraduate');
+        if (str_contains($programLevel, 'phd') || str_contains($programLevel, 'doctorate')) {
+            $breakdown['program_level'] = 20;
+        } elseif (str_contains($programLevel, 'masters') || str_contains($programLevel, 'ms')) {
+            $breakdown['program_level'] = 10;
+        } else {
+            $breakdown['program_level'] = 0;
+        }
+
+        // CGPA
+        $cgpaScore = min(($this->cgpa - 2.0) * 5, 20);
+        $breakdown['cgpa'] = round(max(0, $cgpaScore), 2);
+
+        // Activities
+        $activities = $this->activities ?? [];
+        if (is_string($activities)) {
+            $activities = json_decode($activities, true) ?? [];
+        }
+        $activityCount = is_array($activities) ? count($activities) : 0;
+        $breakdown['extracurricular'] = min($activityCount * 2, 15);
+
+        // Years completed
+        $semesterYear = $this->semester_year ?? 1;
+        $yearsCompleted = max(0, $semesterYear - 1);
+        $breakdown['years_completed'] = min($yearsCompleted * 1.5, 10);
+
+        return $breakdown;
+    }
+
+    /**
+     * Get priority level (High, Medium, Low)
+     */
+    public function getPriorityLevel(): string
+    {
+        $score = $this->getPriorityScorePercentage();
+
+        if ($score >= 80) {
+            return 'High';
+        } elseif ($score >= 60) {
+            return 'Medium';
+        } else {
+            return 'Low';
+        }
     }
 }

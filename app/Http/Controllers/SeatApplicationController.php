@@ -153,6 +153,9 @@ class SeatApplicationController extends Controller
             'physical_condition' => $request->input('physical_condition'),
             'family_status' => $request->input('family_status'),
 
+            'division' => $request->input('division'),
+            'district' => $request->input('district'),
+
             'permanent_address' => $request->input('permanent_address'),
             'current_address' => $request->input('current_address'),
 
@@ -377,7 +380,7 @@ class SeatApplicationController extends Controller
     public function downloadApplicationPDF($applicationId)
     {
         $application = SeatApplication::find($applicationId);
-        
+
         if (!$application) {
             return redirect()->route('student.seat_application')->with('error', 'Application not found.');
         }
@@ -385,7 +388,7 @@ class SeatApplicationController extends Controller
         // Check if the current user is authorized to view this application
         $user = Auth::user();
         $guard = Auth::getDefaultDriver();
-        
+
         // If user is a student, check if they own this application
         if ($guard === 'student' && $application->student_id !== $user->student_id) {
             abort(403, 'Unauthorized action.');
@@ -395,10 +398,168 @@ class SeatApplicationController extends Controller
         $pdf = Pdf::loadView('admin.applications.application_pdf', compact('application', 'student'));
         return $pdf->download('application_' . $application->application_id . '.pdf');
     }
-    public function adminIndex()
+    public function adminIndex(Request $request)
     {
-        $applications = SeatApplication::with('student')->orderBy('application_date', 'desc')->get();
+        $query = SeatApplication::with('student');
+
+        // Apply priority filters
+        if ($request->filled('priority_filters')) {
+            $filters = $request->input('priority_filters');
+
+            if (in_array('phd', $filters)) {
+                $query->where(function ($q) {
+                    $q->where('program', 'like', '%phd%')
+                        ->orWhere('program', 'like', '%doctorate%');
+                });
+            }
+
+            if (in_array('high_cgpa', $filters)) {
+                $query->where('cgpa', '>=', 3.5);
+            }
+
+            if (in_array('distance', $filters)) {
+                $query->where('home_distance_km', '>=', 50);
+            }
+
+            if (in_array('guardian_deceased', $filters)) {
+                $query->where(function ($q) {
+                    $q->whereNotNull('death_certificate_doc')
+                        ->orWhere('family_status', 'like', '%deceased%')
+                        ->orWhere('family_status', 'like', '%orphan%');
+                });
+            }
+
+            if (in_array('extracurricular', $filters)) {
+                $query->whereRaw('JSON_LENGTH(activities) >= 3');
+            }
+
+            if (in_array('senior_student', $filters)) {
+                $query->where('semester_year', '>=', 3);
+            }
+        }
+
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->whereHas('student', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('department', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        // Apply sorting
+        $sortBy = $request->input('sort_by', 'score');
+        $sortOrder = $request->input('sort_order', 'desc');
+
+        switch ($sortBy) {
+            case 'priority_score':
+            case 'score':
+                $query->orderBy('score', $sortOrder);
+                break;
+            case 'cgpa':
+                $query->orderBy('cgpa', $sortOrder);
+                break;
+            case 'distance':
+                $query->orderBy('home_distance_km', $sortOrder);
+                break;
+            case 'date':
+                $query->orderBy('application_date', $sortOrder);
+                break;
+            default:
+                $query->orderBy('score', 'desc');
+        }
+
+        $applications = $query->get();
+
+        // Calculate priority scores for applications that don't have them
+        foreach ($applications as $application) {
+            if (empty($application->score)) {
+                $application->calculatePriorityScore();
+                $application->save();
+            }
+        }
+
         return view('admin.applications.index', compact('applications'));
+    }
+
+    /**
+     * Show priority-based applications with detailed scoring
+     */
+    public function priorityIndex(Request $request)
+    {
+        $query = SeatApplication::with('student');
+
+        // Apply priority filters
+        if ($request->filled('priority_filters')) {
+            $filters = $request->input('priority_filters');
+
+            if (in_array('phd', $filters)) {
+                $query->where(function ($q) {
+                    $q->where('program', 'like', '%phd%')
+                        ->orWhere('program', 'like', '%doctorate%');
+                });
+            }
+
+            if (in_array('high_cgpa', $filters)) {
+                $query->where('cgpa', '>=', 3.5);
+            }
+
+            if (in_array('distance', $filters)) {
+                $query->where('home_distance_km', '>=', 50);
+            }
+
+            if (in_array('guardian_deceased', $filters)) {
+                $query->where(function ($q) {
+                    $q->whereNotNull('death_certificate_doc')
+                        ->orWhere('family_status', 'like', '%deceased%')
+                        ->orWhere('family_status', 'like', '%orphan%');
+                });
+            }
+
+            if (in_array('extracurricular', $filters)) {
+                $query->whereRaw('JSON_LENGTH(activities) >= 3');
+            }
+
+            if (in_array('senior_student', $filters)) {
+                $query->where('semester_year', '>=', 3);
+            }
+        }
+
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->whereHas('student', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('department', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        // Always sort by priority score for priority view
+        $query->orderBy('score', 'desc');
+
+        $applications = $query->get();
+
+        // Calculate priority scores for applications that don't have them
+        foreach ($applications as $application) {
+            if (empty($application->score)) {
+                $application->calculatePriorityScore();
+                $application->save();
+            }
+        }
+
+        return view('admin.applications.priority', compact('applications'));
     }
 
     // Show details of a specific application for admin

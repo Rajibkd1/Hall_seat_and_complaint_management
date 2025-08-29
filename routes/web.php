@@ -140,7 +140,7 @@ Route::middleware(['admin-auth', 'set-active-menu'])->prefix('admin')->group(fun
     Route::middleware('role-permission:view_students')->group(function () {
         Route::get('/students', [AdminController::class, 'students'])->name('admin.students');
         Route::get('/students/{student_id}', [AdminController::class, 'viewStudentProfile'])->name('admin.student.profile');
-        
+
         // Student PDF routes
         Route::get('/students/pdf/generate', [AdminController::class, 'generateStudentsPDFReport'])->name('admin.students.pdf.generate');
         Route::get('/students/pdf/download', [AdminController::class, 'downloadStudentsPDFReport'])->name('admin.students.pdf.download');
@@ -174,6 +174,7 @@ Route::middleware(['admin-auth', 'set-active-menu'])->prefix('admin')->group(fun
     // Application Management (Provost and Co-Provost)
     Route::middleware('role-permission:verify_applications')->group(function () {
         Route::get('/applications', [SeatApplicationController::class, 'adminIndex'])->name('admin.applications.index');
+        Route::get('/applications/priority', [SeatApplicationController::class, 'priorityIndex'])->name('admin.applications.priority');
         Route::get('/applications/{application}', [SeatApplicationController::class, 'adminShow'])->name('admin.applications.view');
         Route::patch('/applications/{application}/update-status', [SeatApplicationController::class, 'updateStatus'])->name('admin.applications.update_status');
         Route::post('/applications/{application}/send-email', [SeatApplicationController::class, 'sendEmail'])->name('admin.applications.send_email');
@@ -232,7 +233,7 @@ Route::middleware(['admin-auth', 'role-permission:Provost'])->prefix('provost')-
     // Provost-specific routes
     Route::get('/students', [ProvostController::class, 'students'])->name('provost.students');
     Route::get('/students/{student_id}', [ProvostController::class, 'viewStudentProfile'])->name('provost.student.profile');
-    
+
     // Student PDF routes
     Route::get('/students/pdf/generate', [AdminController::class, 'generateStudentsPDFReport'])->name('provost.students.pdf.generate');
     Route::get('/students/pdf/download', [AdminController::class, 'downloadStudentsPDFReport'])->name('provost.students.pdf.download');
@@ -248,18 +249,19 @@ Route::middleware(['admin-auth', 'role-permission:Provost'])->prefix('provost')-
     Route::post('/notices/{id}/approve', [ProvostController::class, 'approveNotice'])->name('provost.notices.approve');
     Route::post('/notices/{id}/reject', [ProvostController::class, 'rejectNotice'])->name('provost.notices.reject');
     Route::get('/applications', [ProvostController::class, 'applications'])->name('provost.applications.index');
+    Route::get('/applications/priority', [SeatApplicationController::class, 'priorityIndex'])->name('provost.applications.priority');
     Route::get('/applications/{application}', [ProvostController::class, 'viewApplication'])->name('provost.applications.view');
     Route::patch('/applications/{application}/update-status', [ProvostController::class, 'updateApplicationStatus'])->name('provost.applications.update_status');
     Route::post('/applications/{application}/send-email', [ProvostController::class, 'sendApplicationEmail'])->name('provost.applications.send_email');
-    
+
     // Approved Applications Routes
     Route::get('/applications-approved', [SeatApplicationController::class, 'approvedApplications'])->name('provost.applications.approved');
     Route::get('/applications-approved/{application}', [SeatApplicationController::class, 'approvedShow'])->name('provost.applications.approved.show');
-    
+
     // PDF Report Routes
     Route::get('/applications/pdf/generate', [SeatApplicationController::class, 'generatePDFReport'])->name('provost.applications.pdf.generate');
     Route::get('/applications/pdf/download', [SeatApplicationController::class, 'downloadPDFReport'])->name('provost.applications.pdf.download');
-    
+
     // Allocated Students Routes
     Route::get('/allocated-students', [SeatApplicationController::class, 'allocatedStudents'])->name('provost.applications.allocated');
     Route::get('/allocated-students/{allotment}', [SeatApplicationController::class, 'allocatedShow'])->name('provost.applications.allocated.show');
@@ -292,7 +294,7 @@ Route::middleware(['admin-auth', 'role-permission:Co-Provost'])->prefix('co-prov
     // Co-Provost-specific routes
     Route::get('/students', [CoProvostController::class, 'students'])->name('co-provost.students');
     Route::get('/students/{student_id}', [CoProvostController::class, 'viewStudentProfile'])->name('co-provost.student.profile');
-    
+
     // Student PDF routes
     Route::get('/students/pdf/generate', [AdminController::class, 'generateStudentsPDFReport'])->name('co-provost.students.pdf.generate');
     Route::get('/students/pdf/download', [AdminController::class, 'downloadStudentsPDFReport'])->name('co-provost.students.pdf.download');
@@ -306,18 +308,19 @@ Route::middleware(['admin-auth', 'role-permission:Co-Provost'])->prefix('co-prov
     Route::put('/notices/{id}', [CoProvostController::class, 'updateNotice'])->name('co-provost.notices.update');
     Route::delete('/notices/{id}', [CoProvostController::class, 'destroyNotice'])->name('co-provost.notices.destroy');
     Route::get('/applications', [CoProvostController::class, 'applications'])->name('co-provost.applications.index');
+    Route::get('/applications/priority', [SeatApplicationController::class, 'priorityIndex'])->name('co-provost.applications.priority');
     Route::get('/applications/{application}', [CoProvostController::class, 'viewApplication'])->name('co-provost.applications.view');
     Route::patch('/applications/{application}/update-status', [CoProvostController::class, 'updateApplicationStatus'])->name('co-provost.applications.update_status');
     Route::post('/applications/{application}/send-email', [CoProvostController::class, 'sendApplicationEmail'])->name('co-provost.applications.send_email');
-    
+
     // Approved Applications Routes
     Route::get('/applications-approved', [SeatApplicationController::class, 'approvedApplications'])->name('co-provost.applications.approved');
     Route::get('/applications-approved/{application}', [SeatApplicationController::class, 'approvedShow'])->name('co-provost.applications.approved.show');
-    
+
     // PDF Report Routes
     Route::get('/applications/pdf/generate', [SeatApplicationController::class, 'generatePDFReport'])->name('co-provost.applications.pdf.generate');
     Route::get('/applications/pdf/download', [SeatApplicationController::class, 'downloadPDFReport'])->name('co-provost.applications.pdf.download');
-    
+
     // Allocated Students Routes
     Route::get('/allocated-students', [SeatApplicationController::class, 'allocatedStudents'])->name('co-provost.applications.allocated');
     Route::get('/allocated-students/{allotment}', [SeatApplicationController::class, 'allocatedShow'])->name('co-provost.applications.allocated.show');

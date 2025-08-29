@@ -109,6 +109,10 @@
                                     Relationship:</strong> {{ $application->guardian_relationship }}</p>
                             <p class="text-gray-700"><strong class="font-semibold text-gray-900">Physical
                                     Condition:</strong> {{ ucfirst($application->physical_condition) }}</p>
+                            <p class="text-gray-700"><strong class="font-semibold text-gray-900">Division:</strong>
+                                {{ ucfirst($application->division ?? 'N/A') }}</p>
+                            <p class="text-gray-700"><strong class="font-semibold text-gray-900">District:</strong>
+                                {{ ucfirst(str_replace('_', ' ', $application->district ?? 'N/A')) }}</p>
                             <p class="text-gray-700"><strong class="font-semibold text-gray-900">Family Status:</strong>
                                 {{ str_replace('-', ' ', ucfirst($application->family_status)) }}</p>
                             <p class="text-gray-700"><strong class="font-semibold text-gray-900">Permanent Address:</strong>
