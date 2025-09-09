@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     modalCategory.textContent =
                         data.notice_type.charAt(0).toUpperCase() +
                         data.notice_type.slice(1);
-                    modalContent.textContent = data.description;
+                    modalContent.innerHTML = data.description;
                     modalAuthor.textContent = data.admin
                         ? data.admin.name
                         : "Hall Administration";
@@ -338,7 +338,7 @@ class HomepageNoticeManager {
                 modalCategory.textContent =
                     data.notice_type.charAt(0).toUpperCase() +
                     data.notice_type.slice(1);
-                modalContent.textContent = data.description;
+                modalContent.innerHTML = data.description;
                 modalAuthor.textContent = data.admin
                     ? data.admin.name
                     : "Hall Administration";
@@ -434,27 +434,27 @@ if (window.innerWidth < 768) {
 
 // FAQ Functionality
 function initFAQ() {
-    const faqItems = document.querySelectorAll('.faq-item');
-    
-    faqItems.forEach(item => {
-        const question = item.querySelector('.faq-question');
-        const answer = item.querySelector('.faq-answer');
-        
-        question.addEventListener('click', () => {
-            const isActive = item.classList.contains('active');
-            
+    const faqItems = document.querySelectorAll(".faq-item");
+
+    faqItems.forEach((item) => {
+        const question = item.querySelector(".faq-question");
+        const answer = item.querySelector(".faq-answer");
+
+        question.addEventListener("click", () => {
+            const isActive = item.classList.contains("active");
+
             // Close all other FAQ items
-            faqItems.forEach(otherItem => {
+            faqItems.forEach((otherItem) => {
                 if (otherItem !== item) {
-                    otherItem.classList.remove('active');
+                    otherItem.classList.remove("active");
                 }
             });
-            
+
             // Toggle current item
             if (isActive) {
-                item.classList.remove('active');
+                item.classList.remove("active");
             } else {
-                item.classList.add('active');
+                item.classList.add("active");
             }
         });
     });
@@ -462,28 +462,31 @@ function initFAQ() {
 
 // Contact Form Enhancement
 function initContactForm() {
-    const form = document.querySelector('.contact-form-container');
+    const form = document.querySelector(".contact-form-container");
     if (!form) return;
-    
-    form.addEventListener('submit', (e) => {
+
+    form.addEventListener("submit", (e) => {
         e.preventDefault();
-        
+
         // Add form submission animation
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
-        
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Sending...';
+
+        submitBtn.innerHTML =
+            '<i class="fas fa-spinner fa-spin mr-2"></i>Sending...';
         submitBtn.disabled = true;
-        
+
         // Simulate form submission
         setTimeout(() => {
-            submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Message Sent!';
-            submitBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-            
+            submitBtn.innerHTML =
+                '<i class="fas fa-check mr-2"></i>Message Sent!';
+            submitBtn.style.background =
+                "linear-gradient(135deg, #10b981 0%, #059669 100%)";
+
             setTimeout(() => {
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
-                submitBtn.style.background = '';
+                submitBtn.style.background = "";
                 form.reset();
             }, 2000);
         }, 1500);
@@ -492,37 +495,46 @@ function initContactForm() {
 
 // Enhanced Section Animations
 function initSectionAnimations() {
-    const sections = document.querySelectorAll('.features-section, .how-it-works-section, .faq-section, .contact-section');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-in');
-                
-                // Animate child elements with stagger
-                const children = entry.target.querySelectorAll('.feature-card, .process-step, .faq-item, .contact-info, .contact-form');
-                children.forEach((child, index) => {
-                    setTimeout(() => {
-                        child.style.opacity = '1';
-                        child.style.transform = 'translateY(0)';
-                    }, index * 100);
-                });
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
-    
-    sections.forEach(section => {
+    const sections = document.querySelectorAll(
+        ".features-section, .how-it-works-section, .faq-section, .contact-section"
+    );
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("animate-in");
+
+                    // Animate child elements with stagger
+                    const children = entry.target.querySelectorAll(
+                        ".feature-card, .process-step, .faq-item, .contact-info, .contact-form"
+                    );
+                    children.forEach((child, index) => {
+                        setTimeout(() => {
+                            child.style.opacity = "1";
+                            child.style.transform = "translateY(0)";
+                        }, index * 100);
+                    });
+                }
+            });
+        },
+        {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px",
+        }
+    );
+
+    sections.forEach((section) => {
         observer.observe(section);
-        
+
         // Set initial state for child elements
-        const children = section.querySelectorAll('.feature-card, .process-step, .faq-item, .contact-info, .contact-form');
-        children.forEach(child => {
-            child.style.opacity = '0';
-            child.style.transform = 'translateY(30px)';
-            child.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+        const children = section.querySelectorAll(
+            ".feature-card, .process-step, .faq-item, .contact-info, .contact-form"
+        );
+        children.forEach((child) => {
+            child.style.opacity = "0";
+            child.style.transform = "translateY(30px)";
+            child.style.transition = "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
         });
     });
 }
@@ -530,25 +542,27 @@ function initSectionAnimations() {
 // Mobile Menu Management
 class MobileMenuManager {
     constructor() {
-        this.mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        this.mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-        this.mobileMenuClose = document.getElementById('mobileMenuClose');
-        this.mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
-        
+        this.mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        this.mobileMenuOverlay = document.getElementById("mobileMenuOverlay");
+        this.mobileMenuClose = document.getElementById("mobileMenuClose");
+        this.mobileNavLinks = document.querySelectorAll(".mobile-nav-link");
+
         this.bindEvents();
     }
 
     bindEvents() {
         if (this.mobileMenuBtn) {
-            this.mobileMenuBtn.addEventListener('click', () => this.openMenu());
+            this.mobileMenuBtn.addEventListener("click", () => this.openMenu());
         }
 
         if (this.mobileMenuClose) {
-            this.mobileMenuClose.addEventListener('click', () => this.closeMenu());
+            this.mobileMenuClose.addEventListener("click", () =>
+                this.closeMenu()
+            );
         }
 
         if (this.mobileMenuOverlay) {
-            this.mobileMenuOverlay.addEventListener('click', (e) => {
+            this.mobileMenuOverlay.addEventListener("click", (e) => {
                 if (e.target === this.mobileMenuOverlay) {
                     this.closeMenu();
                 }
@@ -556,21 +570,21 @@ class MobileMenuManager {
         }
 
         // Close menu when clicking nav links
-        this.mobileNavLinks.forEach(link => {
-            link.addEventListener('click', () => {
+        this.mobileNavLinks.forEach((link) => {
+            link.addEventListener("click", () => {
                 this.closeMenu();
             });
         });
 
         // Close menu on escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.isMenuOpen()) {
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && this.isMenuOpen()) {
                 this.closeMenu();
             }
         });
 
         // Handle window resize
-        window.addEventListener('resize', () => {
+        window.addEventListener("resize", () => {
             if (window.innerWidth >= 1024 && this.isMenuOpen()) {
                 this.closeMenu();
             }
@@ -579,36 +593,39 @@ class MobileMenuManager {
 
     openMenu() {
         if (this.mobileMenuOverlay) {
-            this.mobileMenuOverlay.classList.remove('hidden');
-            this.mobileMenuOverlay.classList.add('show');
+            this.mobileMenuOverlay.classList.remove("hidden");
+            this.mobileMenuOverlay.classList.add("show");
         }
-        
+
         if (this.mobileMenuBtn) {
-            this.mobileMenuBtn.classList.add('active');
+            this.mobileMenuBtn.classList.add("active");
         }
 
         // Prevent body scroll
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow = "hidden";
     }
 
     closeMenu() {
         if (this.mobileMenuOverlay) {
-            this.mobileMenuOverlay.classList.remove('show');
+            this.mobileMenuOverlay.classList.remove("show");
             setTimeout(() => {
-                this.mobileMenuOverlay.classList.add('hidden');
+                this.mobileMenuOverlay.classList.add("hidden");
             }, 300);
         }
 
         if (this.mobileMenuBtn) {
-            this.mobileMenuBtn.classList.remove('active');
+            this.mobileMenuBtn.classList.remove("active");
         }
 
         // Restore body scroll
-        document.body.style.overflow = 'auto';
+        document.body.style.overflow = "auto";
     }
 
     isMenuOpen() {
-        return this.mobileMenuOverlay && this.mobileMenuOverlay.classList.contains('show');
+        return (
+            this.mobileMenuOverlay &&
+            this.mobileMenuOverlay.classList.contains("show")
+        );
     }
 }
 
@@ -620,7 +637,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initSmoothScrolling();
     handleScrollAnimations(); // This will make the Quick Access section visible
     enhanceNoticeCards();
-    
+
     // Initialize new enhanced features
     initFAQ();
     initContactForm();

@@ -12,6 +12,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/homepage_professional.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin_create_notice.css') }}">
 </head>
 
 <body class="min-h-screen bg-gray-50">
@@ -252,9 +253,9 @@
                                     <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
                                         {{ $notice->title }}
                                     </h3>
-                                    <p class="text-gray-600 text-sm line-clamp-3 leading-relaxed">
-                                        {{ Str::limit($notice->description, 150) }}
-                                    </p>
+                                    <div class="text-gray-600 text-sm line-clamp-3 leading-relaxed rich-text-preview">
+                                        {!! Str::limit(strip_tags($notice->description), 150) !!}
+                                    </div>
                                 </div>
 
                                 <div class="flex items-center justify-between text-gray-500 text-sm">
@@ -334,7 +335,7 @@
                     </button>
                 </div>
 
-                <div id="modalContent" class="text-gray-700 text-lg leading-relaxed mb-8 whitespace-pre-wrap">
+                <div id="modalContent" class="text-gray-700 text-lg leading-relaxed mb-8 rich-text-content">
                 </div>
 
                 <div
