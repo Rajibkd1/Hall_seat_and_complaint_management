@@ -8,6 +8,7 @@ use App\Models\SeatAllotment;
 use App\Models\Student;
 use App\Mail\SeatAssignmentNotification;
 use App\Mail\SeatReleaseNotification;
+use App\Helpers\SmsHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -212,13 +213,13 @@ class SeatController extends Controller
             'seat_id' => 'required|exists:seats,seat_id',
             'application_id' => 'required|exists:seat_applications,application_id'
         ]);
-        
+
         try {
             DB::beginTransaction();
-            
+
             $seat = Seat::findOrFail($request->seat_id);
             $application = SeatApplication::with('student')->findOrFail($request->application_id);
-            
+
             // Check if seat is available
             if ($seat->status !== 'vacant') {
                 return response()->json([
@@ -226,19 +227,19 @@ class SeatController extends Controller
                     'message' => 'Seat is not available for assignment'
                 ], 400);
             }
-            
+
             // Check if student already has a seat
             $existingAllotment = SeatAllotment::where('student_id', $application->student_id)
-                                            ->where('status', 'active')
-                                            ->first();
-            
+                ->where('status', 'active')
+                ->first();
+
             if ($existingAllotment) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Student already has an active seat assignment'
                 ], 400);
             }
-            
+
             // Create seat allotment
             $allotment = SeatAllotment::create([
                 'seat_id' => $seat->seat_id,
@@ -248,13 +249,13 @@ class SeatController extends Controller
                 'start_date' => now(),
                 'status' => 'active'
             ]);
-            
+
             // Update seat status
             $seat->update(['status' => 'occupied']);
-            
+
             // Update application status
             $application->update(['status' => 'allocated']);
-            
+
             // Send email notification to student
             try {
                 if ($application->student && $application->student->email) {
@@ -276,17 +277,55 @@ class SeatController extends Controller
                     'exception' => $emailException
                 ]);
             }
-            
+
+            // Send SMS notification to student
+            try {
+                if ($application->student && $application->student->phone) {
+                    $smsResult = SmsHelper::sendSeatAssignmentSms(
+                        $application->student->phone,
+                        $seat->room_number,
+                        $seat->bed_number,
+                        $seat->block,
+                        $seat->floor
+                    );
+
+                    if ($smsResult['success']) {
+                        Log::info('Seat assignment SMS sent successfully', [
+                            'student_id' => $application->student_id,
+                            'student_phone' => $application->student->phone,
+                            'seat_id' => $seat->seat_id,
+                            'allotment_id' => $allotment->allotment_id
+                        ]);
+                    } else {
+                        Log::error('Failed to send seat assignment SMS', [
+                            'student_id' => $application->student_id,
+                            'student_phone' => $application->student->phone,
+                            'seat_id' => $seat->seat_id,
+                            'allotment_id' => $allotment->allotment_id,
+                            'error' => $smsResult['message']
+                        ]);
+                    }
+                }
+            } catch (\Exception $smsException) {
+                // Log SMS error but don't fail the assignment
+                Log::error('SMS sending exception in seat assignment: ' . $smsException->getMessage(), [
+                    'student_id' => $application->student_id,
+                    'student_phone' => $application->student->phone ?? 'N/A',
+                    'seat_id' => $seat->seat_id,
+                    'allotment_id' => $allotment->allotment_id,
+                    'exception' => $smsException
+                ]);
+            }
+
             DB::commit();
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Seat assigned successfully'
             ]);
-            
         } catch (\Exception $e) {
             DB::rollback();
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to assign seat: ' . $e->getMessage()
@@ -369,6 +408,44 @@ class SeatController extends Controller
                     'seat_id' => $seatId,
                     'release_reason' => $releaseReason,
                     'exception' => $emailException
+                ]);
+            }
+
+            // Send SMS notification to student
+            try {
+                if ($allotment->student && $allotment->student->phone) {
+                    $smsResult = SmsHelper::sendSeatReleaseSms(
+                        $allotment->student->phone,
+                        $seat->room_number,
+                        $seat->bed_number,
+                        $releaseReason
+                    );
+
+                    if ($smsResult['success']) {
+                        Log::info('Seat release SMS sent successfully', [
+                            'student_id' => $allotment->student_id,
+                            'student_phone' => $allotment->student->phone,
+                            'seat_id' => $seatId,
+                            'release_reason' => $releaseReason
+                        ]);
+                    } else {
+                        Log::error('Failed to send seat release SMS', [
+                            'student_id' => $allotment->student_id,
+                            'student_phone' => $allotment->student->phone,
+                            'seat_id' => $seatId,
+                            'release_reason' => $releaseReason,
+                            'error' => $smsResult['message']
+                        ]);
+                    }
+                }
+            } catch (\Exception $smsException) {
+                // Log SMS error but don't fail the release process
+                Log::error('SMS sending exception in seat release: ' . $smsException->getMessage(), [
+                    'student_id' => $allotment->student_id ?? 'N/A',
+                    'student_phone' => $allotment->student->phone ?? 'N/A',
+                    'seat_id' => $seatId,
+                    'release_reason' => $releaseReason,
+                    'exception' => $smsException
                 ]);
             }
 

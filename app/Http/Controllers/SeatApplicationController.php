@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use App\Mail\ApplicationStatusUpdated;
 use App\Mail\AdminMessageEmail;
+use App\Helpers\SmsHelper;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class SeatApplicationController extends Controller
@@ -606,51 +607,99 @@ class SeatApplicationController extends Controller
 
         $message = 'Application status ' . ($statusChanged ? 'updated to ' . $newStatus : 'remains ' . $oldStatus) . '.';
 
-        // Send email notification if requested by admin (regardless of status change)
+        // Send email and SMS notifications
         $emailSent = false;
-        if ($sendEmailRequested) {
-            $student = $application->student;
+        $smsSent = false;
+        $student = $application->student;
 
-            if ($student && $student->email) {
-                try {
-                    $emailMessage = $validated['email_message'] ?? ($statusChanged ? 'Your application status has been updated.' : 'Message from administration regarding your application.');
-                    Mail::to($student->email)->send(
-                        new ApplicationStatusUpdated($application, $emailMessage, $application->status)
-                    );
-                    $emailSent = true;
-                    $message .= ' Email notification sent successfully.';
+        // Send email notification if requested by admin
+        if ($sendEmailRequested && $student && $student->email) {
+            try {
+                $emailMessage = $validated['email_message'] ?? ($statusChanged ? 'Your application status has been updated.' : 'Message from administration regarding your application.');
+                Mail::to($student->email)->send(
+                    new ApplicationStatusUpdated($application, $emailMessage, $application->status)
+                );
+                $emailSent = true;
+                $message .= ' Email notification sent successfully.';
 
-                    // Log successful email sending
-                    Log::info('Application status email sent successfully', [
+                // Log successful email sending
+                Log::info('Application status email sent successfully', [
+                    'application_id' => $application->application_id,
+                    'student_email' => $student->email,
+                    'status' => $application->status,
+                    'admin_id' => Auth::guard('admin')->id()
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Failed to send application status email', [
+                    'application_id' => $application->application_id,
+                    'student_email' => $student->email ?? 'N/A',
+                    'error' => $e->getMessage(),
+                    'admin_id' => Auth::guard('admin')->id()
+                ]);
+                $message .= ' However, email notification failed to send. Please check email configuration.';
+            }
+        } elseif ($sendEmailRequested) {
+            $message .= ' However, no valid email address found for student.';
+            Log::warning('Email requested but no student email found', [
+                'application_id' => $application->application_id,
+                'student_id' => $application->student_id
+            ]);
+        } elseif ($statusChanged) {
+            $message .= ' No email notification sent (not requested).';
+        }
+
+        // Send SMS notification automatically when status changes (regardless of email request)
+        if ($statusChanged && $student && $student->phone) {
+            try {
+                $smsResult = SmsHelper::sendApplicationStatusSms(
+                    $student->phone,
+                    $application->status,
+                    $validated['email_message'] ?? null
+                );
+
+                if ($smsResult['success']) {
+                    $smsSent = true;
+                    $message .= ' SMS notification sent successfully.';
+
+                    Log::info('Application status SMS sent successfully', [
                         'application_id' => $application->application_id,
-                        'student_email' => $student->email,
+                        'student_phone' => $student->phone,
                         'status' => $application->status,
                         'admin_id' => Auth::guard('admin')->id()
                     ]);
-                } catch (\Exception $e) {
-                    Log::error('Failed to send application status email', [
+                } else {
+                    Log::error('Failed to send application status SMS', [
                         'application_id' => $application->application_id,
-                        'student_email' => $student->email ?? 'N/A',
-                        'error' => $e->getMessage(),
+                        'student_phone' => $student->phone,
+                        'error' => $smsResult['message'],
                         'admin_id' => Auth::guard('admin')->id()
                     ]);
-                    $message .= ' However, email notification failed to send. Please check email configuration.';
+                    $message .= ' However, SMS notification failed to send.';
                 }
-            } else {
-                $message .= ' However, no valid email address found for student.';
-                Log::warning('Email requested but no student email found', [
+            } catch (\Exception $e) {
+                Log::error('SMS sending exception', [
                     'application_id' => $application->application_id,
-                    'student_id' => $application->student_id
+                    'student_phone' => $student->phone ?? 'N/A',
+                    'error' => $e->getMessage(),
+                    'admin_id' => Auth::guard('admin')->id()
                 ]);
+                $message .= ' However, SMS notification failed to send.';
             }
-        } elseif ($statusChanged) {
-            $message .= ' No email notification sent (not requested).';
+        } elseif ($statusChanged && (!$student || !$student->phone)) {
+            Log::warning('SMS could not be sent - no student phone found', [
+                'application_id' => $application->application_id,
+                'student_id' => $application->student_id,
+                'has_student' => $student ? 'yes' : 'no',
+                'has_phone' => $student && $student->phone ? 'yes' : 'no'
+            ]);
+            $message .= ' However, no valid phone number found for SMS.';
         }
 
         return redirect()->route('admin.applications.view', $application->application_id)
             ->with('success', $message)
             ->with('show_status_update_modal', true)
-            ->with('email_sent', $emailSent);
+            ->with('email_sent', $emailSent)
+            ->with('sms_sent', $smsSent);
     }
 
     public function sendEmail(Request $request, SeatApplication $application)
