@@ -141,28 +141,63 @@
                                 class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
                         </div>
 
+                        <!-- Family Member Information -->
                         <div>
-                            <label for="guardian_name" class="block text-sm font-medium text-gray-700 mb-2">Guardian's Name
-                                <span class="text-red-500">*</span></label>
-                            <input type="text" name="guardian_name" id="guardian_name"
-                                value="{{ old('guardian_name', $application->guardian_name) }}" required
+                            <label for="family_member" class="block text-sm font-medium text-gray-700 mb-2">Family
+                                Member <span class="text-red-500">*</span></label>
+                            <input type="text" name="family_member" id="family_member"
+                                value="{{ old('family_member', $application->family_member) }}" required
                                 class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
                         </div>
 
                         <div>
-                            <label for="guardian_mobile" class="block text-sm font-medium text-gray-700 mb-2">Guardian's
-                                Mobile Number <span class="text-red-500">*</span></label>
-                            <input type="tel" name="guardian_mobile" id="guardian_mobile"
-                                value="{{ old('guardian_mobile', $application->guardian_mobile) }}" required
+                            <label for="father_name" class="block text-sm font-medium text-gray-700 mb-2">Father's
+                                Name <span class="text-red-500">*</span></label>
+                            <input type="text" name="father_name" id="father_name"
+                                value="{{ old('father_name', $application->father_name) }}" required
                                 class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
                         </div>
 
-                        <div class="md:col-span-2">
-                            <label for="guardian_relationship"
-                                class="block text-sm font-medium text-gray-700 mb-2">Relationship with Student <span
-                                    class="text-red-500">*</span></label>
-                            <input type="text" name="guardian_relationship" id="guardian_relationship"
-                                value="{{ old('guardian_relationship', $application->guardian_relationship) }}" required
+                        <div>
+                            <label for="mother_name" class="block text-sm font-medium text-gray-700 mb-2">Mother's
+                                Name <span class="text-red-500">*</span></label>
+                            <input type="text" name="mother_name" id="mother_name"
+                                value="{{ old('mother_name', $application->mother_name) }}" required
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                        </div>
+
+                        <div>
+                            <label for="father_profession" class="block text-sm font-medium text-gray-700 mb-2">Father's
+                                Profession <span class="text-red-500">*</span></label>
+                            <input type="text" name="father_profession" id="father_profession"
+                                value="{{ old('father_profession', $application->father_profession) }}" required
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                        </div>
+
+                        <div>
+                            <label for="mother_profession" class="block text-sm font-medium text-gray-700 mb-2">Mother's
+                                Profession <span class="text-red-500">*</span></label>
+                            <input type="text" name="mother_profession" id="mother_profession"
+                                value="{{ old('mother_profession', $application->mother_profession) }}" required
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                        </div>
+
+                        <div>
+                            <label for="other_guardian" class="block text-sm font-medium text-gray-700 mb-2">Other
+                                Guardian</label>
+                            <input type="text" name="other_guardian" id="other_guardian"
+                                value="{{ old('other_guardian', $application->other_guardian) }}"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                        </div>
+
+                        <div>
+                            <label for="guardian_monthly_income"
+                                class="block text-sm font-medium text-gray-700 mb-2">Guardian's Monthly Income (in
+                                Taka) <span class="text-red-500">*</span></label>
+                            <input type="number" step="0.01" min="0" name="guardian_monthly_income"
+                                id="guardian_monthly_income"
+                                value="{{ old('guardian_monthly_income', $application->guardian_monthly_income) }}"
+                                required
                                 class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
                         </div>
                     </div>
@@ -204,48 +239,15 @@
                     </div>
 
                     <!-- Current Semester and GPA -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
-                            <label for="semester_year" class="block text-sm font-medium text-gray-700 mb-2">Current Year
-                                <span class="text-red-500">*</span></label>
-                            <select name="semester_year" id="semester_year" required
-                                class="w-full border border-gray-300 rounded-lg px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
-                                <option value="" disabled
-                                    {{ old('semester_year', $application->semester_year) ? '' : 'selected' }}>Select year
-                                </option>
-                                <option value="1"
-                                    {{ old('semester_year', $application->semester_year) == 1 ? 'selected' : '' }}>1st Year
-                                </option>
-                                <option value="2"
-                                    {{ old('semester_year', $application->semester_year) == 2 ? 'selected' : '' }}>2nd Year
-                                </option>
-                                <option value="3"
-                                    {{ old('semester_year', $application->semester_year) == 3 ? 'selected' : '' }}>3rd Year
-                                </option>
-                                <option value="4"
-                                    {{ old('semester_year', $application->semester_year) == 4 ? 'selected' : '' }}>4th Year
-                                </option>
-                                <option value="5"
-                                    {{ old('semester_year', $application->semester_year) == 5 ? 'selected' : '' }}>5th Year
-                                </option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label for="semester_term" class="block text-sm font-medium text-gray-700 mb-2">Term <span
-                                    class="text-red-500">*</span></label>
-                            <select name="semester_term" id="semester_term" required
-                                class="w-full border border-gray-300 rounded-lg px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
-                                <option value="" disabled
-                                    {{ old('semester_term', $application->semester_term) ? '' : 'selected' }}>Select term
-                                </option>
-                                <option value="1"
-                                    {{ old('semester_term', $application->semester_term) == 1 ? 'selected' : '' }}>1
-                                </option>
-                                <option value="2"
-                                    {{ old('semester_term', $application->semester_term) == 2 ? 'selected' : '' }}>2
-                                </option>
-                            </select>
+                            <label for="number_of_semester" class="block text-sm font-medium text-gray-700 mb-2">Number of
+                                Semester <span class="text-red-500">*</span></label>
+                            <input type="number" min="1" max="20" name="number_of_semester"
+                                id="number_of_semester"
+                                value="{{ old('number_of_semester', $application->number_of_semester) }}" required
+                                placeholder="e.g., 6"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
                         </div>
 
                         <div>
@@ -429,22 +431,38 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         @php
                             $fileFields = [
-                                'marksheet' => 'Latest Semester Marksheet',
-                                'birthCertificate' => 'Birth Certificate/National ID',
-                                'financialCertificate' => 'Financial Status Certificate (if applicable)',
-                                'deathCertificate' => 'Death Certificate (if parent deceased)',
-                                'medicalCertificate' => 'Medical Certificate (if applicable)',
-                                'activityCertificate' => 'BNCC/Scout Certificate (if applicable)',
-                                'signature' => "Student's Signature",
+                                'marksheet' => ['label' => 'Latest Semester Marksheet', 'required' => true],
+                                'birthCertificate' => ['label' => 'Birth Certificate/National ID', 'required' => true],
+                                'financialCertificate' => [
+                                    'label' => 'Financial Status Certificate (if applicable)',
+                                    'required' => false,
+                                ],
+                                'deathCertificate' => [
+                                    'label' => 'Death Certificate (if parent deceased)',
+                                    'required' => false,
+                                ],
+                                'medicalCertificate' => [
+                                    'label' => 'Medical Certificate (if applicable)',
+                                    'required' => false,
+                                ],
+                                'activityCertificate' => [
+                                    'label' => 'BNCC/Scout Certificate (if applicable)',
+                                    'required' => false,
+                                ],
+                                'signature' => ['label' => "Student's Signature", 'required' => false],
                             ];
                         @endphp
 
-                        @foreach ($fileFields as $name => $label)
+                        @foreach ($fileFields as $name => $field)
                             <div>
-                                <label for="{{ $name }}"
-                                    class="block text-sm font-medium text-gray-700 mb-2">{{ $label }}</label>
+                                <label for="{{ $name }}" class="block text-sm font-medium text-gray-700 mb-2">
+                                    {{ $field['label'] }}
+                                    @if ($field['required'])
+                                        <span class="text-red-500">*</span>
+                                    @endif
+                                </label>
                                 <input type="file" name="{{ $name }}" id="{{ $name }}"
-                                    accept=".pdf,.jpg,.jpeg,.png"
+                                    accept=".pdf,.jpg,.jpeg,.png" @if ($field['required']) required @endif
                                     class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100">
                                 @if ($application->{$name . '_doc'})
                                     <p class="text-sm text-gray-600 mt-1">
@@ -454,6 +472,53 @@
                                 @endif
                             </div>
                         @endforeach
+                    </div>
+
+                    <!-- Others Document Upload Section -->
+                    <div class="mt-8 pt-6 border-t border-gray-200">
+                        <h4 class="text-lg font-medium text-gray-900 mb-4">Additional Documents (Others)</h4>
+                        <p class="text-sm text-gray-600 mb-4">Upload up to 3 additional documents if applicable</p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label for="other_doc_1" class="block text-sm font-medium text-gray-700 mb-2">Other
+                                    Document 1</label>
+                                <input type="file" name="other_doc_1" id="other_doc_1" accept=".pdf,.jpg,.jpeg,.png"
+                                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100">
+                                @if ($application->other_doc_1)
+                                    <p class="text-sm text-gray-600 mt-1">
+                                        Current file: <a href="{{ asset('storage/' . $application->other_doc_1) }}"
+                                            target="_blank" class="text-blue-600 hover:underline">View current file</a>
+                                    </p>
+                                @endif
+                            </div>
+
+                            <div>
+                                <label for="other_doc_2" class="block text-sm font-medium text-gray-700 mb-2">Other
+                                    Document 2</label>
+                                <input type="file" name="other_doc_2" id="other_doc_2" accept=".pdf,.jpg,.jpeg,.png"
+                                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100">
+                                @if ($application->other_doc_2)
+                                    <p class="text-sm text-gray-600 mt-1">
+                                        Current file: <a href="{{ asset('storage/' . $application->other_doc_2) }}"
+                                            target="_blank" class="text-blue-600 hover:underline">View current file</a>
+                                    </p>
+                                @endif
+                            </div>
+
+                            <div>
+                                <label for="other_doc_3" class="block text-sm font-medium text-gray-700 mb-2">Other
+                                    Document 3</label>
+                                <input type="file" name="other_doc_3" id="other_doc_3" accept=".pdf,.jpg,.jpeg,.png"
+                                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100">
+                                @if ($application->other_doc_3)
+                                    <p class="text-sm text-gray-600 mt-1">
+                                        Current file: <a href="{{ asset('storage/' . $application->other_doc_3) }}"
+                                            target="_blank" class="text-blue-600 hover:underline">View current file</a>
+                                    </p>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
 

@@ -79,13 +79,17 @@ class SeatApplicationController extends Controller
             'department' => 'required|string|max:255',
             'university_id' => 'required|string|max:50',
             'academic_year' => 'required|string|max:50',
-            'guardian_name' => 'required|string|max:255',
-            'guardian_mobile' => 'required|string|max:20',
-            'guardian_relationship' => 'required|string|max:100',
+            // Family member information
+            'family_member' => 'required|string|max:255',
+            'father_name' => 'required|string|max:255',
+            'mother_name' => 'required|string|max:255',
+            'father_profession' => 'required|string|max:255',
+            'mother_profession' => 'required|string|max:255',
+            'other_guardian' => 'nullable|string|max:255',
+            'guardian_monthly_income' => 'required|numeric|min:0',
 
             'program' => 'required|string',
-            'semester_year' => 'nullable|integer',
-            'semester_term' => 'nullable|integer',
+            'number_of_semester' => 'required|integer|min:1|max:20',
             'cgpa' => 'required|numeric|min:0|max:4',
 
             'physical_condition' => 'required|string',
@@ -105,13 +109,16 @@ class SeatApplicationController extends Controller
             'application_date' => 'required|date',
 
             'university_id_doc' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
-            'marksheet' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
-            'birthCertificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'marksheet' => 'required|file|mimes:pdf,jpg,jpeg,png',
+            'birthCertificate' => 'required|file|mimes:pdf,jpg,jpeg,png',
             'financialCertificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
             'deathCertificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
             'medicalCertificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
             'activityCertificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
             'signature' => 'nullable|file|mimes:jpg,jpeg,png',
+            'other_doc_1' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'other_doc_2' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'other_doc_3' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
         ]);
 
         $universityId = $request->input('university_id');
@@ -124,6 +131,9 @@ class SeatApplicationController extends Controller
             'medicalCertificate' => 'medical_certificate_doc',
             'activityCertificate' => 'activity_certificate_doc',
             'signature' => 'signature_doc',
+            'other_doc_1' => 'other_doc_1',
+            'other_doc_2' => 'other_doc_2',
+            'other_doc_3' => 'other_doc_3',
         ];
 
         $filePaths = [];
@@ -142,13 +152,18 @@ class SeatApplicationController extends Controller
             'student_name' => $request->input('student_name'),
             'department' => $request->input('department'),
             'academic_year' => $request->input('academic_year'),
-            'guardian_name' => $request->input('guardian_name'),
-            'guardian_mobile' => $request->input('guardian_mobile'),
-            'guardian_relationship' => $request->input('guardian_relationship'),
+
+            // Family member information
+            'family_member' => $request->input('family_member'),
+            'father_name' => $request->input('father_name'),
+            'mother_name' => $request->input('mother_name'),
+            'father_profession' => $request->input('father_profession'),
+            'mother_profession' => $request->input('mother_profession'),
+            'other_guardian' => $request->input('other_guardian'),
+            'guardian_monthly_income' => $request->input('guardian_monthly_income'),
 
             'program' => $request->input('program'),
-            'semester_year' => $request->input('semester_year'),
-            'semester_term' => $request->input('semester_term'),
+            'number_of_semester' => $request->input('number_of_semester'),
             'cgpa' => $request->input('cgpa'),
 
             'physical_condition' => $request->input('physical_condition'),
@@ -257,13 +272,17 @@ class SeatApplicationController extends Controller
             'department' => 'required|string|max:255',
             'university_id' => 'required|string|max:50',
             'academic_year' => 'required|string|max:50',
-            'guardian_name' => 'required|string|max:255',
-            'guardian_mobile' => 'required|string|max:20',
-            'guardian_relationship' => 'required|string|max:100',
+            // Family member information
+            'family_member' => 'required|string|max:255',
+            'father_name' => 'required|string|max:255',
+            'mother_name' => 'required|string|max:255',
+            'father_profession' => 'required|string|max:255',
+            'mother_profession' => 'required|string|max:255',
+            'other_guardian' => 'nullable|string|max:255',
+            'guardian_monthly_income' => 'required|numeric|min:0',
 
             'program' => 'required|string',
-            'semester_year' => 'nullable|integer',
-            'semester_term' => 'nullable|integer',
+            'number_of_semester' => 'required|integer|min:1|max:20',
             'cgpa' => 'required|numeric|min:0|max:4',
 
             'physical_condition' => 'required|string',
@@ -283,13 +302,16 @@ class SeatApplicationController extends Controller
             'application_date' => 'required|date',
 
             'university_id_doc' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
-            'marksheet' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
-            'birthCertificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'marksheet' => 'required|file|mimes:pdf,jpg,jpeg,png',
+            'birthCertificate' => 'required|file|mimes:pdf,jpg,jpeg,png',
             'financialCertificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
             'deathCertificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
             'medicalCertificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
             'activityCertificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
             'signature' => 'nullable|file|mimes:jpg,jpeg,png',
+            'other_doc_1' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'other_doc_2' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'other_doc_3' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
         ]);
 
         $universityId = $request->input('university_id');
@@ -308,6 +330,9 @@ class SeatApplicationController extends Controller
             'medicalCertificate' => 'medical_certificate_doc',
             'activityCertificate' => 'activity_certificate_doc',
             'signature' => 'signature_doc',
+            'other_doc_1' => 'other_doc_1',
+            'other_doc_2' => 'other_doc_2',
+            'other_doc_3' => 'other_doc_3',
         ];
 
         $filePaths = [];
@@ -328,13 +353,18 @@ class SeatApplicationController extends Controller
             'student_name' => $request->input('student_name'),
             'department' => $request->input('department'),
             'academic_year' => $request->input('academic_year'),
-            'guardian_name' => $request->input('guardian_name'),
-            'guardian_mobile' => $request->input('guardian_mobile'),
-            'guardian_relationship' => $request->input('guardian_relationship'),
+
+            // Family member information
+            'family_member' => $request->input('family_member'),
+            'father_name' => $request->input('father_name'),
+            'mother_name' => $request->input('mother_name'),
+            'father_profession' => $request->input('father_profession'),
+            'mother_profession' => $request->input('mother_profession'),
+            'other_guardian' => $request->input('other_guardian'),
+            'guardian_monthly_income' => $request->input('guardian_monthly_income'),
 
             'program' => $request->input('program'),
-            'semester_year' => $request->input('semester_year'),
-            'semester_term' => $request->input('semester_term'),
+            'number_of_semester' => $request->input('number_of_semester'),
             'cgpa' => $request->input('cgpa'),
 
             'physical_condition' => $request->input('physical_condition'),
