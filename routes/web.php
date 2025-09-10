@@ -8,6 +8,7 @@ use App\Http\Controllers\HallNoticeController;
 use App\Http\Controllers\StudentComplaintController;
 use App\Http\Controllers\SeatApplicationController;
 use App\Http\Controllers\SeatController;
+use App\Http\Controllers\SeatRenewalController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SuperAdminAuthController;
 use App\Http\Controllers\SuperAdminController;
@@ -115,6 +116,11 @@ Route::middleware('student-auth')->group(function () {
     Route::put('/seat-application/update/{application}', [SeatApplicationController::class, 'update'])->name('seat-application.update');
     Route::delete('/seat-application/delete/{application}', [SeatApplicationController::class, 'destroy'])->name('seat-application.destroy');
     Route::get('/seat-application/{application}/download-pdf', [SeatApplicationController::class, 'downloadApplicationPDF'])->name('seat-application.download-pdf');
+
+    // Seat Renewal Routes
+    Route::get('/seat-renewal', [SeatRenewalController::class, 'showRenewalForm'])->name('student.seat_renewal');
+    Route::post('/seat-renewal/submit', [SeatRenewalController::class, 'submitRenewalApplication'])->name('student.seat_renewal.submit');
+    Route::get('/renewal-status', [SeatRenewalController::class, 'viewRenewalStatus'])->name('student.renewal_status');
 });
 
 // Super Admin Protected Routes
@@ -220,6 +226,24 @@ Route::middleware(['admin-auth', 'set-active-menu'])->prefix('admin')->group(fun
 
     // OTP Routes for Admin Creation
     Route::post('/send-otp', [AdminAuthController::class, 'sendOTP'])->name('admin.send-otp');
+
+    // Email Communication Routes
+    Route::get('/email/compose', [AdminController::class, 'showEmailForm'])->name('admin.email.compose');
+    Route::post('/email/send-individual', [AdminController::class, 'sendIndividualEmail'])->name('admin.email.send-individual');
+    Route::post('/email/send-bulk', [AdminController::class, 'sendBulkEmail'])->name('admin.email.send-bulk');
+
+    // Seat Renewal Management Routes
+    Route::get('/renewal-applications', [SeatRenewalController::class, 'index'])->name('admin.renewal_applications.index');
+    Route::get('/renewal-applications/{renewalApplication}', [SeatRenewalController::class, 'show'])->name('admin.renewal_applications.show');
+    Route::post('/renewal-applications/{renewalApplication}/approve', [SeatRenewalController::class, 'approve'])->name('admin.renewal_applications.approve');
+    Route::post('/renewal-applications/{renewalApplication}/reject', [SeatRenewalController::class, 'reject'])->name('admin.renewal_applications.reject');
+    Route::post('/renewal-applications/{renewalApplication}/send-custom-email', [SeatRenewalController::class, 'sendCustomEmail'])->name('admin.renewal_applications.send_custom_email');
+    Route::post('/renewal-applications/{renewalApplication}/send-template-email', [SeatRenewalController::class, 'sendTemplateEmail'])->name('admin.renewal_applications.send_template_email');
+
+    // PDF Export Routes for Renewal Applications
+    Route::get('/renewal-applications/pdf/download', [SeatRenewalController::class, 'downloadRenewalApplicationsPDF'])->name('admin.renewal_applications.pdf.download');
+    Route::get('/renewal-applications/{renewalApplication}/download-pdf', [SeatRenewalController::class, 'downloadSingleRenewalApplicationPDF'])->name('admin.renewal_applications.download_pdf');
+    Route::post('/send-renewal-reminders', [SeatRenewalController::class, 'sendRenewalReminders'])->name('admin.send_renewal_reminders');
 });
 
 // Unified Login Routes - Redirect all role-based logins to student auth
@@ -296,6 +320,12 @@ Route::middleware(['admin-auth', 'role-permission:Provost'])->prefix('provost')-
     Route::post('/create-co-provost', [ProvostController::class, 'storeCoProvost'])->name('provost.store-co-provost');
     Route::get('/create-staff', [ProvostController::class, 'showCreateStaff'])->name('provost.create-staff');
     Route::post('/create-staff', [ProvostController::class, 'storeStaff'])->name('provost.store-staff');
+
+    // Email Communication Routes
+    Route::get('/email/compose', [AdminController::class, 'showEmailForm'])->name('provost.email.compose');
+    Route::post('/email/send-individual', [AdminController::class, 'sendIndividualEmail'])->name('provost.email.send-individual');
+    Route::post('/email/send-bulk', [AdminController::class, 'sendBulkEmail'])->name('provost.email.send-bulk');
+
     Route::post('/logout', [ProvostController::class, 'logout'])->name('provost.logout');
 });
 
@@ -349,6 +379,11 @@ Route::middleware(['admin-auth', 'role-permission:Co-Provost'])->prefix('co-prov
     Route::get('/seats/{seat}/details', [CoProvostController::class, 'getSeatDetails'])->name('co-provost.seats.details');
     Route::get('/seats/available-students', [CoProvostController::class, 'getAvailableStudents'])->name('co-provost.seats.available_students');
 
+    // Email Communication Routes
+    Route::get('/email/compose', [AdminController::class, 'showEmailForm'])->name('co-provost.email.compose');
+    Route::post('/email/send-individual', [AdminController::class, 'sendIndividualEmail'])->name('co-provost.email.send-individual');
+    Route::post('/email/send-bulk', [AdminController::class, 'sendBulkEmail'])->name('co-provost.email.send-bulk');
+
     Route::post('/logout', [CoProvostController::class, 'logout'])->name('co-provost.logout');
 });
 
@@ -363,4 +398,23 @@ Route::middleware(['admin-auth', 'role-permission:Staff'])->prefix('staff')->gro
     Route::get('/notices', [StaffController::class, 'notices'])->name('staff.notices');
 
     Route::post('/logout', [StaffController::class, 'logout'])->name('staff.logout');
+});
+
+// Test email route
+Route::get('/test-email', function () {
+    try {
+        // Force log driver to prevent timeout issues
+        \Config::set('mail.default', 'log');
+        \Config::set('mail.mailers.smtp.timeout', 5);
+
+        // Set execution time limit
+        set_time_limit(10);
+
+        \Mail::raw('This is a test email', function ($message) {
+            $message->to('test@example.com')->subject('Test Email');
+        });
+        return 'Email sent successfully! Check storage/logs/laravel.log for content.';
+    } catch (\Exception $e) {
+        return 'Email failed: ' . $e->getMessage();
+    }
 });

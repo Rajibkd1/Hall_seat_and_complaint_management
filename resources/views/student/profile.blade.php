@@ -222,50 +222,174 @@
                     <!-- Hall Seat and Profile Status Row -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <!-- Hall Seat Information -->
-                        @if ($seatDetails)
+                        @if ($seatAllotment)
                             <div class="bg-white rounded-lg shadow-sm border border-gray-200">
                                 <div class="px-6 py-4 border-b border-gray-200">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-6 h-6 bg-gray-600 rounded-lg flex items-center justify-center">
-                                            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                                                </path>
-                                            </svg>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-6 h-6 bg-gray-600 rounded-lg flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                                                    </path>
+                                                </svg>
+                                            </div>
+                                            <h3 class="text-lg font-semibold text-gray-900">Hall Seat</h3>
                                         </div>
-                                        <h3 class="text-lg font-semibold text-gray-900">Hall Seat</h3>
+                                        @if ($seatAllotment->canApplyForRenewal())
+                                            <a href="{{ route('student.seat_application') }}"
+                                                class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                                </svg>
+                                                Renew Seat
+                                            </a>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="p-6">
-                                    <div class="space-y-3">
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-sm font-medium text-gray-700">Room:</span>
-                                            <span
-                                                class="text-sm font-medium text-gray-900">{{ $seatDetails->room_number }}</span>
+                                    <div class="space-y-4">
+                                        <!-- Seat Details -->
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium text-gray-700">Room:</span>
+                                                    <span
+                                                        class="text-sm font-medium text-gray-900">{{ $seatAllotment->seat->room_number }}</span>
+                                                </div>
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium text-gray-700">Bed:</span>
+                                                    <span
+                                                        class="text-sm font-medium text-gray-900">{{ $seatAllotment->seat->bed_number }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium text-gray-700">Floor:</span>
+                                                    <span
+                                                        class="text-sm font-medium text-gray-900">{{ $seatAllotment->seat->floor }}</span>
+                                                </div>
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium text-gray-700">Block:</span>
+                                                    <span
+                                                        class="text-sm font-medium text-gray-900">{{ $seatAllotment->seat->block }}</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-sm font-medium text-gray-700">Bed:</span>
-                                            <span
-                                                class="text-sm font-medium text-gray-900">{{ $seatDetails->bed_number }}</span>
+
+                                        <!-- Allocation Period -->
+                                        <div class="border-t pt-4">
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium text-gray-700">Allocated:</span>
+                                                    <span
+                                                        class="text-sm font-medium text-gray-900">{{ \Carbon\Carbon::parse($seatAllotment->start_date)->format('M d, Y') }}</span>
+                                                </div>
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-sm font-medium text-gray-700">Expires:</span>
+                                                    <span
+                                                        class="text-sm font-medium text-gray-900">{{ \Carbon\Carbon::parse($seatAllotment->allocation_expiry_date)->format('M d, Y') }}</span>
+                                                </div>
+                                                @if ($seatAllotment->remaining_days !== null)
+                                                    <div class="flex justify-between items-center">
+                                                        <span class="text-sm font-medium text-gray-700">Remaining:</span>
+                                                        @if ($seatAllotment->remaining_days > 0)
+                                                            <span id="countdown-timer"
+                                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                                                @if ($seatAllotment->remaining_days <= 30) bg-red-100 text-red-800
+                                                                @elseif($seatAllotment->remaining_days <= 60) bg-yellow-100 text-yellow-800
+                                                                @else bg-green-100 text-green-800 @endif">
+                                                                @if ($seatAllotment->remaining_days >= 30)
+                                                                    {{ floor($seatAllotment->remaining_days / 30) }}
+                                                                    month{{ floor($seatAllotment->remaining_days / 30) > 1 ? 's' : '' }}
+                                                                    {{ $seatAllotment->remaining_days % 30 }}
+                                                                    day{{ $seatAllotment->remaining_days % 30 !== 1 ? 's' : '' }}
+                                                                    left
+                                                                @else
+                                                                    {{ $seatAllotment->remaining_days }}
+                                                                    day{{ $seatAllotment->remaining_days !== 1 ? 's' : '' }}
+                                                                    left
+                                                                @endif
+                                                            </span>
+                                                        @else
+                                                            <span id="countdown-timer"
+                                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                                Expired
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </div>
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-sm font-medium text-gray-700">Floor:</span>
-                                            <span
-                                                class="text-sm font-medium text-gray-900">{{ $seatDetails->floor }}</span>
-                                        </div>
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-sm font-medium text-gray-700">Block:</span>
-                                            <span
-                                                class="text-sm font-medium text-gray-900">{{ $seatDetails->block }}</span>
-                                        </div>
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-sm font-medium text-gray-700">Status:</span>
-                                            <span
-                                                class="inline-flex px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
-                                                Active
-                                            </span>
-                                        </div>
+
+                                        <!-- Renewal Status -->
+                                        @if ($seatAllotment->renewal_required)
+                                            <div class="border-t pt-4">
+                                                <div class="flex items-center justify-between">
+                                                    <span class="text-sm font-medium text-gray-700">Renewal Status:</span>
+                                                    @if ($seatAllotment->canApplyForRenewal())
+                                                        <span
+                                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                            <svg class="w-3 h-3 mr-1" fill="currentColor"
+                                                                viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                                                    clip-rule="evenodd" />
+                                                            </svg>
+                                                            Renewal Required
+                                                        </span>
+                                                        @if (
+                                                            $seatAllotment->reminder_29_days_sent ||
+                                                                $seatAllotment->reminder_20_days_sent ||
+                                                                $seatAllotment->reminder_10_days_sent)
+                                                            <div
+                                                                class="mt-2 p-2 bg-blue-50 border border-blue-200 rounded-md">
+                                                                <p class="text-xs text-blue-700 mb-1">
+                                                                    <i class="fas fa-envelope mr-1"></i>
+                                                                    Renewal reminder emails sent:
+                                                                </p>
+                                                                <div class="text-xs text-blue-600">
+                                                                    @if ($seatAllotment->reminder_29_days_sent)
+                                                                        <span class="inline-block mr-2">✓ 29 days</span>
+                                                                    @endif
+                                                                    @if ($seatAllotment->reminder_20_days_sent)
+                                                                        <span class="inline-block mr-2">✓ 20 days</span>
+                                                                    @endif
+                                                                    @if ($seatAllotment->reminder_10_days_sent)
+                                                                        <span class="inline-block mr-2">✓ 10 days</span>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    @elseif($seatAllotment->isExpired())
+                                                        <span
+                                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                            <svg class="w-3 h-3 mr-1" fill="currentColor"
+                                                                viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                                    clip-rule="evenodd" />
+                                                            </svg>
+                                                            Expired
+                                                        </span>
+                                                    @else
+                                                        <span
+                                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                            <svg class="w-3 h-3 mr-1" fill="currentColor"
+                                                                viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                                    clip-rule="evenodd" />
+                                                            </svg>
+                                                            Active
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -540,6 +664,51 @@
         document.getElementById('uploadIdCardBtn').addEventListener('click', function() {
             showUploadModal();
         });
+
+        // Real-time countdown timer for seat allocation
+        @if ($seatAllotment && $seatAllotment->allocation_expiry_date)
+            function updateCountdown() {
+                const expiryDate = new Date('{{ $seatAllotment->allocation_expiry_date }}');
+                const now = new Date();
+                const timeLeft = expiryDate - now;
+
+                if (timeLeft > 0) {
+                    const totalDays = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                    const months = Math.floor(totalDays / 30);
+                    const days = totalDays % 30;
+
+                    // Update the countdown display
+                    const countdownElement = document.getElementById('countdown-timer');
+                    if (countdownElement) {
+                        if (months > 0) {
+                            countdownElement.innerHTML =
+                                `${months} month${months > 1 ? 's' : ''} ${days} day${days !== 1 ? 's' : ''} left`;
+                        } else {
+                            countdownElement.innerHTML = `${days} day${days !== 1 ? 's' : ''} left`;
+                        }
+
+                        // Update color based on urgency
+                        countdownElement.className =
+                            'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ' +
+                            (totalDays <= 30 ? 'bg-red-100 text-red-800' :
+                                totalDays <= 60 ? 'bg-yellow-100 text-yellow-800' :
+                                'bg-green-100 text-green-800');
+                    }
+                } else {
+                    // Expired
+                    const countdownElement = document.getElementById('countdown-timer');
+                    if (countdownElement) {
+                        countdownElement.innerHTML = 'Expired';
+                        countdownElement.className =
+                            'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800';
+                    }
+                }
+            }
+
+            // Update countdown every day
+            updateCountdown();
+            setInterval(updateCountdown, 86400000); // 24 hours
+        @endif
     </script>
     </div>
     </div>

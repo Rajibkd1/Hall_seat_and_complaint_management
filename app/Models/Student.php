@@ -72,12 +72,17 @@ class Student extends Authenticatable
         );
     }
 
+    public function complaints()
+    {
+        return $this->hasMany(Complaint::class, 'student_id');
+    }
+
     // Accessors
     public function getProfileImageUrlAttribute()
     {
         return $this->profile_image
             ? asset('storage/' . $this->profile_image)
-            : asset('images/default-avatar.png');
+            : asset('images/default-avatar.svg');
     }
 
     public function getIdCardFrontUrlAttribute()

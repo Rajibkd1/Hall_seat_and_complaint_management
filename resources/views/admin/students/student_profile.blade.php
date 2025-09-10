@@ -15,8 +15,27 @@
                     <span class="text-gray-800 font-semibold">Student Profile</span>
                 </nav>
                 <div class="border-b border-gray-200 pb-6">
-                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Student Profile Management</h1>
-                    <p class="text-gray-600 mt-2 text-lg">Comprehensive student information and verification details</p>
+                    <div class="flex flex-col lg:flex-row lg:justify-between lg:items-start space-y-4 lg:space-y-0">
+                        <div class="flex-1">
+                            <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Student Profile Management</h1>
+                            <p class="text-gray-600 mt-2 text-lg">Comprehensive student information and verification details
+                            </p>
+                        </div>
+                        @if ($student)
+                            <div class="flex-shrink-0">
+                                <button
+                                    onclick="openEmailModal('{{ $student->student_id }}', '{{ $student->name }}', '{{ $student->email }}')"
+                                    class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 hover:shadow-lg shadow-md w-full lg:w-auto justify-center">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                        </path>
+                                    </svg>
+                                    Send Email
+                                </button>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
 
@@ -109,6 +128,62 @@
                                         <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
                                         Active Student
                                     </span>
+
+                                    <!-- Hall Stay Duration Badge -->
+                                    @if ($currentSeatAllotment && $currentSeatAllotment->start_date)
+                                        @php
+                                            $startDate = \Carbon\Carbon::parse($currentSeatAllotment->start_date);
+                                            $now = \Carbon\Carbon::now();
+                                            $duration = $startDate->diffInDays($now);
+                                            $months = floor($duration / 30);
+                                            $days = $duration % 30;
+                                        @endphp
+                                        <span
+                                            class="inline-flex items-center px-4 py-2 rounded-md text-sm font-semibold bg-blue-500/20 text-blue-100 border border-blue-400/30">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                </path>
+                                            </svg>
+                                            @if ($months > 0)
+                                                {{ $months }}m {{ $days }}d in Hall
+                                            @else
+                                                {{ $days }}d in Hall
+                                            @endif
+                                        </span>
+                                    @endif
+
+                                    <!-- Renewal Status Badge -->
+                                    @if ($currentSeatAllotment)
+                                        @if ($currentSeatAllotment->renewal_required)
+                                            @if ($currentSeatAllotment->canApplyForRenewal())
+                                                <span
+                                                    class="inline-flex items-center px-4 py-2 rounded-md text-sm font-semibold bg-orange-500/20 text-orange-100 border border-orange-400/30">
+                                                    <div class="w-2 h-2 bg-orange-400 rounded-full mr-2"></div>
+                                                    Can Renew
+                                                </span>
+                                            @elseif($currentSeatAllotment->hasPendingRenewalApplication())
+                                                <span
+                                                    class="inline-flex items-center px-4 py-2 rounded-md text-sm font-semibold bg-blue-500/20 text-blue-100 border border-blue-400/30">
+                                                    <div class="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
+                                                    Renewal Pending
+                                                </span>
+                                            @elseif($currentSeatAllotment->remaining_days !== null && $currentSeatAllotment->remaining_days <= 30)
+                                                <span
+                                                    class="inline-flex items-center px-4 py-2 rounded-md text-sm font-semibold bg-yellow-500/20 text-yellow-100 border border-yellow-400/30">
+                                                    <div class="w-2 h-2 bg-yellow-400 rounded-full mr-2"></div>
+                                                    Renewal Required
+                                                </span>
+                                            @endif
+                                        @else
+                                            <span
+                                                class="inline-flex items-center px-4 py-2 rounded-md text-sm font-semibold bg-green-500/20 text-green-100 border border-green-400/30">
+                                                <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                                No Renewal Needed
+                                            </span>
+                                        @endif
+                                    @endif
                                 </div>
                             </div>
 
@@ -142,8 +217,8 @@
                                     <div class="space-y-5">
                                         <div class="border-l-4 border-gray-600 pl-4 py-2">
                                             <div class="flex items-center mb-2">
-                                                <svg class="w-4 h-4 text-gray-500 mr-2" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
+                                                <svg class="w-4 h-4 text-gray-500 mr-2" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                         d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
                                                     </path>
@@ -166,6 +241,25 @@
                                                     Phone Number</p>
                                             </div>
                                             <p class="text-gray-900 font-medium">{{ $student->phone ?? 'Not Provided' }}
+                                            </p>
+                                        </div>
+
+                                        <div class="border-l-4 border-gray-600 pl-4 py-2">
+                                            <div class="flex items-center mb-2">
+                                                <svg class="w-4 h-4 text-gray-500 mr-2" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                                    </path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z">
+                                                    </path>
+                                                </svg>
+                                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                                    Current Address</p>
+                                            </div>
+                                            <p class="text-gray-900 font-medium">
+                                                {{ $student->current_address ?? 'Not Provided' }}
                                             </p>
                                         </div>
                                     </div>
@@ -198,6 +292,38 @@
                                                     System ID</p>
                                             </div>
                                             <p class="text-gray-900 font-medium font-mono">{{ $student->student_id }}</p>
+                                        </div>
+
+                                        <div class="border-l-4 border-gray-600 pl-4 py-2">
+                                            <div class="flex items-center mb-2">
+                                                <svg class="w-4 h-4 text-gray-500 mr-2" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                                    </path>
+                                                </svg>
+                                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                                    Profile Completed</p>
+                                            </div>
+                                            <p class="text-gray-900 font-medium">
+                                                {{ $student->profile_completed_at ? \Carbon\Carbon::parse($student->profile_completed_at)->format('M d, Y') : 'Not Completed' }}
+                                            </p>
+                                        </div>
+
+                                        <div class="border-l-4 border-gray-600 pl-4 py-2">
+                                            <div class="flex items-center mb-2">
+                                                <svg class="w-4 h-4 text-gray-500 mr-2" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                    </path>
+                                                </svg>
+                                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                                    Account Activated</p>
+                                            </div>
+                                            <p class="text-gray-900 font-medium">
+                                                {{ $student->activated_at ? \Carbon\Carbon::parse($student->activated_at)->format('M d, Y') : 'Not Activated' }}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -403,25 +529,228 @@
                                 <div class="flex items-center justify-between">
                                     <span class="text-gray-600">Account Status</span>
                                     <span
-                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        <div class="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
-                                        Active
+                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $student->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        <div
+                                            class="w-2 h-2 {{ $student->is_active ? 'bg-green-500' : 'bg-red-500' }} rounded-full mr-1">
+                                        </div>
+                                        {{ $student->is_active ? 'Active' : 'Inactive' }}
                                     </span>
                                 </div>
                                 <div class="flex items-center justify-between">
-                                    <span class="text-gray-600">Enrollment</span>
+                                    <span class="text-gray-600">Profile Status</span>
                                     <span
-                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                        <div class="w-2 h-2 bg-blue-500 rounded-full mr-1"></div>
-                                        Enrolled
+                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $student->profile_completed ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                        <div
+                                            class="w-2 h-2 {{ $student->profile_completed ? 'bg-green-500' : 'bg-yellow-500' }} rounded-full mr-1">
+                                        </div>
+                                        {{ $student->profile_completed ? 'Complete' : 'Incomplete' }}
                                     </span>
                                 </div>
                                 <div class="flex items-center justify-between">
-                                    <span class="text-gray-600">Last Login</span>
-                                    <span class="text-sm text-gray-900">2 hours ago</span>
+                                    <span class="text-gray-600">Last Updated</span>
+                                    <span
+                                        class="text-sm text-gray-900">{{ $student->updated_at ? $student->updated_at->format('M d, Y') : 'Never' }}</span>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Seat Information Card -->
+                        @if ($currentSeatAllotment)
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Current Seat</h3>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-600">Floor</span>
+                                        <span
+                                            class="text-sm font-medium text-gray-900">{{ $currentSeatAllotment->seat->floor ?? 'N/A' }}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-600">Room</span>
+                                        <span
+                                            class="text-sm font-medium text-gray-900">{{ $currentSeatAllotment->seat->room_number ?? 'N/A' }}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-600">Bed</span>
+                                        <span
+                                            class="text-sm font-medium text-gray-900">{{ $currentSeatAllotment->seat->bed_number ?? 'N/A' }}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-600">Allocated</span>
+                                        <span
+                                            class="text-sm font-medium text-gray-900">{{ $currentSeatAllotment->start_date ? \Carbon\Carbon::parse($currentSeatAllotment->start_date)->format('M d, Y') : 'N/A' }}</span>
+                                    </div>
+
+                                    <!-- Hall Stay Duration -->
+                                    @if ($currentSeatAllotment->start_date)
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-gray-600">Duration in Hall</span>
+                                            <span class="text-sm font-medium text-gray-900">
+                                                @php
+                                                    $startDate = \Carbon\Carbon::parse(
+                                                        $currentSeatAllotment->start_date,
+                                                    );
+                                                    $now = \Carbon\Carbon::now();
+                                                    $duration = $startDate->diffInDays($now);
+                                                    $months = floor($duration / 30);
+                                                    $days = $duration % 30;
+                                                @endphp
+                                                @if ($months > 0)
+                                                    {{ $months }} month{{ $months > 1 ? 's' : '' }}
+                                                    {{ $days }} day{{ $days > 1 ? 's' : '' }}
+                                                @else
+                                                    {{ $days }} day{{ $days > 1 ? 's' : '' }}
+                                                @endif
+                                            </span>
+                                        </div>
+                                    @endif
+
+                                    @if ($currentSeatAllotment->allocation_expiry_date)
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-gray-600">Expires</span>
+                                            <span
+                                                class="text-sm font-medium text-gray-900">{{ \Carbon\Carbon::parse($currentSeatAllotment->allocation_expiry_date)->format('M d, Y') }}</span>
+                                        </div>
+
+                                        <!-- Remaining Days -->
+                                        @if ($currentSeatAllotment->remaining_days !== null)
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-gray-600">Remaining Days</span>
+                                                <span
+                                                    class="text-sm font-medium {{ $currentSeatAllotment->remaining_days <= 10 ? 'text-red-600' : ($currentSeatAllotment->remaining_days <= 30 ? 'text-orange-600' : 'text-green-600') }}">
+                                                    {{ $currentSeatAllotment->remaining_days }}
+                                                    day{{ $currentSeatAllotment->remaining_days != 1 ? 's' : '' }}
+                                                </span>
+                                            </div>
+                                        @endif
+                                    @endif
+
+                                    <!-- Renewal Status -->
+                                    <div class="border-t border-gray-200 pt-3 mt-3">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-gray-600 font-medium">Renewal Status</span>
+                                            @if ($currentSeatAllotment->renewal_required)
+                                                @if ($currentSeatAllotment->canApplyForRenewal())
+                                                    <span
+                                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                                        <div class="w-2 h-2 bg-orange-500 rounded-full mr-1"></div>
+                                                        Can Renew
+                                                    </span>
+                                                @elseif($currentSeatAllotment->hasPendingRenewalApplication())
+                                                    <span
+                                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                        <div class="w-2 h-2 bg-blue-500 rounded-full mr-1"></div>
+                                                        Pending
+                                                    </span>
+                                                @else
+                                                    <span
+                                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                        <div class="w-2 h-2 bg-yellow-500 rounded-full mr-1"></div>
+                                                        Required Soon
+                                                    </span>
+                                                @endif
+                                            @else
+                                                <span
+                                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                                                    Not Required
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        <!-- Renewal Reminder Status -->
+                                        @if (
+                                            $currentSeatAllotment->renewal_required &&
+                                                $currentSeatAllotment->remaining_days !== null &&
+                                                $currentSeatAllotment->remaining_days <= 30)
+                                            <div class="text-xs text-gray-500">
+                                                <div class="flex items-center justify-between">
+                                                    <span>Reminder Status:</span>
+                                                    <div class="flex space-x-1">
+                                                        @if ($currentSeatAllotment->reminder_29_days_sent)
+                                                            <span
+                                                                class="inline-flex items-center px-1.5 py-0.5 rounded text-xs bg-green-100 text-green-700">✓
+                                                                29d</span>
+                                                        @endif
+                                                        @if ($currentSeatAllotment->reminder_20_days_sent)
+                                                            <span
+                                                                class="inline-flex items-center px-1.5 py-0.5 rounded text-xs bg-green-100 text-green-700">✓
+                                                                20d</span>
+                                                        @endif
+                                                        @if ($currentSeatAllotment->reminder_10_days_sent)
+                                                            <span
+                                                                class="inline-flex items-center px-1.5 py-0.5 rounded text-xs bg-green-100 text-green-700">✓
+                                                                10d</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Application Information Card -->
+                        @if ($latestApplication)
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Latest Application</h3>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-600">Status</span>
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium 
+                                        {{ $latestApplication->status === 'approved'
+                                            ? 'bg-green-100 text-green-800'
+                                            : ($latestApplication->status === 'rejected'
+                                                ? 'bg-red-100 text-red-800'
+                                                : 'bg-yellow-100 text-yellow-800') }}">
+                                            {{ ucfirst($latestApplication->status) }}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-600">Submitted</span>
+                                        <span
+                                            class="text-sm font-medium text-gray-900">{{ $latestApplication->submission_date ? \Carbon\Carbon::parse($latestApplication->submission_date)->format('M d, Y') : 'N/A' }}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-600">Type</span>
+                                        <span
+                                            class="text-sm font-medium text-gray-900">{{ ucfirst($latestApplication->type ?? 'Regular') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Complaint Information Card -->
+                        @if ($latestComplaint)
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Latest Complaint</h3>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-600">Category</span>
+                                        <span
+                                            class="text-sm font-medium text-gray-900">{{ ucfirst($latestComplaint->category ?? 'General') }}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-600">Status</span>
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium 
+                                        {{ $latestComplaint->status === 'resolved'
+                                            ? 'bg-green-100 text-green-800'
+                                            : ($latestComplaint->status === 'rejected'
+                                                ? 'bg-red-100 text-red-800'
+                                                : 'bg-yellow-100 text-yellow-800') }}">
+                                            {{ ucfirst($latestComplaint->status ?? 'Pending') }}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-600">Submitted</span>
+                                        <span
+                                            class="text-sm font-medium text-gray-900">{{ $latestComplaint->submission_date ? \Carbon\Carbon::parse($latestComplaint->submission_date)->format('M d, Y') : 'N/A' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @else
@@ -495,6 +824,94 @@
         </div>
     </div>
 
+    <!-- Email Modal -->
+    <div id="emailModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="relative max-w-2xl w-full mx-4">
+            <div class="relative bg-white rounded-lg shadow-2xl">
+                <!-- Modal Header -->
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        Send Email to Student
+                    </h3>
+                    <button type="button" onclick="closeEmailModal()"
+                        class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-2 transition-colors duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="p-6">
+                    <form id="emailForm" method="POST">
+                        @csrf
+                        <input type="hidden" id="student_id" name="student_id">
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Recipient</label>
+                            <div class="bg-gray-50 p-3 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div id="studentName" class="font-medium text-gray-900"></div>
+                                        <div id="studentEmail" class="text-sm text-gray-600"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="emailSubject" class="block text-sm font-medium text-gray-700 mb-2">
+                                Subject <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="emailSubject" name="subject" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Enter email subject">
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="emailMessage" class="block text-sm font-medium text-gray-700 mb-2">
+                                Message <span class="text-red-500">*</span>
+                            </label>
+                            <textarea id="emailMessage" name="message" rows="6" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Enter your message here..."></textarea>
+                        </div>
+
+                        <div class="flex justify-end space-x-3">
+                            <button type="button" onclick="closeEmailModal()"
+                                class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors duration-200">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                </svg>
+                                Send Email
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         function openImageModal(imageSrc, title) {
             const modal = document.getElementById('imageModal');
@@ -529,8 +946,128 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeImageModal();
+                closeEmailModal();
             }
         });
+
+        // Email Modal Functions
+        function openEmailModal(studentId, studentName, studentEmail) {
+            const modal = document.getElementById('emailModal');
+            const form = document.getElementById('emailForm');
+            const studentIdInput = document.getElementById('student_id');
+            const studentNameDiv = document.getElementById('studentName');
+            const studentEmailDiv = document.getElementById('studentEmail');
+            const subjectInput = document.getElementById('emailSubject');
+            const messageInput = document.getElementById('emailMessage');
+
+            // Set form action based on current route
+            const currentPath = window.location.pathname;
+            if (currentPath.includes('/provost/')) {
+                form.action = '{{ route('provost.email.send-individual') }}';
+            } else if (currentPath.includes('/co-provost/')) {
+                form.action = '{{ route('co-provost.email.send-individual') }}';
+            } else {
+                form.action = '{{ route('admin.email.send-individual') }}';
+            }
+
+            // Populate form data
+            studentIdInput.value = studentId;
+            studentNameDiv.textContent = studentName;
+            studentEmailDiv.textContent = studentEmail;
+            subjectInput.value = '';
+            messageInput.value = '';
+
+            // Show modal
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEmailModal() {
+            const modal = document.getElementById('emailModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close email modal when clicking outside
+        document.getElementById('emailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEmailModal();
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+
+            // Show loading state
+            submitBtn.innerHTML =
+                '<svg class="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Sending...';
+            submitBtn.disabled = true;
+
+            // Submit form
+            fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content'),
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Show success message
+                        showNotification('Email sent successfully!', 'success');
+                        closeEmailModal();
+                    } else {
+                        // Show error message
+                        showNotification(data.message || 'Failed to send email. Please try again.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('An error occurred. Please try again.', 'error');
+                })
+                .finally(() => {
+                    // Reset button
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                });
+        });
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
+                type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    ${message}
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+
+            // Remove notification after 5 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
     </script>
 
 @endsection

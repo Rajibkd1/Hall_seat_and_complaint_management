@@ -10,6 +10,7 @@ use App\Models\SeatApplication;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use App\Mail\StudentCommunicationEmail;
 
 class AdminController extends Controller
 {
@@ -72,8 +73,42 @@ class AdminController extends Controller
 
     public function viewStudentProfile($student_id)
     {
-        $student = Student::where('student_id', $student_id)->first();
-        return view('admin.students.student_profile', compact('student'));
+        // Load student with all related data
+        $student = Student::where('student_id', $student_id)
+            ->with([
+                'seatApplications' => function ($query) {
+                    $query->orderBy('created_at', 'desc');
+                },
+                'seatAllotment' => function ($query) {
+                    $query->where('status', 'active')
+                        ->with(['seat']);
+                },
+                'complaints' => function ($query) {
+                    $query->orderBy('created_at', 'desc');
+                }
+            ])
+            ->first();
+
+        if (!$student) {
+            return redirect()->route('admin.students')
+                ->with('error', 'Student not found.');
+        }
+
+        // Get current seat allocation if exists
+        $currentSeatAllotment = $student->seatAllotment;
+
+        // Get latest seat application
+        $latestApplication = $student->seatApplications->first();
+
+        // Get latest complaint
+        $latestComplaint = $student->complaints->first();
+
+        return view('admin.students.student_profile', compact(
+            'student',
+            'currentSeatAllotment',
+            'latestApplication',
+            'latestComplaint'
+        ));
     }
 
     public function accountRequests()
@@ -113,7 +148,7 @@ class AdminController extends Controller
         try {
             Mail::to($student->email)->send(new \App\Mail\AccountActivationConfirmation($student));
         } catch (\Exception $e) {
-            \Log::error('Failed to send activation email: ' . $e->getMessage());
+            Log::error('Failed to send activation email: ' . $e->getMessage());
         }
 
         // Determine the correct redirect route based on admin role
@@ -263,5 +298,118 @@ class AdminController extends Controller
         $pdf = Pdf::loadView('admin.students.students_pdf_report', compact('students'));
 
         return $pdf->download('students_directory_report_' . date('Y-m-d') . '.pdf');
+    }
+
+    // Email Communication Methods
+    public function showEmailForm()
+    {
+        $students = Student::orderBy('name', 'asc')->get();
+        session(['active_admin_menu' => 'email']);
+        return view('admin.email.compose', compact('students'));
+    }
+
+    public function sendIndividualEmail(Request $request)
+    {
+        $request->validate([
+            'student_id' => 'required|exists:students,student_id',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+
+        $student = Student::where('student_id', $request->student_id)->first();
+        $admin = auth()->guard('admin')->user();
+
+        try {
+            Mail::to($student->email)->send(new StudentCommunicationEmail(
+                $request->subject,
+                $request->message,
+                $admin->name,
+                $admin->role,
+                false
+            ));
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Email sent successfully to ' . $student->name
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Email sent successfully to ' . $student->name);
+        } catch (\Exception $e) {
+            Log::error('Failed to send individual email: ' . $e->getMessage());
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to send email. Please try again.'
+                ], 500);
+            }
+
+            return redirect()->back()->with('error', 'Failed to send email. Please try again.');
+        }
+    }
+
+    public function sendBulkEmail(Request $request)
+    {
+        $request->validate([
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+
+        $admin = auth()->guard('admin')->user();
+
+        // Get all students
+        $students = Student::all();
+
+        if ($students->isEmpty()) {
+            return redirect()->back()->with('error', 'No students found to send email to.');
+        }
+
+        $successCount = 0;
+        $failCount = 0;
+
+        foreach ($students as $student) {
+            try {
+                Mail::to($student->email)->send(new StudentCommunicationEmail(
+                    $request->subject,
+                    $request->message,
+                    $admin->name,
+                    $admin->role,
+                    true
+                ));
+                $successCount++;
+            } catch (\Exception $e) {
+                Log::error('Failed to send bulk email to ' . $student->email . ': ' . $e->getMessage());
+                $failCount++;
+            }
+        }
+
+        if ($successCount > 0) {
+            $message = "Bulk email sent successfully to {$successCount} students.";
+            if ($failCount > 0) {
+                $message .= " Failed to send to {$failCount} students.";
+            }
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $message
+                ]);
+            }
+
+            return redirect()->back()->with('success', $message);
+        } else {
+            $errorMessage = 'Failed to send email to any students. Please try again.';
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $errorMessage
+                ], 500);
+            }
+
+            return redirect()->back()->with('error', $errorMessage);
+        }
     }
 }

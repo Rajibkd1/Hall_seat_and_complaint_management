@@ -24,17 +24,23 @@ class SeatApplicationController extends Controller
 
         $existingApplication = SeatApplication::where('student_id', $studentId)->first();
 
+        // Get seat allocation information for renewal button
+        $seatAllotment = \App\Models\SeatAllotment::where('student_id', $studentId)
+            ->where('status', 'active')
+            ->with(['seat'])
+            ->first();
+
         // Check if student profile is complete before allowing seat application
         $missingFields = $this->checkProfileCompleteness($student);
 
         if (!empty($missingFields)) {
             session(['active_nav' => 'seat_application']);
-            return view('student.seat_application', compact('student', 'existingApplication', 'missingFields'));
+            return view('student.seat_application', compact('student', 'existingApplication', 'missingFields', 'seatAllotment'));
         }
 
         session(['active_nav' => 'seat_application']);
 
-        return view('student.seat_application', compact('student', 'existingApplication'));
+        return view('student.seat_application', compact('student', 'existingApplication', 'seatAllotment'));
     }
 
     /**

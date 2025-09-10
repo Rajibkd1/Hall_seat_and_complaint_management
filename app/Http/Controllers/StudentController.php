@@ -19,12 +19,22 @@ class StudentController extends Controller
 
         // Load seat details if student has an active seat
         $seatDetails = null;
+        $seatAllotment = null;
         if ($student->hasActiveSeat()) {
             $seatDetails = $student->getSeatDetails();
+            $seatAllotment = \App\Models\SeatAllotment::where('student_id', $student->student_id)
+                ->where('status', 'active')
+                ->with(['seat'])
+                ->first();
+
+            // Check if student needs renewal reminder and send email
+            if ($seatAllotment) {
+                $this->checkAndSendRenewalReminder($seatAllotment);
+            }
         }
 
         session(['active_nav' => 'profile']);
-        return view('student.profile', compact('student', 'seatDetails'));
+        return view('student.profile', compact('student', 'seatDetails', 'seatAllotment'));
     }
 
     public function editProfile()
@@ -271,6 +281,75 @@ class StudentController extends Controller
                 'message' => 'An error occurred while uploading the ID card. Please try again.',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    /**
+     * Check if student needs renewal reminder and send appropriate email
+     */
+    private function checkAndSendRenewalReminder($seatAllotment)
+    {
+        // Don't send if student has already renewed
+        if ($seatAllotment->hasActiveRenewalApplication()) {
+            return;
+        }
+
+        // Check for 29-day reminder
+        if ($seatAllotment->needsReminderEmail(29)) {
+            $this->sendReminderEmail($seatAllotment, 29);
+        }
+        // Check for 20-day reminder
+        elseif ($seatAllotment->needsReminderEmail(20)) {
+            $this->sendReminderEmail($seatAllotment, 20);
+        }
+        // Check for 10-day reminder
+        elseif ($seatAllotment->needsReminderEmail(10)) {
+            $this->sendReminderEmail($seatAllotment, 10);
+        }
+    }
+
+    /**
+     * Send the appropriate reminder email based on days remaining
+     */
+    private function sendReminderEmail($seatAllotment, $daysThreshold)
+    {
+        try {
+            $mailable = null;
+
+            switch ($daysThreshold) {
+                case 29:
+                    $mailable = new \App\Mail\SeatRenewalReminder29Days($seatAllotment);
+                    break;
+                case 20:
+                    $mailable = new \App\Mail\SeatRenewalReminder20Days($seatAllotment);
+                    break;
+                case 10:
+                    $mailable = new \App\Mail\SeatRenewalReminder10Days($seatAllotment);
+                    break;
+            }
+
+            if ($mailable) {
+                \Illuminate\Support\Facades\Mail::to($seatAllotment->student->email)
+                    ->send($mailable);
+
+                // Mark this specific reminder as sent
+                $seatAllotment->markReminderSent($daysThreshold);
+
+                \Illuminate\Support\Facades\Log::info("Renewal reminder email sent to student ({$daysThreshold} days)", [
+                    'student_id' => $seatAllotment->student_id,
+                    'allotment_id' => $seatAllotment->allotment_id,
+                    'remaining_days' => $seatAllotment->remaining_days,
+                    'reminder_type' => $daysThreshold . '_days'
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to send renewal reminder email ({$daysThreshold} days)", [
+                'student_id' => $seatAllotment->student_id,
+                'allotment_id' => $seatAllotment->allotment_id,
+                'remaining_days' => $seatAllotment->remaining_days,
+                'reminder_type' => $daysThreshold . '_days',
+                'error' => $e->getMessage()
+            ]);
         }
     }
 }

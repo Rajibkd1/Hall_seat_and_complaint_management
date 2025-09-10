@@ -240,14 +240,17 @@ class SeatController extends Controller
                 ], 400);
             }
 
-            // Create seat allotment
+            // Create seat allotment with renewal settings
             $allotment = SeatAllotment::create([
                 'seat_id' => $seat->seat_id,
                 'student_id' => $application->student_id,
                 'application_id' => $application->application_id,
                 'admin_id' => auth('admin')->id(),
                 'start_date' => now(),
-                'status' => 'active'
+                'status' => 'active',
+                'renewal_required' => true,
+                'renewal_reminder_sent' => false,
+                'allocation_expiry_date' => now()->addYear()->format('Y-m-d')
             ]);
 
             // Update seat status

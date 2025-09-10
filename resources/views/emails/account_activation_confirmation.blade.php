@@ -23,6 +23,25 @@
             border-radius: 10px 10px 0 0;
         }
 
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
         .content {
             background: #f8f9fa;
             padding: 30px;
@@ -59,7 +78,10 @@
 
 <body>
     <div class="header">
-        <h1>🎉 Account Activated Successfully!</h1>
+        <div class="logo">
+            <img src="{{ asset('storage/nstu_logo.png') }}" alt="NSTU Logo" />
+        </div>
+        <h1>Account Activated Successfully!</h1>
         <p>Welcome to NSTU Hall Management System</p>
     </div>
 

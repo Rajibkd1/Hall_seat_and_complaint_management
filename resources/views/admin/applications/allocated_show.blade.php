@@ -8,11 +8,11 @@
             <!-- Header Section -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-8 overflow-hidden">
                 <div class="bg-gray-800 px-8 py-6">
-                    <div class="flex justify-between items-center">
-                        <div>
+                    <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center space-y-4 lg:space-y-0">
+                        <div class="flex-1">
                             <h1 class="text-2xl font-bold text-white mb-2">Allocated Student Details</h1>
                             <p class="text-gray-300">Comprehensive information about the seat allocation</p>
-                            <div class="flex items-center mt-4 space-x-4">
+                            <div class="flex flex-wrap items-center mt-4 space-x-4">
                                 <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
                                     <span class="text-white text-sm font-medium">Allotment ID</span>
                                     <div class="text-white text-xl font-bold">#{{ $allotment->allotment_id }}</div>
@@ -24,9 +24,22 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="text-right">
+                        <div
+                            class="flex flex-col sm:flex-row lg:flex-col space-y-3 sm:space-y-0 sm:space-x-3 lg:space-x-0 lg:space-y-3">
+                            @if ($allotment->student)
+                                <button
+                                    onclick="openEmailModal('{{ $allotment->student->student_id }}', '{{ $allotment->student->name }}', '{{ $allotment->student->email }}')"
+                                    class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 shadow-lg w-full sm:w-auto justify-center">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                        </path>
+                                    </svg>
+                                    Send Email
+                                </button>
+                            @endif
                             <a href="{{ route('admin.applications.allocated') }}"
-                                class="inline-flex items-center px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold rounded-lg hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-200">
+                                class="inline-flex items-center px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold rounded-lg hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-200 w-full sm:w-auto justify-center">
                                 <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                     fill="currentColor">
                                     <path fill-rule="evenodd"
@@ -447,6 +460,94 @@
         </div>
     </div>
 
+    <!-- Email Modal -->
+    <div id="emailModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="relative max-w-2xl w-full mx-4">
+            <div class="relative bg-white rounded-lg shadow-2xl">
+                <!-- Modal Header -->
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        Send Email to Student
+                    </h3>
+                    <button type="button" onclick="closeEmailModal()"
+                        class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-2 transition-colors duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="p-6">
+                    <form id="emailForm" method="POST">
+                        @csrf
+                        <input type="hidden" id="student_id" name="student_id">
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Recipient</label>
+                            <div class="bg-gray-50 p-3 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div id="studentName" class="font-medium text-gray-900"></div>
+                                        <div id="studentEmail" class="text-sm text-gray-600"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="emailSubject" class="block text-sm font-medium text-gray-700 mb-2">
+                                Subject <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="emailSubject" name="subject" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Enter email subject">
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="emailMessage" class="block text-sm font-medium text-gray-700 mb-2">
+                                Message <span class="text-red-500">*</span>
+                            </label>
+                            <textarea id="emailMessage" name="message" rows="6" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Enter your message here..."></textarea>
+                        </div>
+
+                        <div class="flex justify-end space-x-3">
+                            <button type="button" onclick="closeEmailModal()"
+                                class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors duration-200">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                </svg>
+                                Send Email
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Image Modal Functions
         function openImageModal(imageSrc, title) {
@@ -489,8 +590,128 @@
             document.addEventListener('keydown', function(event) {
                 if (event.key === 'Escape') {
                     closeImageModal();
+                    closeEmailModal();
                 }
             });
         });
+
+        // Email Modal Functions
+        function openEmailModal(studentId, studentName, studentEmail) {
+            const modal = document.getElementById('emailModal');
+            const form = document.getElementById('emailForm');
+            const studentIdInput = document.getElementById('student_id');
+            const studentNameDiv = document.getElementById('studentName');
+            const studentEmailDiv = document.getElementById('studentEmail');
+            const subjectInput = document.getElementById('emailSubject');
+            const messageInput = document.getElementById('emailMessage');
+
+            // Set form action based on current route
+            const currentPath = window.location.pathname;
+            if (currentPath.includes('/provost/')) {
+                form.action = '{{ route('provost.email.send-individual') }}';
+            } else if (currentPath.includes('/co-provost/')) {
+                form.action = '{{ route('co-provost.email.send-individual') }}';
+            } else {
+                form.action = '{{ route('admin.email.send-individual') }}';
+            }
+
+            // Populate form data
+            studentIdInput.value = studentId;
+            studentNameDiv.textContent = studentName;
+            studentEmailDiv.textContent = studentEmail;
+            subjectInput.value = '';
+            messageInput.value = '';
+
+            // Show modal
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEmailModal() {
+            const modal = document.getElementById('emailModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close email modal when clicking outside
+        document.getElementById('emailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEmailModal();
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+
+            // Show loading state
+            submitBtn.innerHTML =
+                '<svg class="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Sending...';
+            submitBtn.disabled = true;
+
+            // Submit form
+            fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content'),
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Show success message
+                        showNotification('Email sent successfully!', 'success');
+                        closeEmailModal();
+                    } else {
+                        // Show error message
+                        showNotification(data.message || 'Failed to send email. Please try again.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('An error occurred. Please try again.', 'error');
+                })
+                .finally(() => {
+                    // Reset button
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                });
+        });
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
+                type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    ${message}
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+
+            // Remove notification after 5 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
     </script>
 @endsection

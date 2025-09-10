@@ -11,6 +11,29 @@
                         <p class="text-gray-600">Complete your hall seat application form</p>
                     </div>
                     <div class="flex items-center space-x-4">
+                        <!-- Renew Seat Button -->
+                        @if ($seatAllotment && $seatAllotment->canApplyForRenewal())
+                            <div class="mr-4 text-right">
+                                <div class="mb-2">
+                                    <p class="text-xs text-gray-500">Current Seat</p>
+                                    <p class="text-sm font-medium text-gray-900">
+                                        {{ $seatAllotment->seat->floor }} Floor, Room
+                                        {{ $seatAllotment->seat->room_number }}, Bed {{ $seatAllotment->seat->bed_number }}
+                                    </p>
+                                    <p class="text-xs text-orange-600">
+                                        {{ $seatAllotment->remaining_days }} days left
+                                    </p>
+                                </div>
+                                <a href="{{ route('student.seat_renewal') }}"
+                                    class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                    Renew Seat
+                                </a>
+                            </div>
+                        @endif
                         <div class="text-right">
                             <p class="text-sm text-gray-500">Applicant</p>
                             <p class="font-semibold text-gray-900">{{ $student->name }}</p>

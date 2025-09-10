@@ -32,14 +32,15 @@
             @endphp
 
             <!-- Students - Only for Provost and Co-Provost -->
-            @if($isProvost || $isCoProvost)
-            <li><a href="{{ route('admin.students') }}"
-                    class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'students' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
-                    <div class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
-                        <i class="fas fa-users text-gray-300 group-hover:text-white"></i>
-                    </div>
-                    <span class="font-medium">View Students</span>
-                </a></li>
+            @if ($isProvost || $isCoProvost)
+                <li><a href="{{ route('admin.students') }}"
+                        class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'students' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
+                        <div
+                            class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
+                            <i class="fas fa-users text-gray-300 group-hover:text-white"></i>
+                        </div>
+                        <span class="font-medium">View Students</span>
+                    </a></li>
             @endif
 
             <!-- Complaints - All roles can access -->
@@ -61,34 +62,59 @@
                 </a></li>
 
             <!-- Applications - Only for Provost and Co-Provost -->
-            @if($isProvost || $isCoProvost)
-            <li><a href="{{ route('admin.applications.index') }}"
-                    class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'applications' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
-                    <div class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
-                        <i class="fas fa-file-alt text-gray-300 group-hover:text-white"></i>
-                    </div>
-                    <span class="font-medium">Applications</span>
-                </a></li>
+            @if ($isProvost || $isCoProvost)
+                <li><a href="{{ route('admin.applications.index') }}"
+                        class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'applications' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
+                        <div
+                            class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
+                            <i class="fas fa-file-alt text-gray-300 group-hover:text-white"></i>
+                        </div>
+                        <span class="font-medium">Applications</span>
+                    </a></li>
 
-            <!-- Allocated Students - Only for Provost and Co-Provost -->
-            <li><a href="{{ route('admin.applications.allocated') }}"
-                    class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'allocated_students' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
-                    <div class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
-                        <i class="fas fa-user-check text-gray-300 group-hover:text-white"></i>
-                    </div>
-                    <span class="font-medium">Allocated Students</span>
-                </a></li>
+                <!-- Allocated Students - Only for Provost and Co-Provost -->
+                <li><a href="{{ route('admin.applications.allocated') }}"
+                        class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'allocated_students' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
+                        <div
+                            class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
+                            <i class="fas fa-user-check text-gray-300 group-hover:text-white"></i>
+                        </div>
+                        <span class="font-medium">Allocated Students</span>
+                    </a></li>
+
+                <!-- Renew Applications - Only for Provost and Co-Provost -->
+                <li><a href="{{ route('admin.renewal_applications.index') }}"
+                        class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'renewal_applications' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
+                        <div
+                            class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
+                            <i class="fas fa-sync-alt text-gray-300 group-hover:text-white"></i>
+                        </div>
+                        <span class="font-medium">Renew Applications</span>
+                    </a></li>
             @endif
 
             <!-- Seats - Only for Provost -->
-            @if($isProvost)
-            <li><a href="{{ route('admin.seats.index') }}"
-                    class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'seats' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
-                    <div class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
-                        <i class="fas fa-chair text-gray-300 group-hover:text-white"></i>
-                    </div>
-                    <span class="font-medium">Seats</span>
-                </a></li>
+            @if ($isProvost)
+                <li><a href="{{ route('admin.seats.index') }}"
+                        class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'seats' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
+                        <div
+                            class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
+                            <i class="fas fa-chair text-gray-300 group-hover:text-white"></i>
+                        </div>
+                        <span class="font-medium">Seats</span>
+                    </a></li>
+            @endif
+
+            <!-- Email Communication - Only for Provost and Co-Provost -->
+            @if ($isProvost || $isCoProvost)
+                <li><a href="{{ route('admin.email.compose') }}"
+                        class="nav-link group flex items-center py-4 px-6 text-white transition-all duration-300 border-l-4 rounded-r-xl mx-2 {{ session('active_admin_menu') === 'email' ? 'active bg-gray-700 border-blue-500' : 'hover:bg-gray-800 border-transparent' }}">
+                        <div
+                            class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-gray-700 transition-colors duration-300">
+                            <i class="fas fa-envelope text-gray-300 group-hover:text-white"></i>
+                        </div>
+                        <span class="font-medium">Email Communication</span>
+                    </a></li>
             @endif
 
             <!-- Sign Out -->

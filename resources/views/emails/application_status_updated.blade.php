@@ -65,8 +65,8 @@
         .header-icon {
             width: 80px;
             height: 80px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
             margin: 0 auto 20px;
             display: flex;
             align-items: center;
@@ -74,12 +74,15 @@
             position: relative;
             z-index: 2;
             backdrop-filter: blur(10px);
+            padding: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .header-icon svg {
-            width: 40px;
-            height: 40px;
-            fill: white;
+        .header-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
         }
 
         .header h1 {
@@ -309,18 +312,20 @@
             width: 50px;
             height: 50px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
+            border-radius: 8px;
             margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(10px);
+            padding: 4px;
         }
 
-        .footer-logo svg {
-            width: 25px;
-            height: 25px;
-            fill: #d1d5db;
+        .footer-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 4px;
         }
 
         .footer h3 {
@@ -394,9 +399,7 @@
     <div class="email-container">
         <div class="header">
             <div class="header-icon">
-                <svg viewBox="0 0 24 24">
-                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <img src="{{ asset('storage/nstu_logo.png') }}" alt="NSTU Logo" />
             </div>
             <h1>Application Status Update</h1>
             <div class="subtitle">NSTU Hall Management System</div>
@@ -466,9 +469,7 @@
 
         <div class="footer">
             <div class="footer-logo">
-                <svg viewBox="0 0 24 24">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-                </svg>
+                <img src="{{ asset('storage/nstu_logo.png') }}" alt="NSTU Logo" />
             </div>
             <h3>NSTU Hall Management</h3>
             <p>Noakhali Science and Technology University</p>

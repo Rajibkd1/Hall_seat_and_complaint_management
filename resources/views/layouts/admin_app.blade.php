@@ -1,30 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link href="{{ asset('css/admin_student_profile.css') }}" rel="stylesheet">
     <script src="{{ asset('js/admin_student_profile.js') }}"></script>
     <link href="{{ asset('css/admin_students.css') }}" rel="stylesheet">
     <script src="{{ asset('js/admin_students.js') }}"></script>
     <script src="{{ asset('js/admin_view_complaint.js') }}"></script>
+    <link href="{{ asset('css/admin_email_communication.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/admin_email_communication.js') }}"></script>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs4.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs4.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* Custom styles for active tab indicator */
         .active-tab-indicator {
             border-bottom-width: 4px;
-            border-color: #6366f1; /* A shade of indigo, adjust as needed */
-            background-color: #f3f4f6; /* Light gray background */
+            border-color: #6366f1;
+            /* A shade of indigo, adjust as needed */
+            background-color: #f3f4f6;
+            /* Light gray background */
         }
+
         /* Styles for dimming/blurring main content when sidebar is open */
         body.sidebar-open #mainContent {
             filter: blur(3px) brightness(0.7);
-            pointer-events: none; /* Disable clicks on dimmed content */
+            pointer-events: none;
+            /* Disable clicks on dimmed content */
             transition: filter 0.3s ease-in-out;
         }
+
         body:not(.sidebar-open) #mainContent {
             filter: none;
             pointer-events: auto;
@@ -32,6 +46,7 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-100 font-sans antialiased">
     @include('layouts.admin_header')
     @include('layouts.admin_tabbar')
@@ -65,4 +80,5 @@
         });
     </script>
 </body>
+
 </html>
