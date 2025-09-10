@@ -15,6 +15,7 @@ use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\ProvostController;
 use App\Http\Controllers\CoProvostController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,11 +103,9 @@ Route::middleware('student-auth')->group(function () {
     Route::get('/hall-notice', [HallNoticeController::class, 'index'])->name('student.hall-notice');
     Route::get('/hall-notice/{id}', [HallNoticeController::class, 'show'])->name('student.hall-notice.show');
 
-    // Placeholder routes for Seat Application and Contact Us
-    Route::get('/contact-us', function () {
-        session(['active_nav' => 'contact_us']);
-        return view('student.contact_us');
-    })->name('student.contact_us');
+    // Contact Us Routes
+    Route::get('/contact-us', [ContactController::class, 'index'])->name('student.contact_us');
+    Route::post('/contact-us', [ContactController::class, 'store'])->name('student.contact_submit');
 
     //Seat Application Routes
     Route::get('/seat-application', [SeatApplicationController::class, 'showForm'])->name('student.seat_application');
