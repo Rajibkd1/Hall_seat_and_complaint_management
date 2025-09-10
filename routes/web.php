@@ -70,14 +70,20 @@ Route::post('/super-admin/verify-otp', [SuperAdminAuthController::class, 'verify
 |--------------------------------------------------------------------------
 */
 
-// Student Protected Routes
-Route::middleware('student-auth')->group(function () {
-    Route::get('/student/dashboard', [StudentAuthController::class, 'dashboard'])->name('student.dashboard');
+// Student Profile Routes (accessible without full activation)
+Route::middleware('student-profile-access')->group(function () {
     Route::get('/student/profile', [\App\Http\Controllers\StudentController::class, 'profile'])->name('student.profile');
     Route::get('/student/profile/edit', [\App\Http\Controllers\StudentController::class, 'editProfile'])->name('student.profile.edit');
     Route::post('/student/profile', [\App\Http\Controllers\StudentController::class, 'update'])->name('student.profile.update');
     Route::post('/student/upload-id-card', [\App\Http\Controllers\StudentController::class, 'uploadIdCard'])->name('student.upload.id_card');
-    Route::post('/student/logout', [StudentAuthController::class, 'logout'])->name('student.logout');
+});
+
+// Student logout route (accessible for all authenticated students)
+Route::post('/student/logout', [StudentAuthController::class, 'logout'])->name('student.logout');
+
+// Student Protected Routes (requires full activation)
+Route::middleware('student-auth')->group(function () {
+    Route::get('/student/dashboard', [StudentAuthController::class, 'dashboard'])->name('student.dashboard');
     // Complaint List
     Route::get('/complaint_list', [StudentComplaintController::class, 'complaintList'])->name('student.complaint_list');
 
@@ -140,6 +146,9 @@ Route::middleware(['admin-auth', 'set-active-menu'])->prefix('admin')->group(fun
     Route::middleware('role-permission:view_students')->group(function () {
         Route::get('/students', [AdminController::class, 'students'])->name('admin.students');
         Route::get('/students/{student_id}', [AdminController::class, 'viewStudentProfile'])->name('admin.student.profile');
+        Route::get('/account-requests', [AdminController::class, 'accountRequests'])->name('admin.account.requests');
+        Route::get('/account-requests/{student_id}', [AdminController::class, 'viewAccountRequest'])->name('admin.account.request.detail');
+        Route::post('/activate-account/{student_id}', [AdminController::class, 'activateAccount'])->name('admin.activate.account');
 
         // Student PDF routes
         Route::get('/students/pdf/generate', [AdminController::class, 'generateStudentsPDFReport'])->name('admin.students.pdf.generate');
@@ -233,6 +242,9 @@ Route::middleware(['admin-auth', 'role-permission:Provost'])->prefix('provost')-
     // Provost-specific routes
     Route::get('/students', [ProvostController::class, 'students'])->name('provost.students');
     Route::get('/students/{student_id}', [ProvostController::class, 'viewStudentProfile'])->name('provost.student.profile');
+    Route::get('/account-requests', [AdminController::class, 'accountRequests'])->name('provost.account.requests');
+    Route::get('/account-requests/{student_id}', [AdminController::class, 'viewAccountRequest'])->name('provost.account.request.detail');
+    Route::post('/activate-account/{student_id}', [AdminController::class, 'activateAccount'])->name('provost.activate.account');
 
     // Student PDF routes
     Route::get('/students/pdf/generate', [AdminController::class, 'generateStudentsPDFReport'])->name('provost.students.pdf.generate');
@@ -294,6 +306,9 @@ Route::middleware(['admin-auth', 'role-permission:Co-Provost'])->prefix('co-prov
     // Co-Provost-specific routes
     Route::get('/students', [CoProvostController::class, 'students'])->name('co-provost.students');
     Route::get('/students/{student_id}', [CoProvostController::class, 'viewStudentProfile'])->name('co-provost.student.profile');
+    Route::get('/account-requests', [AdminController::class, 'accountRequests'])->name('co-provost.account.requests');
+    Route::get('/account-requests/{student_id}', [AdminController::class, 'viewAccountRequest'])->name('co-provost.account.request.detail');
+    Route::post('/activate-account/{student_id}', [AdminController::class, 'activateAccount'])->name('co-provost.activate.account');
 
     // Student PDF routes
     Route::get('/students/pdf/generate', [AdminController::class, 'generateStudentsPDFReport'])->name('co-provost.students.pdf.generate');

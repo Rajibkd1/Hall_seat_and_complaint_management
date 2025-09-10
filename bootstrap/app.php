@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'student-auth' => \App\Http\Middleware\StudentAuth::class,
+            'student-profile-access' => \App\Http\Middleware\StudentProfileAccess::class,
             'admin-auth' => \App\Http\Middleware\AdminAuth::class,
             'super-admin-auth' => \App\Http\Middleware\SuperAdminAuth::class,
             'role-permission' => \App\Http\Middleware\RolePermission::class,

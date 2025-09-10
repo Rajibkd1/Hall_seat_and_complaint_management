@@ -8,6 +8,8 @@ use App\Models\Complaint;
 use App\Models\HallNotice;
 use App\Models\SeatApplication;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -72,6 +74,57 @@ class AdminController extends Controller
     {
         $student = Student::where('student_id', $student_id)->first();
         return view('admin.students.student_profile', compact('student'));
+    }
+
+    public function accountRequests()
+    {
+        $students = Student::where('profile_completed', true)
+            ->where('is_active', false)
+            ->orderBy('profile_completed_at', 'desc')
+            ->get();
+
+        return view('admin.students.account_requests', compact('students'));
+    }
+
+    public function viewAccountRequest($student_id)
+    {
+        $student = Student::where('student_id', $student_id)
+            ->where('profile_completed', true)
+            ->where('is_active', false)
+            ->firstOrFail();
+
+        return view('admin.students.student_detail', compact('student'));
+    }
+
+    public function activateAccount(Request $request, $student_id)
+    {
+        $student = Student::where('student_id', $student_id)->firstOrFail();
+
+        if (!$student->profile_completed) {
+            return redirect()->back()->with('error', 'Student profile is not completed yet.');
+        }
+
+        $student->update([
+            'is_active' => true,
+            'activated_at' => now()
+        ]);
+
+        // Send activation email
+        try {
+            Mail::to($student->email)->send(new \App\Mail\AccountActivationConfirmation($student));
+        } catch (\Exception $e) {
+            \Log::error('Failed to send activation email: ' . $e->getMessage());
+        }
+
+        // Determine the correct redirect route based on admin role
+        $admin = auth()->guard('admin')->user();
+        if ($admin->role === 'Provost') {
+            return redirect()->route('provost.students')->with('success', 'Account activated successfully! Activation email sent to student.');
+        } elseif ($admin->role === 'Co-Provost') {
+            return redirect()->route('co-provost.students')->with('success', 'Account activated successfully! Activation email sent to student.');
+        } else {
+            return redirect()->route('admin.students')->with('success', 'Account activated successfully! Activation email sent to student.');
+        }
     }
 
     public function complaints()

@@ -32,6 +32,10 @@ class Student extends Authenticatable
         'guardian_alive_status',
         'guardian_contact',
         'password_hash',
+        'is_active',
+        'profile_completed',
+        'activated_at',
+        'profile_completed_at',
     ];
 
     protected $hidden = [
@@ -39,6 +43,11 @@ class Student extends Authenticatable
     ];
 
     protected $appends = ['profile_image_url'];
+
+    protected $casts = [
+        'activated_at' => 'datetime',
+        'profile_completed_at' => 'datetime',
+    ];
 
     // Relationships
     public function seatApplications()
@@ -98,5 +107,30 @@ class Student extends Authenticatable
             return $allotment ? $allotment->seat : null;
         }
         return null;
+    }
+
+    public function isAccountActive()
+    {
+        return $this->is_active;
+    }
+
+    public function isProfileCompleted()
+    {
+        return $this->profile_completed;
+    }
+
+    public function canLogin()
+    {
+        return $this->is_active && $this->profile_completed;
+    }
+
+    public function needsProfileCompletion()
+    {
+        return !$this->profile_completed;
+    }
+
+    public function needsAccountActivation()
+    {
+        return !$this->is_active;
     }
 }

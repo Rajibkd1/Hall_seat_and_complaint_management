@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class StudentAuth
+class StudentProfileAccess
 {
     /**
      * Handle an incoming request.
@@ -20,17 +20,6 @@ class StudentAuth
         if (!Auth::guard('student')->check()) {
             // If not authenticated, redirect to student login page
             return redirect()->route('student.auth');
-        }
-
-        $student = Auth::guard('student')->user();
-
-        // Check if account is active and profile is completed
-        if (!$student->isAccountActive()) {
-            return redirect()->route('student.profile')->with('warning', 'Your account is not yet activated. Please complete your profile and wait for admin approval.');
-        }
-
-        if (!$student->isProfileCompleted()) {
-            return redirect()->route('student.profile')->with('warning', 'Please complete your profile to activate your account.');
         }
 
         // Ensure the student guard is used for the request

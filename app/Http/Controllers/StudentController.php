@@ -60,7 +60,7 @@ class StudentController extends Controller
 
         if ($validator->fails()) {
             Log::error('Profile update validation failed', ['errors' => $validator->errors()]);
-            
+
             if ($request->ajax() || $request->wantsJson()) {
                 return response()->json([
                     'success' => false,
@@ -68,7 +68,7 @@ class StudentController extends Controller
                     'errors' => $validator->errors()
                 ], 422);
             }
-            
+
             return back()->withErrors($validator)->withInput();
         }
 
@@ -77,7 +77,7 @@ class StudentController extends Controller
         // Handle profile image upload
         if ($request->hasFile('profile_image')) {
             Log::info('Processing profile image upload');
-            
+
             try {
                 // Delete old profile image if it exists
                 if ($student->profile_image && Storage::disk('public')->exists($student->profile_image)) {
@@ -94,14 +94,14 @@ class StudentController extends Controller
                 Log::info('Profile image uploaded successfully: ' . $path);
             } catch (\Exception $e) {
                 Log::error('Profile image upload failed: ' . $e->getMessage());
-                
+
                 if ($request->ajax() || $request->wantsJson()) {
                     return response()->json([
                         'success' => false,
                         'message' => 'Failed to upload profile image: ' . $e->getMessage()
                     ], 500);
                 }
-                
+
                 return back()->withErrors(['profile_image' => 'Failed to upload profile image'])->withInput();
             }
         }
@@ -109,7 +109,7 @@ class StudentController extends Controller
         // Handle ID card front upload
         if ($request->hasFile('id_card_front')) {
             Log::info('Processing ID card front upload');
-            
+
             try {
                 // Delete old ID card front if it exists
                 if ($student->id_card_front && Storage::disk('public')->exists($student->id_card_front)) {
@@ -131,7 +131,7 @@ class StudentController extends Controller
         // Handle ID card back upload
         if ($request->hasFile('id_card_back')) {
             Log::info('Processing ID card back upload');
-            
+
             try {
                 // Delete old ID card back if it exists
                 if ($student->id_card_back && Storage::disk('public')->exists($student->id_card_back)) {
@@ -153,6 +153,10 @@ class StudentController extends Controller
         try {
             Log::info('Updating student data', ['data' => $dataToUpdate]);
             $student->update($dataToUpdate);
+
+            // Check if profile is now completed (has all required fields)
+            $this->checkAndUpdateProfileCompletion($student);
+
             Log::info('Student profile updated successfully');
 
             // Check if request is AJAX
@@ -185,6 +189,38 @@ class StudentController extends Controller
         }
     }
 
+    private function checkAndUpdateProfileCompletion($student)
+    {
+        // Check if all required fields for profile completion are filled
+        $requiredFields = [
+            'profile_image',
+            'phone',
+            'id_card_front',
+            'id_card_back'
+        ];
+
+        $isCompleted = true;
+        foreach ($requiredFields as $field) {
+            if (empty($student->$field)) {
+                $isCompleted = false;
+                break;
+            }
+        }
+
+        // Update profile completion status if it has changed
+        if ($isCompleted && !$student->profile_completed) {
+            $student->update([
+                'profile_completed' => true,
+                'profile_completed_at' => now()
+            ]);
+        } elseif (!$isCompleted && $student->profile_completed) {
+            $student->update([
+                'profile_completed' => false,
+                'profile_completed_at' => null
+            ]);
+        }
+    }
+
     public function uploadIdCard(Request $request)
     {
         /** @var \App\Models\Student $student */
@@ -206,7 +242,7 @@ class StudentController extends Controller
         try {
             $type = $request->input('type', 'front');
             $fieldName = 'id_card_' . $type;
-            
+
             // Delete old ID card if it exists
             if ($student->$fieldName && Storage::disk('public')->exists($student->$fieldName)) {
                 Storage::disk('public')->delete($student->$fieldName);
@@ -227,7 +263,6 @@ class StudentController extends Controller
                 'image_url' => asset('storage/' . $path),
                 'type' => $type
             ]);
-
         } catch (\Exception $e) {
             Log::error('ID Card upload error: ' . $e->getMessage());
 

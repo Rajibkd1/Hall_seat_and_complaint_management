@@ -77,13 +77,15 @@ class StudentAuthController extends Controller
             'department' => $request->department,
             'session_year' => $request->session_year,
             'password_hash' => Hash::make($request->password),
+            'is_active' => false,
+            'profile_completed' => false,
         ]);
 
         EmailVerification::where('email', $request->email)->delete();
 
         Auth::guard('student')->login($student);
 
-        return redirect()->route('student.dashboard');
+        return redirect()->route('student.profile')->with('success', 'Account created successfully! Please complete your profile to activate your account.');
     }
 
     public function login(Request $request)
@@ -96,6 +98,17 @@ class StudentAuthController extends Controller
         // Attempt to log in as a student
         $student = Student::where('email', $request->email)->first();
         if ($student && Hash::check($request->password, $student->password_hash)) {
+            // Check if account is active and profile is completed
+            if (!$student->isAccountActive()) {
+                Auth::guard('student')->login($student);
+                return redirect()->route('student.profile')->with('warning', 'Your account is not yet activated. Please complete your profile and wait for admin approval.');
+            }
+
+            if (!$student->isProfileCompleted()) {
+                Auth::guard('student')->login($student);
+                return redirect()->route('student.profile')->with('warning', 'Please complete your profile to activate your account.');
+            }
+
             Auth::guard('student')->login($student);
             return redirect()->route('student.dashboard');
         }
@@ -104,7 +117,7 @@ class StudentAuthController extends Controller
         $admin = Admin::where('email', $request->email)->first();
         if ($admin && Hash::check($request->password, $admin->password_hash)) {
             Auth::guard('admin')->login($admin);
-            
+
             // Redirect based on role
             switch ($admin->role) {
                 case 'Provost':
@@ -123,8 +136,19 @@ class StudentAuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::guard('student')->logout();
-        return redirect('/');
+        try {
+            \Log::info('Logout attempt for student: ' . (auth('student')->user() ? auth('student')->user()->email : 'No user'));
+
+            Auth::guard('student')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            \Log::info('Logout successful, redirecting to homepage');
+            return redirect('/')->with('success', 'You have been logged out successfully.');
+        } catch (\Exception $e) {
+            \Log::error('Logout error: ' . $e->getMessage());
+            return redirect('/')->with('error', 'An error occurred during logout.');
+        }
     }
 
     public function showAuthForm($form_type = 'login')

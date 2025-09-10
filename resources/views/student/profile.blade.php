@@ -51,6 +51,41 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Profile Completion Status -->
+                @if (!$student->is_active || !$student->profile_completed)
+                    <div class="px-8 py-4 bg-yellow-50 border-b border-yellow-200">
+                        <div class="flex items-center gap-3">
+                            <div class="flex-shrink-0">
+                                <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-sm font-medium text-yellow-800">
+                                    @if (!$student->profile_completed)
+                                        Profile Incomplete
+                                    @elseif(!$student->is_active)
+                                        Account Pending Activation
+                                    @endif
+                                </h3>
+                                <p class="text-sm text-yellow-700 mt-1">
+                                    @if (!$student->profile_completed)
+                                        Please complete your profile by uploading your profile image, mobile number, and ID
+                                        card images to activate your account.
+                                    @elseif(!$student->is_active)
+                                        Your profile is complete! Your account activation request has been sent to the
+                                        administration. You will receive an email notification once your account is
+                                        activated.
+                                    @endif
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -216,11 +251,13 @@
                                         </div>
                                         <div class="flex justify-between items-center">
                                             <span class="text-sm font-medium text-gray-700">Floor:</span>
-                                            <span class="text-sm font-medium text-gray-900">{{ $seatDetails->floor }}</span>
+                                            <span
+                                                class="text-sm font-medium text-gray-900">{{ $seatDetails->floor }}</span>
                                         </div>
                                         <div class="flex justify-between items-center">
                                             <span class="text-sm font-medium text-gray-700">Block:</span>
-                                            <span class="text-sm font-medium text-gray-900">{{ $seatDetails->block }}</span>
+                                            <span
+                                                class="text-sm font-medium text-gray-900">{{ $seatDetails->block }}</span>
                                         </div>
                                         <div class="flex justify-between items-center">
                                             <span class="text-sm font-medium text-gray-700">Status:</span>
@@ -286,7 +323,8 @@
                                             <div class="h-full bg-gray-600 rounded-full"
                                                 style="width: {{ $profileCompletion ?? 75 }}%"></div>
                                         </div>
-                                        <span class="text-sm font-medium text-gray-900">{{ $profileCompletion ?? 75 }}%</span>
+                                        <span
+                                            class="text-sm font-medium text-gray-900">{{ $profileCompletion ?? 75 }}%</span>
                                     </div>
                                 </div>
 
@@ -503,6 +541,9 @@
             showUploadModal();
         });
     </script>
+    </div>
+    </div>
+    </div>
 @endsection
 
 @push('scripts')
