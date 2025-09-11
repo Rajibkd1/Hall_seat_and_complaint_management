@@ -437,6 +437,9 @@ class SeatApplicationController extends Controller
     }
     public function adminIndex(Request $request)
     {
+        // Set active menu for navigation
+        session(['active_admin_menu' => 'applications']);
+
         $query = SeatApplication::with('student');
 
         // Apply priority filters
@@ -480,14 +483,28 @@ class SeatApplicationController extends Controller
             $search = $request->input('search');
             $query->whereHas('student', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('department', 'like', "%{$search}%");
-            });
+                    ->orWhere('email', 'like', "%{$search}%");
+            })->orWhere('department', 'like', "%{$search}%");
         }
 
         // Apply status filter
         if ($request->filled('status')) {
             $query->where('status', $request->input('status'));
+        }
+
+        // Apply department filter
+        if ($request->filled('department')) {
+            $query->where('department', $request->input('department'));
+        }
+
+        // Apply academic year filter
+        if ($request->filled('academic_year')) {
+            $query->where('academic_year', $request->input('academic_year'));
+        }
+
+        // Apply number of semesters filter
+        if ($request->filled('number_of_semester')) {
+            $query->where('number_of_semester', $request->input('number_of_semester'));
         }
 
         // Apply sorting
@@ -791,12 +808,80 @@ class SeatApplicationController extends Controller
     }
 
     // List approved and verified applications
-    public function approvedApplications()
+    public function approvedApplications(Request $request)
     {
-        $approvedApplications = SeatApplication::with('student')
-            ->where('status', 'approved')
-            ->orderBy('application_date', 'desc')
-            ->get();
+        $query = SeatApplication::with('student')
+            ->where('status', 'approved');
+
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->whereHas('student', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            })->orWhere('department', 'like', "%{$search}%");
+        }
+
+        // Apply department filter
+        if ($request->filled('department')) {
+            $query->where('department', $request->input('department'));
+        }
+
+        // Apply academic year filter
+        if ($request->filled('academic_year')) {
+            $query->where('academic_year', $request->input('academic_year'));
+        }
+
+        // Apply number of semesters filter
+        if ($request->filled('number_of_semester')) {
+            $query->where('number_of_semester', $request->input('number_of_semester'));
+        }
+
+        // Apply CGPA filter
+        if ($request->filled('cgpa_min')) {
+            $query->where('cgpa', '>=', $request->input('cgpa_min'));
+        }
+
+        if ($request->filled('cgpa_max')) {
+            $query->where('cgpa', '<=', $request->input('cgpa_max'));
+        }
+
+        // Apply seat status filter
+        if ($request->filled('seat_status')) {
+            if ($request->input('seat_status') === 'assigned') {
+                $query->whereHas('seatAllotments', function ($q) {
+                    $q->where('status', 'active');
+                });
+            } elseif ($request->input('seat_status') === 'needs_seat') {
+                $query->whereDoesntHave('seatAllotments', function ($q) {
+                    $q->where('status', 'active');
+                });
+            }
+        }
+
+        // Apply sorting
+        $sortBy = $request->input('sort_by', 'application_date');
+        $sortOrder = $request->input('sort_order', 'desc');
+
+        switch ($sortBy) {
+            case 'name':
+                $query->join('students', 'seat_applications.student_id', '=', 'students.student_id')
+                    ->orderBy('students.name', $sortOrder)
+                    ->select('seat_applications.*');
+                break;
+            case 'cgpa':
+                $query->orderBy('cgpa', $sortOrder);
+                break;
+            case 'department':
+                $query->orderBy('department', $sortOrder);
+                break;
+            case 'application_date':
+            default:
+                $query->orderBy('application_date', $sortOrder);
+                break;
+        }
+
+        $approvedApplications = $query->get();
 
         return view('admin.applications.approved', compact('approvedApplications'));
     }
@@ -841,20 +926,65 @@ class SeatApplicationController extends Controller
     }
 
     // List allocated students
-    public function allocatedStudents()
+    public function allocatedStudents(Request $request)
     {
         // Set active menu for navigation
         session(['active_admin_menu' => 'allocated_students']);
 
-        $allocatedStudents = \App\Models\SeatAllotment::with([
+        $query = \App\Models\SeatAllotment::with([
             'student',
             'seat',
             'application',
             'admin'
-        ])
-            ->where('status', 'active')
-            ->orderBy('start_date', 'desc')
-            ->get();
+        ])->where('status', 'active');
+
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->whereHas('student', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('university_id', 'like', "%{$search}%");
+            })->orWhereHas('seat', function ($q) use ($search) {
+                $q->where('room_number', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply department filter
+        if ($request->filled('department')) {
+            $query->whereHas('application', function ($q) use ($request) {
+                $q->where('department', $request->input('department'));
+            });
+        }
+
+        // Apply session year filter
+        if ($request->filled('academic_year')) {
+            $query->whereHas('application', function ($q) use ($request) {
+                $q->where('academic_year', $request->input('academic_year'));
+            });
+        }
+
+        // Apply number of semesters filter
+        if ($request->filled('number_of_semester')) {
+            $query->whereHas('application', function ($q) use ($request) {
+                $q->where('number_of_semester', $request->input('number_of_semester'));
+            });
+        }
+
+        // Apply block filter
+        if ($request->filled('block')) {
+            $query->whereHas('seat', function ($q) use ($request) {
+                $q->where('block', $request->input('block'));
+            });
+        }
+
+        // Apply floor filter
+        if ($request->filled('floor')) {
+            $query->whereHas('seat', function ($q) use ($request) {
+                $q->where('floor', $request->input('floor'));
+            });
+        }
+
+        $allocatedStudents = $query->orderBy('start_date', 'desc')->get();
 
         return view('admin.applications.allocated', compact('allocatedStudents'));
     }

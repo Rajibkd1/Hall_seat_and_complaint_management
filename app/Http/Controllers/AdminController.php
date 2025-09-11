@@ -65,9 +65,27 @@ class AdminController extends Controller
         ));
     }
 
-    public function students()
+    public function students(Request $request)
     {
-        $students = Student::all();
+        $query = Student::query();
+
+        // Search by name
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Filter by department
+        if ($request->filled('department')) {
+            $query->where('department', $request->department);
+        }
+
+        // Filter by session year
+        if ($request->filled('session_year')) {
+            $query->where('session_year', $request->session_year);
+        }
+
+        $students = $query->orderBy('name', 'asc')->get();
+
         return view('admin.students.students', compact('students'));
     }
 

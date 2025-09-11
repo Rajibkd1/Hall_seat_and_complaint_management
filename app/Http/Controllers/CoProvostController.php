@@ -20,9 +20,9 @@ class CoProvostController extends Controller
     }
 
     // Delegate methods to AdminController
-    public function students()
+    public function students(Request $request)
     {
-        return $this->adminController->students();
+        return $this->adminController->students($request);
     }
 
     public function viewStudentProfile($student_id)
